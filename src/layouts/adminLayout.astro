@@ -1,0 +1,136 @@
+---
+import Container from "../components[admin]/container.astro";
+import Sidebar from "../components[admin]/sidebar.astro";
+
+const adminCookie = Astro.cookies.get("admin");
+
+const adminDetails = await fetch(
+    Astro.site + "/api/adminLogin/" + adminCookie?.value,
+);
+const APIResponse = await adminDetails.json();
+if (APIResponse.xataResponse.status == 300)
+    return Astro.redirect("/admin/signin/");
+
+interface Props {
+    pageName: string;
+    pageTitle?: string;
+}
+const { pageTitle, pageName } = Astro.props;
+---
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link
+            rel="stylesheet"
+            href="https://site-assets.fontawesome.com/releases/v6.4.2/css/all.css"
+        />
+        <title>{pageTitle} - SMM Reviews</title>
+    </head>
+    <body>
+        <div class="dashboard-container w-full relative flex">
+            <Sidebar />
+            <Container
+                pageTitle={pageName}
+                userFullName={APIResponse.xataResponse.fullName}
+            >
+                <div
+                    id="app-root"
+                    class="app-root-components-holder bg-[#efeef3] flex items-center flex-col p-5 h-[90vh] overflow-y-auto"
+                >
+                    <slot />
+                </div>
+            </Container>
+        </div>
+       
+    </body>
+</html>
+
+<link
+    rel="stylesheet"
+    type="text/css"
+    href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
+/>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"
+></script>
+<script is:inline src="/assets/scripts/dashboard.js"></script>
+
+<style is:inline>
+    ::-webkit-scrollbar {
+        width: 7px;
+        height: 7px;
+    }
+
+    ::-webkit-scrollbar-track {
+        display: none;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: #979797;
+        border-radius: 5px;
+        margin-right: 5px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background-color: #696969;
+    }
+
+    .options.hide {
+        visibility: hidden;
+    }
+
+    .data-box {
+        background-image: linear-gradient(45deg, black, transparent);
+    }
+
+    .data-content-row p {
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+    }
+
+    .dashboardStretch {
+        width: 100% !important;
+    }
+
+    .side-menubar-container,
+    .dashboard-component-container {
+        transition: 0.5s all ease-in-out;
+    }
+
+    .sidebarHide {
+        transform: translateX(-100%);
+        visibility: hidden;
+        z-index: 10;
+    }
+
+    @media (max-width: 800px) {
+        .side-menubar-container {
+            transform: translateX(-100%);
+            visibility: hidden;
+        }
+
+        .sidebarHide {
+            transform: translateX(0);
+            visibility: visible;
+            z-index: 10;
+        }
+    }
+
+    table,
+    th,
+    td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+
+    th {
+        text-align: left;
+    }
+
+    td {
+        text-align: center;
+    }
+</style>
