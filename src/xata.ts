@@ -11,10 +11,17 @@ const tables = [
     name: "panels-datatable",
     columns: [
       { name: "panelTitle", type: "string" },
-      { name: "paneFeaturedImage", type: "file" },
       { name: "panelWebsiteURL", type: "string" },
       { name: "panelAPILink", type: "string" },
       { name: "panelAPIKey", type: "string" },
+      {
+        name: "paneFeaturedImage",
+        type: "file",
+        file: { defaultPublicAccess: true },
+      },
+      { name: "panelSlug", type: "string", unique: true },
+      { name: "panelTextDescrition", type: "text" },
+      { name: "panelTotalServices", type: "int" },
     ],
   },
   {
@@ -35,6 +42,7 @@ const tables = [
         defaultValue: "new_pass",
       },
       { name: "email", type: "string", unique: true },
+      { name: "fullName", type: "string" },
     ],
   },
   {

@@ -1,29 +1,199 @@
 ---
 import MainLayout from "../layouts/MainLayout.astro";
-import SMM_Panel_Card from "../components/SMM_Panel_Card.astro"
+import SMM_panelCards from "../components/SMM_panelCards.astro";
 
-// import panelsData from "../data/temp-panel.js"
+interface panelStructure {
+	paneFeaturedImage: {
+		url: string;
+	};
+	id: string;
+	panelAPIKey: string;
+	panelAPILink: string;
+	panelSlug: string;
+	panelTextDescrition: string;
+	panelTitle: string;
+	panelTotalServices: number;
+	panelWebsiteURL: string;
+}
 
 const allPanels = await fetch(Astro.site + "api/panels.json");
-const responsePanels = await allPanels.json();
-// console.log(responsePanels);
+console.log("Current API in Use - ", Astro.site + "api/panels.json");
 
+const responsePanels = await allPanels.json();
 ---
 
 <MainLayout title="SMM Panel Listing - Home">
 	<div class="indexHero text-center lg:w-2/4" slot="heroContent">
 		<h1 class="text-3xl font-bold my-5">SMM Panel Listings</h1>
-		<p class=" my-5">Exlore most popular SMM Panels with our listings.</p>
+		<p class="my-5">Exlore most popular SMM Panels with our listings.</p>
 
 		<div class="searchBox my-5">
-			<form action="" name="searchPanel" class="relative flex gap-3 items-center ">
-				<input type="text" name="searchQuery" id="" class="w-full px-3 py-2 text-gray-800 rounded-lg" placeholder="Search Youtube Services">
-				<i class="fa-solid fa-magnifying-glass absolute right-7 text-blue-500"></i>
+			<form
+				action=""
+				name="searchPanel"
+				class="relative flex gap-3 items-center"
+			>
+				<input
+					type="text"
+					name="searchQuery"
+					id=""
+					class="w-full px-3 py-2 text-gray-800 rounded-lg"
+					placeholder="Search Youtube Services"
+				/>
+				<i
+					class="fa-solid fa-magnifying-glass absolute right-7 text-blue-500"
+				></i>
 			</form>
 		</div>
 	</div>
-	
-	<!-- SMM Panels Listing -->
-	<SMM_Panel_Card SMMPanelLists={responsePanels}></SMM_Panel_Card>
-	
+
+	<main class="w-full flex gap-5">
+		<!-- SMM Panels Listing -->
+		<section class="panel-container mb-14 w-[60%]">
+			<div class="header flex justify-between items-center w-full my-4">
+				<span>
+					<h2 class="text-xl font-semibold">Latest SMM Panels</h2>
+					<p>
+						Explore the most recently added SMM Panels and more...
+					</p>
+				</span>
+				<a href="/smm-panels">See all</a>
+			</div>
+
+			<div
+				class="wrapper flex justify-center items-center flex-wrap gap-5"
+			>
+				{
+					responsePanels.map((panel: panelStructure) => (
+						<SMM_panelCards
+							descriptionText={panel.panelTextDescrition}
+							imageSrc={panel.paneFeaturedImage.url}
+							panelTitle={panel.panelTitle}
+							servicesCount={panel.panelTotalServices}
+							slugURL={panel.panelSlug}
+						/>
+					))
+				}
+
+				<!-- <div class="smmpanelCard lg:w-[32%] p-5 rounded-lg flex flex-col gap-3 shadow-lg border border-gray-200">
+					<a href="/smm-panel/rec_co62js6annbn1jdj2tg0">
+						<img
+							src="https://eu-central-1.storage.xata.sh/t6b8oc64ud78bdt92637qte1uk"
+							alt="tremendously hm Logo image"
+							class="w-full h-44 object-cover"/>
+					</a>
+					<h3 class="text-blue-600 font-semibold">
+						<a href="/smm-panel/rec_co62js6annbn1jdj2tg0">tremendously hm</a>
+					</h3>
+					<div class="bottom flex justify-between text-sm">
+						<span class="url flex items-center gap-2">
+							<i class="fa-regular fa-globe"></i>
+							<a href="impartial actual">impartial actual</a>
+						</span>
+					</div>
+				</div> -->
+			</div>
+		</section>
+
+		<aside class="w-[40%] p-5 flex flex-col gap-y-4">
+			<div class="services-cloud-container bg-white p-3 rounded-md">
+				<div class="header flex justify-between items-center w-full">
+					<span class="w-full">
+						<h2 class="text-xl font-semibold text-center">
+							All Services
+						</h2>
+					</span>
+				</div>
+
+				<div class="services-cloud flex flex-wrap gap-3 text-white">
+					<a class="px-4 py-2 rounded-md bg-red-500" href=""
+						>Instagram</a
+					>
+					<a class="px-4 py-2 rounded-md bg-blue-500" href=""
+						>Facebook</a
+					>
+					<a class="px-4 py-2 rounded-md bg-red-600" href=""
+						>Youtube</a
+					>
+					<a class="px-4 py-2 rounded-md bg-yellow-500" href=""
+						>Snapchat</a
+					>
+					<a class="px-4 py-2 rounded-md bg-blue-800" href=""
+						>Tumblr</a
+					>
+					<a class="px-4 py-2 rounded-md bg-red-500" href=""
+						>Pinterest</a
+					>
+					<a class="px-4 py-2 rounded-md bg-black" href="">Tiktok</a>
+					<a class="px-4 py-2 rounded-md bg-black" href="">Twitter</a>
+					<a class="px-4 py-2 rounded-md bg-green-500" href=""
+						>Spotify</a
+					>
+					<a class="px-4 py-2 rounded-md bg-blue-500" href=""
+						>Telegram</a
+					>
+				</div>
+			</div>
+
+			<div class="top-panel-container bg-white p-3 rounded-md">
+				<div class="header flex justify-between items-center w-full">
+					<span class="w-full">
+						<h2 class="text-xl font-semibold text-center">
+							Top SMM Panels
+						</h2>
+					</span>
+				</div>
+
+				<div class="top-panel">
+					<ul>
+						<li>
+							<a class="flex gap-3 items-center" href="">
+								<img
+									src="https://cdn.comparesmm.com/favicons/smmturk.png"
+									class="rounded-full size-10"
+								/>
+								<span class="font-semibold">SMMTurk</span>
+							</a>
+						</li>
+						<li>
+							<a class="flex gap-3 items-center" href="">
+								<img
+									src="https://cdn.comparesmm.com/favicons/smm-cost.png"
+									class="rounded-full size-10"
+								/>
+								<span class="font-semibold">SMM Cost</span>
+							</a>
+						</li>
+						<li>
+							<a class="flex gap-3 items-center" href="">
+								<img
+									src="https://cdn.comparesmm.com/favicons/bulkfollows.png"
+									class="rounded-full size-10"
+								/>
+								<span class="font-semibold">Bulkfollows</span>
+							</a>
+						</li>
+						<li>
+							<a class="flex gap-3 items-center" href="">
+								<img
+									src="https://cdn.comparesmm.com/favicons/crescitaly.png"
+									class="rounded-full size-10"
+								/>
+								<span class="font-semibold">Crescitaly</span>
+							</a>
+						</li>
+						<li>
+							<a class="flex gap-3 items-center" href="">
+								<img
+									src="https://cdn.comparesmm.com/favicons/global-smm.png"
+									class="rounded-full size-10"
+								/>
+								<span class="font-semibold">Global SMM</span>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</aside>
+	</main>
 </MainLayout>
