@@ -6,15 +6,17 @@ if (Astro.request.method === "POST") {
    try {
       const data = await Astro.request.formData();
 
-      const response = await fetch(Astro.site + "/api/adminLogin.json", {
+      const response = await fetch(Astro.site + "api/adminLogin.json", {
          method: "POST",
          body: data,
       });
 
       const APIResponse = await response.json();
       
+      console.log(APIResponse);
+      
       if (APIResponse.status == 200){
-         Astro.cookies.set("admin", APIResponse.userID, { path: "/admin" });
+         Astro.cookies.set("admin", APIResponse.userID , {path : "/admin" });
          return Astro.redirect("/admin");
       }
       else {

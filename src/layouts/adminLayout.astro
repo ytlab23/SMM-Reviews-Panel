@@ -5,7 +5,7 @@ import Sidebar from "../components[admin]/sidebar.astro";
 const adminCookie = Astro.cookies.get("admin");
 
 const adminDetails = await fetch(
-    Astro.site + "/api/adminLogin/" + adminCookie?.value,
+    Astro.site + "api/adminLogin/" + adminCookie?.value,
 );
 const APIResponse = await adminDetails.json();
 if (APIResponse.xataResponse.status == 300)

@@ -5,6 +5,7 @@ import AdminAuthLayout from "../../layouts/adminAuthLayout.astro";
 const adminCookie = Astro.cookies.get("admin");
 
 if(isAdminLoggedIn(adminCookie)){
+    console.log("deleting Cookie");
     Astro.cookies.delete("admin");
 }
 else

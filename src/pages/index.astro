@@ -4,7 +4,7 @@ import SMM_Panel_Card from "../components/SMM_Panel_Card.astro"
 
 // import panelsData from "../data/temp-panel.js"
 
-const allPanels = await fetch(Astro.site + "/api/panels.json");
+const allPanels = await fetch(Astro.site + "api/panels.json");
 const responsePanels = await allPanels.json();
 // console.log(responsePanels);
 

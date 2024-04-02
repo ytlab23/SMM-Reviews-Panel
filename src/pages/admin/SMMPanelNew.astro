@@ -10,7 +10,7 @@ if (Astro.request.method === "POST") {
         const data = await Astro.request.formData();
         // console.log("Form Data at client side - ", data);
 
-        const response = await fetch(Astro.site + "/api/panels.json", {
+        const response = await fetch(Astro.site + "api/panels.json", {
             method: "POST",
             body: data,
         });
