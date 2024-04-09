@@ -1,30 +1,21 @@
 ---
 import PanelLayout from "../../layouts/PanelLayout.astro";
-export const prerender = true;
 
 import servicePlatformsData from "../../data/temp-services";
 
-interface panelSchema{
-    id: string,
-    paneFeaturedImage: {
-        url: string,
-    },
-    panelAPIKey: string,
-    panelAPILink:  string,
-    panelTitle:  string,
-    panelWebsiteURL:  string,
-    panelSlug:  string,
-    panelTextDescrition:  string,
-    panelTotalServices: number,
-    rating : number,
-    paymentOptions : {
-        payDepo : string,
-        payOption : string
-    }
-}
+export const prerender = true;
+export async function getStaticPaths (){
 
+    const allPanelsFetch:any = await fetch(Astro.site + "api/panels.json")
+    const allPanelRes : panelSchema[] = await allPanelsFetch.json();
 
-
+    return allPanelRes.map((panel:any) => (
+        {
+            params : { slug: panel.panelSlug },
+            props: { panel },
+        }
+    ))
+} ;
 
 const { panel } = Astro.props;
 const { slug } = Astro.params;
@@ -61,6 +52,25 @@ for(let i = 0; i < servicePlatformsData.length; i++) {
 function isSame(APIService :string , platformSavedService : string){
     if(APIService.toLowerCase().includes(platformSavedService.toLowerCase()))
     return true;
+}
+
+interface panelSchema{
+    id: string,
+    paneFeaturedImage: {
+        url: string,
+    },
+    panelAPIKey: string,
+    panelAPILink:  string,
+    panelTitle:  string,
+    panelWebsiteURL:  string,
+    panelSlug:  string,
+    panelTextDescrition:  string,
+    panelTotalServices: number,
+    rating : number,
+    paymentOptions : {
+        payDepo : string,
+        payOption : string
+    }
 }
 
 ---
