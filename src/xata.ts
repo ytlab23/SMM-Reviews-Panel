@@ -21,7 +21,8 @@ const tables = [
       },
       { name: "panelSlug", type: "string", unique: true },
       { name: "panelTextDescrition", type: "text" },
-      { name: "panelTotalServices", type: "int" },
+      { name: "rating", type: "int" },
+      { name: "paymentOptions", type: "json" },
     ],
   },
   {

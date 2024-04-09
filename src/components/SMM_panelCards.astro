@@ -4,13 +4,12 @@ interface Props {
     imageSrc : string,
     panelTitle : string,
     descriptionText : string,
-    servicesCount : number,
     slugURL : string
 }
 
-const {imageSrc ,panelTitle ,descriptionText ,servicesCount ,slugURL} = Astro.props;
+const {imageSrc ,panelTitle ,descriptionText ,slugURL} = Astro.props;
 
-// console.log(imageSrc ,panelTitle ,descriptionText ,servicesCount ,slugURL);
+// console.log(imageSrc ,panelTitle ,descriptionText ,slugURL);
 
 ---
 
@@ -26,7 +25,6 @@ const {imageSrc ,panelTitle ,descriptionText ,servicesCount ,slugURL} = Astro.pr
         <span class="textContent line-clamp-2">
             {descriptionText}
         </span>
-        <span class="block">{servicesCount.toString()} services</span>
         <a
             href={"/panels/"+ slugURL}
             class="linkbtn block w-fit p-1 px-2 rounded-xl bg-[#3f3fe5] text-white hover:bg-[#3838be] hover:shadow-lg hover:underline"

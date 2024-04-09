@@ -2,6 +2,8 @@
 import MainLayout from "../layouts/MainLayout.astro";
 import SMM_panelCards from "../components/SMM_panelCards.astro";
 
+import servicePlatformsData from "../data/temp-services";
+
 interface panelStructure {
 	paneFeaturedImage: {
 		url: string;
@@ -20,12 +22,14 @@ const allPanels = await fetch(Astro.site + "api/panels.json");
 console.log("Current API in Use - ", Astro.site + "api/panels.json");
 
 const responsePanels = await allPanels.json();
+// console.log(responsePanels);
+
 ---
 
 <MainLayout title="SMM Panel Listing - Home">
 	<div class="indexHero text-center lg:w-2/4" slot="heroContent">
 		<h1 class="text-3xl font-bold my-5">SMM Panel Listings</h1>
-		<p class="my-5">Exlore most popular SMM Panels with our listings.</p>
+		<p class="my-5">Explore most popular SMM Panels with our listings.</p>
 
 		<div class="searchBox my-5">
 			<form
@@ -63,13 +67,13 @@ const responsePanels = await allPanels.json();
 			<div
 				class="wrapper flex justify-center items-center flex-wrap gap-5"
 			>
+			
 				{
-					responsePanels.map((panel: panelStructure) => (
+					responsePanels.reverse().map((panel: panelStructure) => (
 						<SMM_panelCards
-							descriptionText={panel.panelTextDescrition}
+							descriptionText={panel.panelTextDescrition.substring(0, 120)}
 							imageSrc={panel.paneFeaturedImage.url}
 							panelTitle={panel.panelTitle}
-							servicesCount={panel.panelTotalServices}
 							slugURL={panel.panelSlug}
 						/>
 					))
@@ -106,32 +110,12 @@ const responsePanels = await allPanels.json();
 				</div>
 
 				<div class="services-cloud flex flex-wrap gap-3 text-white">
-					<a class="px-4 py-2 rounded-md bg-red-500" href=""
-						>Instagram</a
-					>
-					<a class="px-4 py-2 rounded-md bg-blue-500" href=""
-						>Facebook</a
-					>
-					<a class="px-4 py-2 rounded-md bg-red-600" href=""
-						>Youtube</a
-					>
-					<a class="px-4 py-2 rounded-md bg-yellow-500" href=""
-						>Snapchat</a
-					>
-					<a class="px-4 py-2 rounded-md bg-blue-800" href=""
-						>Tumblr</a
-					>
-					<a class="px-4 py-2 rounded-md bg-red-500" href=""
-						>Pinterest</a
-					>
-					<a class="px-4 py-2 rounded-md bg-black" href="">Tiktok</a>
-					<a class="px-4 py-2 rounded-md bg-black" href="">Twitter</a>
-					<a class="px-4 py-2 rounded-md bg-green-500" href=""
-						>Spotify</a
-					>
-					<a class="px-4 py-2 rounded-md bg-blue-500" href=""
-						>Telegram</a
-					>
+					{
+						servicePlatformsData.slice(0, 20).map((service) => (
+							<a class="px-4 capitalize py-2 rounded-md cursor-pointer" style=`background-color: ${service.color}`
+							>{service.platform}</a>
+						))
+					}
 				</div>
 			</div>
 

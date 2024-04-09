@@ -1,4 +1,5 @@
 ---
+import TextArea from "../../components[admin]/TextArea.astro";
 import TextInput from "../../components[admin]/TextInput.astro";
 import AdminLayout from "../../layouts/adminLayout.astro";
 import Toastify from "toastify-js";
@@ -17,7 +18,8 @@ if (Astro.request.method === "POST") {
 
         const APIResponse = await response.json();
         if (APIResponse.message == "Data Saved Successfully") {
-            messageToShow = "SMM Panel is saved. Click here to see all Saved SMM Panels";
+            messageToShow =
+                "SMM Panel is saved. Click here to see all Saved SMM Panels";
         }
     } catch (error) {
         if (error instanceof Error) {
@@ -29,74 +31,223 @@ if (Astro.request.method === "POST") {
 
 <AdminLayout pageName="New SMM Panels" pageTitle="New SMM Panels">
     <div class="formContainer w-full">
-        <form method="post" class="flex gap-x-5 w-full">
-            <div class="form-fields flex flex-col gap-y-4 w-[60%]">
-                <TextInput
-                    isRequired={true}
+        <form method="post" class="w-full">
+            <div class="topBar flex gap-4 w-full my-3">
+                <input
+                    required="true"
+                    type="text"
+                    id="panelTitle"
+                    name="panelTitle"
                     placeholder="XYZ SMM Panel"
-                    textBoxId="panelTitle"
-                    textLabelText="Panel Title"
+                    class="w-[85%] border-b border-b-blue-500 px-4 rounded-md"
                 />
-
-                <span class="flex items-center gap-4">
-                    <label class="w-1/3 text-right" for=""
-                        >Panel FeaturedImage *</label
-                    >
-                    <span
-                        class="flex flex-col justify-center items-center gap-2 w-2/3"
-                    >
-                        <img
-                            id="uploadedImage"
-                            src="/assets/images/placeholderImage.jpg"
-                            class="w-full h-[180px] object-cover rounded-md"
-                        />
-                        <input
-                            id="uploadInput"
-                            name="uploadInput"
-                            type="file"
-                            class="text-xs w-fit"
-                            accept="image/*"
-                        />
-                    </span>
-                </span>
-
-                <TextInput
-                    isRequired={true}
-                    placeholder="@someapikey_likethis"
-                    textBoxId="panelAPIKey"
-                    textLabelText="Panel APIKey"
-                />
-
-                <TextInput
-                    isRequired={true}
-                    placeholder="API Url"
-                    textBoxId="panelAPILink"
-                    textLabelText="Panel API Link"
-                />
-
-                <TextInput
-                    isRequired={true}
-                    placeholder="https://somesmm.com"
-                    textBoxId="panelWebsiteURL"
-                    textLabelText="Panel Website URL"
-                />
-                <input type="hidden" name="imageName" id="imageName" />
-                <input type="hidden" name="imageBase64" id="imageBase64" />
-                <input type="hidden" name="imageFileType" id="imageFileType" />
-            </div>
-
-            <div class="form-tools w-[40%] flex justify-end">
                 <button
-                    class="size-fit px-5 py-3 text-white rounded-lg bg-[#5344f5] hover:bg-[#3d32b3]"
-                    >Publish</button
+                    type="submit"
+                    class="size-fit w-auto px-5 py-3 text-white rounded-lg bg-[#5344f5] hover:bg-[#3d32b3]"
+                    ><i class="fa-solid fa-play"></i> Publish</button
                 >
             </div>
+
+            <div class="bottomContainer flex gap-4 my-3">
+                <div class="content-fields flex lg:flex-col gap-5 lg:w-[60%]">
+                    <TextArea
+                        isRequired={false}
+                        placeholder="Few Paragraphs about this SMM Panel (This will be shown as Paragraph Content on the page)"
+                        textBoxId="panelTextDescrition"
+                        textLabelText="Panel Text Description"
+                    />
+
+                    <TextInput
+                        isRequired={true}
+                        placeholder="https://somesmm.com"
+                        textBoxId="panelWebsiteURL"
+                        textLabelText="Panel Website URL"
+                    />
+                    <TextInput
+                        isRequired={true}
+                        placeholder="API Url"
+                        textBoxId="panelAPILink"
+                        textLabelText="Panel API Link"
+                    />
+                    <TextInput
+                        isRequired={true}
+                        placeholder="@someapikey_likethis"
+                        textBoxId="panelAPIKey"
+                        textLabelText="Panel APIKey"
+                    />
+
+                    <span
+                        class="flex flex-col gap-3 justify-center items-center w-full"
+                    >
+                        <button
+                            id="TestAPIBtn"
+                            type="button"
+                            class="size-fit w-fit px-3 py-1 text-white rounded-lg bg-[#5344f5] hover:bg-[#3d32b3]"
+                            >Test API</button
+                        >
+                    </span>
+
+                    <TextInput
+                        isRequired={true}
+                        placeholder="1234+"
+                        textBoxId="panelTotalServices"
+                        textLabelText="Total Number of Services by Panel"
+                    />
+                </div>
+
+                <div class="sideBar lg:w-[40%] flex flex-col gap-5">
+                    <TextInput
+                        isRequired={true}
+                        placeholder="xyz-smm-panel"
+                        textBoxId="panelSlug"
+                        textLabelText="Panel Permalink/Slug"
+                    />
+
+                    <span class="flex flex-col items-center gap-4">
+                        <label class="w-full text-left"
+                            >Panel FeaturedImage *</label
+                        >
+                        <span
+                            class="flex flex-col justify-center items-center gap-2 w-full px-12 py-3 border-black border-2 border-dashed rounded-xl"
+                        >
+                            <img
+                                id="uploadedImage"
+                                src="/assets/images/placeholderImage.jpg"
+                                class="w-full h-[180px] object-cover rounded-md"
+                            />
+                            <input
+                                id="uploadInput"
+                                name="uploadInput"
+                                type="file"
+                                class="text-xs w-fit"
+                                accept="image/*"
+                            />
+                        </span>
+                    </span>
+
+                    <span class="flex flex-col items-center gap-4">
+                        <label class="w-full text-left">Give Rating</label>
+
+                        <span
+                            id="ratingSelector"
+                            class="flex justify-between relative cursor-pointer w-full p-2 px-3 rounded-md border border-[#f4f4f4] bg-white text-[#555555] shadow-lg"
+                            ><span id="ratingSelectedValue">Select Stars</span>
+                            <i class="fa-solid fa-caret-down"></i>
+                            <span
+                                class="options invisible absolute left-0 top-14 bg-white w-full rounded-md flex flex-col z-[1]"
+                            >
+                                <span
+                                    class="ratingOption hover:bg-slate-200 p-4 py-2 rounded-t-md cursor-pointer"
+                                    >Select Stars</span
+                                >
+                                <span
+                                    class="ratingOption hover:bg-slate-200 p-4 py-2 rounded-t-md cursor-pointer"
+                                    >1 <span class="stars text-yellow-400"
+                                        ><i class="fa-solid fa-star"></i><i
+                                            class="fa-regular fa-star"></i><i
+                                            class="fa-regular fa-star"></i><i
+                                            class="fa-regular fa-star"></i><i
+                                            class="fa-regular fa-star"
+                                        ></i></span
+                                    ></span
+                                >
+                                <span
+                                    class="ratingOption hover:bg-slate-200 p-4 py-2 cursor-pointer"
+                                    >2 <span class="stars text-yellow-400"
+                                        ><i class="fa-solid fa-star"></i><i
+                                            class="fa-solid fa-star"></i><i
+                                            class="fa-regular fa-star"></i><i
+                                            class="fa-regular fa-star"></i><i
+                                            class="fa-regular fa-star"
+                                        ></i></span
+                                    ></span
+                                >
+                                <span
+                                    class="ratingOption hover:bg-slate-200 p-4 py-2 cursor-pointer"
+                                    >3 <span class="stars text-yellow-400"
+                                        ><i class="fa-solid fa-star"></i><i
+                                            class="fa-solid fa-star"></i><i
+                                            class="fa-solid fa-star"></i><i
+                                            class="fa-regular fa-star"></i><i
+                                            class="fa-regular fa-star"
+                                        ></i></span
+                                    ></span
+                                >
+                                <span
+                                    class="ratingOption hover:bg-slate-200 p-4 py-2 cursor-pointer"
+                                    >4 <span class="stars text-yellow-400"
+                                        ><i class="fa-solid fa-star"></i><i
+                                            class="fa-solid fa-star"></i><i
+                                            class="fa-solid fa-star"></i><i
+                                            class="fa-solid fa-star"></i><i
+                                            class="fa-regular fa-star"
+                                        ></i></span
+                                    ></span
+                                >
+                                <span
+                                    class="ratingOption hover:bg-slate-200 p-4 py-2 rounded-b-md cursor-pointer"
+                                    >5 <span class="stars text-yellow-400"
+                                        ><i class="fa-solid fa-star"></i><i
+                                            class="fa-solid fa-star"></i><i
+                                            class="fa-solid fa-star"></i><i
+                                            class="fa-solid fa-star"></i><i
+                                            class="fa-solid fa-star"></i></span
+                                    ></span
+                                >
+                            </span>
+                        </span>
+                    </span>
+
+                    <span class="paymentOptions">
+                        <label class="w-full text-left"
+                            >Add Payment Options</label
+                        >
+
+                        <span class="fields flex gap-1 items-end my-2">
+                            <TextInput
+                                isRequired={false}
+                                placeholder="Option"
+                                textBoxId="payOption"
+                                textLabelText="Option"
+                            />
+                            <TextInput
+                                isRequired={false}
+                                placeholder="Min Deposit"
+                                textBoxId="payDepo"
+                                textLabelText="Min Deposit"
+                            />
+                            <button
+                                id="paymentAddBtn"
+                                type="button"
+                                class="size-fit w-fit px-3 py-2 text-white rounded-lg bg-[#5344f5] hover:bg-[#3d32b3]"
+                                >Add</button
+                            >
+                        </span>
+                        <span
+                            id="paymentData"
+                            class="paymentData flex flex-col gap-1"
+                        >
+                        </span>
+                    </span>
+                </div>
+            </div>
+
+            <input type="hidden" name="imageName" id="imageName" />
+            <input type="hidden" name="imageBase64" id="imageBase64" />
+            <input type="hidden" name="imageFileType" id="imageFileType" />
+            <input type="hidden" name="rating" id="rating" />
+            <input type="hidden" name="paymentOptions" id="paymentOptions" />
         </form>
     </div>
 
     {
-        messageToShow && 
-        <span class="toast hidden" id="toast" data-message = {messageToShow}></span>
+        messageToShow && (
+            <span
+                class="toast hidden"
+                id="toast"
+                data-message={messageToShow}
+            />
+        )
     }
 </AdminLayout>
 
@@ -126,22 +277,150 @@ if (Astro.request.method === "POST") {
             }
         });
 
-        try {
-            Toastify( {
-                    text: document.querySelector("#toast").getAttribute("data-message"),
-                    duration: 3000,
-                    destination: "/admin/SMMPanel",
-                    close: true,
-                    gravity: "bottom", // `top` or `bottom`
-                    position: "right", // `left`, `center` or `right`
-                    stopOnFocus: true, // Prevents dismissing of toast on hover
-                    style: {
-                        background: "linear-gradient(to right, #5344f5, #3dbbc9)",
-                    },
-                    onClick: function () {}, // Callback after click
-                }).showToast();
-            
-        } catch (error) {
-            console.log(error)
+    //#region Slug
+    document.getElementById("panelTitle")
+        .addEventListener("input", function (event) {
+            var inputText = event.target.value;
+            document.getElementById("panelSlug").value = inputText.toLowerCase().replaceAll(" ", "-");
+        });
+    //#endregion
+
+    //#region TestAPI
+    const TestAPIBtn = document.getElementById("TestAPIBtn");
+    TestAPIBtn.addEventListener("click", () => {
+        const panelAPILink = document.getElementById("panelAPILink");
+        const panelAPIKey = document.getElementById("panelAPIKey");
+
+        if (panelAPILink.value != "" && panelAPIKey.value != "") {
+            window.open(
+                `${panelAPILink.value}?key=${panelAPIKey.value}&action=services`,
+                "_blank",
+            );
+        } else alert("Please enter both Panel API URL and API Key");
+    });
+    //#endregion
+
+    //#region Rating Selection
+    const ratingSelector = document.getElementById("ratingSelector");
+    const ratingValue = document.getElementById("ratingSelectedValue");
+    const ratingOptions = document.querySelectorAll(
+        "#ratingSelector .options .ratingOption",
+    );
+    ratingSelector.onclick = function () {
+        ratingSelector
+            .querySelector("span.options")
+            .classList.toggle("invisible");
+    };
+
+    ratingOptions.forEach((ratingOption) => {
+        ratingOption.addEventListener("click", () => {
+            ratingValue.innerHTML = ratingOption.innerHTML;
+            document.getElementById("rating").value =
+                ratingValue.textContent.trim();
+        });
+    });
+    //#endregion
+
+    //#region Payment Button Additions
+    const paymentAddBtn = document.getElementById("paymentAddBtn");
+    const paymentDataHolder = document.getElementById("paymentData");
+    var paymentOptionsData = [];
+    var paymentOptionJsonObject = [];
+    var allPaymentDeleteBtns;
+
+    paymentAddBtn.addEventListener("click", () => {
+        const payOption = document.getElementById("payOption");
+        const payDepo = document.getElementById("payDepo");
+        document.getElementById("paymentOptions").value = "";
+
+        if (payOption.value != "" && payDepo.value != "") {
+            paymentOptionsData.push([payOption.value, payDepo.value]);
         }
+
+        formPaymentOptionsJson();
+
+        //Adding Payment Entered data for User
+        showPaymentOptions();
+
+        document.getElementById("payOption").value = "";
+        document.getElementById("payDepo").value = "";
+    });
+
+    function formPaymentOptionsJson() {
+        paymentOptionJsonObject = [];
+        for (var i = 0; i < paymentOptionsData.length; i++) {
+            var tempObj = {
+                payOption: paymentOptionsData[i][0],
+                payDepo: paymentOptionsData[i][1],
+            };
+            paymentOptionJsonObject.push(tempObj);
+        }
+        document.getElementById("paymentOptions").value = JSON.stringify(
+            paymentOptionJsonObject,
+        );
+        console.log(JSON.stringify(paymentOptionJsonObject));
+    }
+
+    function showPaymentOptions() {
+        paymentDataHolder.innerHTML = "";
+        for (let index = 0; index < paymentOptionsData.length; index++) {
+            paymentDataHolder.insertAdjacentHTML(
+                "beforeend",
+                `
+                <span class="row flex items-center bg-[#f0f8ff] border-b border-b-white p-2">
+                    <p class="w-[45%]">${paymentOptionsData[index][0]}</p>
+                    <p class="w-[45%]">${paymentOptionsData[index][1]}</p>
+                    <i class="cursor-pointer fa-duotone fa-trash"></i>
+                </span>
+                `,
+            );
+        }
+        allPaymentDeleteBtns = document.querySelectorAll(
+            "#paymentData .row .fa-trash",
+        );
+        deletePaymentOption();
+    }
+
+    function deletePaymentOption() {
+        allPaymentDeleteBtns.forEach((deleteBtn) => {
+            deleteBtn.addEventListener("click", () => {
+                for (
+                    let index = 0;
+                    index < paymentOptionsData.length;
+                    index++
+                ) {
+                    if (
+                        paymentOptionsData[index].includes(
+                            deleteBtn.previousElementSibling
+                                .previousElementSibling.textContent,
+                        )
+                    ) {
+                        paymentOptionsData.splice(index, 1);
+                        break;
+                    }
+                }
+                showPaymentOptions();
+            });
+        });
+        formPaymentOptionsJson();
+    }
+    //#endregion
+
+    //Toast Notifications
+    try {
+        Toastify({
+            text: document.querySelector("#toast").getAttribute("data-message"),
+            duration: 3000,
+            close: true,
+            gravity: "bottom", // `top` or `bottom`
+            position: "right", // `left`, `center` or `right`
+            stopOnFocus: true, // Prevents dismissing of toast on hover
+            style: {
+                background: "linear-gradient(to right, #5344f5, #3dbbc9)",
+            },
+            onClick: function () {}, // Callback after click
+        }).showToast();
+    } catch (error) {
+        console.log(error);
+    }
 </script>

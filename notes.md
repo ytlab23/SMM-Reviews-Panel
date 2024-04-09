@@ -19,3 +19,11 @@ Add New SMM PANEL
 New Blog Post
 New Page
 Site Settings
+
+Panel-
+Save Button and Auto Save
+isPublished
+On publish Disable all fields
+Run API Test
+Services Clouds
+Meta Description

@@ -8,21 +8,26 @@ export async function GET() {
    try {
       const records = await xata.db["panels-datatable"]
          .select([
-            "paneFeaturedImage",
             "panelTitle",
             "panelWebsiteURL",
             "panelAPILink",
             "panelAPIKey",
             "panelSlug",
             "panelTextDescrition",
-            "panelTotalServices",
+            "rating",
+            "paymentOptions",
+            "paneFeaturedImage"
          ])
          .getAll();
 
       return new Response(
          JSON.stringify(records),
       )
-   } catch (error) {
+   } catch (error:any) {
+      if(error.toString().includes("column [panelSlug]: is not unique"))
+         return new Response(
+            JSON.stringify("Please enter a different a Permalink/Slug"),
+         )
       console.log(error);
    }
 }
@@ -46,10 +51,17 @@ export const POST: APIRoute = async ({ request }) => {
 
    // Do something with the data, then return a success response
    const record = await xata.db["panels-datatable"].create({
+
       panelTitle: data.get("panelTitle")?.toString(),
       panelWebsiteURL: data.get("panelWebsiteURL")?.toString(),
       panelAPILink: data.get("panelAPILink")?.toString(),
       panelAPIKey: data.get("panelAPIKey")?.toString(),
+
+      panelSlug: data.get("panelSlug")?.toString(),
+      panelTextDescrition: data.get("panelTextDescrition")?.toString(),
+      rating: Number(data.get("rating")!),
+      paymentOptions: data.get("paymentOptions")?.toString(),
+
       paneFeaturedImage: {
          name: data.get("imageName")?.toString(),
          mediaType: data.get("imageFileType")?.toString(),

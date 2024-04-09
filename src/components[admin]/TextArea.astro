@@ -12,9 +12,9 @@ const {textLabelText, textBoxId ,placeholder ,isRequired } = Astro.props;
 
 <span class="flex flex-col items-center gap-2">
     <label class="w-full text-left" for="">{textLabelText} {isRequired && "*"}</label>
-    <input type="text" id={textBoxId} name={textBoxId} 
-    class="w-full p-2 px-3 rounded-md border border-[#f4f4f4] bg-white text-[#555555] shadow-lg"
+    <textarea id={textBoxId} name={textBoxId} 
+    class="w-full min-h-36 p-2 maxh px-3 rounded-md border border-[#f4f4f4] bg-white text-[#555555] shadow-lg"
     placeholder={placeholder}
     required = {isRequired}
-    >
+    ></textarea>
 </span>

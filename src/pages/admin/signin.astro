@@ -1,10 +1,13 @@
 ---
 import AdminAuthLayout from "../../layouts/adminAuthLayout.astro";
 var form_message = "";
-
+var isFormSubmitted = false;
 if (Astro.request.method === "POST") {
    try {
+      
       const data = await Astro.request.formData();
+      isFormSubmitted = true;
+      console.log(data.get("username"));
 
       const response = await fetch(Astro.site + "api/adminLogin.json", {
          method: "POST",
@@ -13,7 +16,7 @@ if (Astro.request.method === "POST") {
 
       const APIResponse = await response.json();
       
-      console.log(APIResponse);
+      // console.log("Sign In Response - ", APIResponse);
       
       if (APIResponse.status == 200){
          Astro.cookies.set("admin", APIResponse.userID , {path : "/admin" });
@@ -21,11 +24,13 @@ if (Astro.request.method === "POST") {
       }
       else {
          form_message = "Wrong Username or Password. Check your typos and try again."
+         isFormSubmitted = false;
       }
    } catch (error) {
       if (error instanceof Error) {
          console.error(error.message);
       }
+      isFormSubmitted = false;
    }
 }
 
@@ -44,7 +49,7 @@ if (Astro.request.method === "POST") {
    <form method="post" class="flex flex-col gap-y-5 h-1/2 w-full">
       <span class="relative w-full flex items-center">
          <i class="absolute left-5 fa-solid fa-user"></i>
-         <input
+         <input onkeyup="return forceLower(this);"
             required
             class="w-full border-2 border-blue-600 px-3 pl-10 py-2"
             type="text"
@@ -75,3 +80,5 @@ if (Astro.request.method === "POST") {
       </span>
    </form>
 </AdminAuthLayout>
+
+<script is:inline src="/assets/scripts/main.js"></script>

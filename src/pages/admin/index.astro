@@ -60,4 +60,9 @@ if (currentHour < 12) {
 </AdminLayout>
 
 <script is:inline src="/assets/scripts/main.js"></script>
+<script>
+    // Update the time immediately and then every minute
+    updateTime();
+    setInterval(updateTime, 1000); // 60000 milliseconds = 1 minute
+</script>
 

@@ -5,7 +5,7 @@ function updateTime() {
    const hours = String(now.getHours()).padStart(2, '0');
    const minutes = String(now.getMinutes()).padStart(2, '0');
    const seconds = String(now.getSeconds()).padStart(2, '0');
-   if(hours > 12){
+   if (hours > 12) {
       timeString = `${hours - 12}:${minutes}:${seconds} PM`;
    }
    else
@@ -27,6 +27,7 @@ function updateTime() {
    document.querySelector('.admin-greetings .time-wrapper .date').textContent = fullDate;
 }
 
-// Update the time immediately and then every minute
-updateTime();
-setInterval(updateTime, 1000); // 60000 milliseconds = 1 minute
+
+function forceLower(strInput) {
+   strInput.value = strInput.value.toLowerCase();
+}
