@@ -1,0 +1,20 @@
+---
+
+export const prerender = true;
+export async function getStaticPaths (){
+
+const allPanelsFetch:any = await fetch(Astro.site + "api/panels.json")
+const allPanelRes = await allPanelsFetch.json();
+
+return allPanelRes.map((panel:any) => (
+    {
+        params : { slug: panel.id },
+        props: { panel },
+    }
+))
+} ;
+const { slug } = Astro.params;
+
+Astro.cookies.set("updatePanelID", slug , {path : "/admin" });
+return Astro.redirect("/admin/panelUpdate");
+---

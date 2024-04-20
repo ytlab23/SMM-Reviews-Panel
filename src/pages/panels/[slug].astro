@@ -28,7 +28,7 @@ for (let j = 0; j < 5; j++) {
         ratingCollection.push("fa-regular fa-star");
 }
 
-console.log("Rating Stars Classes", ratingCollection);
+// console.log("Rating Stars Classes", ratingCollection);
 
 const servicesFetch = await fetch(`${panel.panelAPILink}?key=${panel.panelAPIKey}&action=services`)
 const servicesResponse = await servicesFetch.json();
@@ -92,7 +92,7 @@ interface panelSchema{
                 <div class="services-cloud flex flex-wrap gap-3 text-white">
 					{
 						platformList.map((service:any) => (
-							<a class="px-4 capitalize py-2 rounded-md cursor-pointer" style=`background-color: ${service.color}`
+							<a class="px-4 capitalize py-2 rounded-md cursor-pointer" style={`background-color: ${service.color}`}
 							>{service.platform}</a>
 						))
 					}
@@ -162,12 +162,12 @@ interface panelSchema{
             </div>
         </div>
 
-        {
+        <!-- {
             servicesResponse.length > 20 && 
             <div class="button w-full flex justify-center items-center hidden">
                 <a class="rounded-full px-3 py-2 bg-[#333333] text-white" href={"/allServer/"+slug} >Show All</a>
             </div>
-        }
+        } -->
     </article>
 
 </PanelLayout>

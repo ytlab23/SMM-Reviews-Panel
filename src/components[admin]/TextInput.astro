@@ -3,10 +3,11 @@ interface Props {
     textLabelText :string
     textBoxId :string
     placeholder : string,
-    isRequired : boolean
+    isRequired : boolean,
+    textValue? :string
 }
 
-const {textLabelText, textBoxId ,placeholder ,isRequired } = Astro.props;
+const {textLabelText, textBoxId ,placeholder ,isRequired,textValue } = Astro.props;
 
 ---
 
@@ -16,5 +17,6 @@ const {textLabelText, textBoxId ,placeholder ,isRequired } = Astro.props;
     class="w-full p-2 px-3 rounded-md border border-[#f4f4f4] bg-white text-[#555555] shadow-lg"
     placeholder={placeholder}
     required = {isRequired}
+    value={textValue}
     >
 </span>

@@ -46,8 +46,8 @@ export const POST: APIRoute = async ({ request }) => {
       );
    }
 
-   const imageFile = new Blob([data.get("imageBase64") || ""],
-      { type: data.get("imageFileType")?.toString() || "" })
+   // const imageFile = new Blob([data.get("imageBase64") || ""],
+   //    { type: data.get("imageFileType")?.toString() || "" })
 
    // Do something with the data, then return a success response
    const record = await xata.db["panels-datatable"].create({
