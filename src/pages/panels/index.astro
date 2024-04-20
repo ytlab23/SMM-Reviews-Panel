@@ -1,0 +1,68 @@
+---
+import PanelLayout from "../../layouts/PanelLayout.astro";
+import SMM_panelCards2 from "../../components/SMM_panelCards2.astro";
+
+interface panelStructure {
+	paneFeaturedImage: {
+		url: string;
+	};
+	id: string;
+	panelAPIKey: string;
+	panelAPILink: string;
+	panelSlug: string;
+	panelTextDescrition: string;
+	panelTitle: string;
+	panelTotalServices: number;
+	rating: number;
+	panelWebsiteURL: string;
+}
+const allPanels = await fetch(Astro.site + "api/panels.json");
+
+const responsePanels : panelStructure[] = await allPanels.json();
+
+let allPanelAPIs : string[] = [];
+let allPanelServiceCount : number[] = [];
+//Capturing Panel's APIUrl and APIKey
+responsePanels.map((panel) => (
+    allPanelAPIs.push(`${panel.panelAPILink}?key=${panel.panelAPIKey}&action=services`)
+))
+
+//Executing Every Panel's API to get services
+for (let i = 0; i < allPanelAPIs.length; i++) {
+    let panelServicesdata = await fetch(allPanelAPIs[i]).then(Response => Response.json());
+    allPanelServiceCount.push(panelServicesdata.length);
+}
+---
+
+<PanelLayout title={"All SMM Panel Listed on SMM Panel"} metaDescription="">
+
+    <div class="header flex gap-3 items-end">
+        <span>
+            <h1 class="text-xl font-bold mb-3">Compare SMM Panels</h1>
+            <p class="font-semi/bold mb-3 leading-6">Discover the best SMM Panels, checkout their services & offers and find the right SMM Panel for you!
+            Bring your brand to the next level by buying the best signals, likes, followers & much more!</p>
+        </span>
+
+        <img src="assets/images/icons.png" alt="icons image" class="size-36">
+    </div>
+
+    <div class="panels-container">
+        <span class="text-base font-semibold">Check out our favorite SMM Panels below 👇</span>
+
+        <div class="wrapper flex flex-wrap gap-4 my-5">
+            {
+                responsePanels.reverse().map((panel: panelStructure, index) => (
+                    <SMM_panelCards2
+                        rating = {panel.rating}
+                        service={allPanelServiceCount[index]}
+                        websiteURL = {panel.panelWebsiteURL}
+                        imageSrc = {panel.paneFeaturedImage == null ? "" : panel.paneFeaturedImage.url }
+                        panelTitle={panel.panelTitle}
+                        slugURL={panel.panelSlug}
+                    />
+                ))
+            }
+        </div>
+    </div>
+
+</PanelLayout>

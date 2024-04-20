@@ -1,0 +1,443 @@
+---
+import TextArea from "../components[admin]/TextArea.astro";
+import TextInput from "../components[admin]/TextInput.astro";
+
+interface Props {
+    panelInfo?: any;
+    formType: string;
+}
+let { panelInfo, formType } = Astro.props;
+
+interface PanelDataStructure {
+    data: {
+        panelTitle: string;
+        panelTextDescrition: string;
+        panelWebsiteURL: string;
+        panelAPILink: string;
+        panelAPIKey: string;
+        panelSlug: string;
+        paneFeaturedImage: {
+            url: string;
+        },
+        rating : any,
+        paymentOptions : any
+    };
+}
+
+if (!panelInfo) {
+    var temp: PanelDataStructure = {
+        data: {
+            panelTitle: "",
+            panelTextDescrition: "",
+            panelWebsiteURL: "",
+            panelAPILink: "",
+            panelAPIKey: "",
+            panelSlug: "",
+            paneFeaturedImage: {
+                url: "",
+            },
+            rating : null,
+            paymentOptions : ""
+        },
+    };
+    panelInfo = temp;
+}
+
+---
+<div class="formContainer w-full relative">
+    <form method="post" class="w-full">
+        <div class="topBar flex gap-4 w-full my-3 justify-between">
+            <input
+                required="true"
+                type="text"
+                id="panelTitle"
+                name="panelTitle"
+                placeholder="XYZ SMM Panel"
+                class="w-[85%] border-b border-b-blue-500 px-4 rounded-md"
+                value={panelInfo.data.panelTitle || ""}
+                />
+            <button
+                type="submit"
+                class="size-fit w-auto px-5 py-3 text-white rounded-lg bg-[#5344f5] hover:bg-[#3d32b3] capitalize"
+                ><i class="fa-solid fa-play"></i> {formType}</button
+            >
+        </div>
+
+        <div class="bottomContainer flex gap-4 my-3">
+            <div class="content-fields flex lg:flex-col gap-5 lg:w-[60%]">
+                <TextArea
+                    isRequired={false}
+                    placeholder="Few Paragraphs about this SMM Panel (This will be shown as Paragraph Content on the page)"
+                    textBoxId="panelTextDescrition"
+                    textLabelText="Panel Text Description"
+                    textValue = {panelInfo.data.panelTextDescrition || ""}
+                />
+
+                <TextInput
+                    isRequired={true}
+                    placeholder="https://somesmm.com"
+                    textBoxId="panelWebsiteURL"
+                    textLabelText="Panel Website URL"
+                    textValue = {panelInfo.data.panelWebsiteURL || ""}
+                />
+                <TextInput
+                    isRequired={true}
+                    placeholder="API Url"
+                    textBoxId="panelAPILink"
+                    textLabelText="Panel API Link"
+                    textValue = {panelInfo.data.panelAPILink || ""}
+                />
+                <TextInput
+                    isRequired={true}
+                    placeholder="@someapikey_likethis"
+                    textBoxId="panelAPIKey"
+                    textLabelText="Panel APIKey"
+                    textValue = {panelInfo.data.panelAPIKey || ""}
+                />
+
+                <span
+                    class="flex flex-col gap-3 justify-center items-center w-full"
+                >
+                    <button
+                        id="TestAPIBtn"
+                        type="button"
+                        class="size-fit w-fit px-3 py-1 text-white rounded-lg bg-[#5344f5] hover:bg-[#3d32b3]"
+                        >Test API</button
+                    >
+                </span>
+
+            </div>
+
+            <div class="sideBar lg:w-[40%] flex flex-col gap-5">
+                <TextInput
+                    isRequired={true}
+                    placeholder="xyz-smm-panel"
+                    textBoxId="panelSlug"
+                    textLabelText="Panel Permalink/Slug"
+                    textValue = {panelInfo.data.panelSlug || ""}
+                />
+
+                <span class="flex flex-col items-center gap-4">
+                    <label class="w-full text-left">Panel FeaturedImage *</label
+                    >
+                    <span
+                        class="flex flex-col justify-center items-center gap-2 w-full px-12 py-3 border-black border-2 border-dashed rounded-xl"
+                    >
+                        <img
+                            id="uploadedImage"
+                            src=
+                            {
+                                (panelInfo.data.paneFeaturedImage != null)
+                                ? ( panelInfo.data.paneFeaturedImage.url == "" ) ? "/assets/images/placeholderImage.jpg" : panelInfo.data.paneFeaturedImage.url 
+                                : "/assets/images/placeholderImage.jpg"
+                            }
+                            class="w-full h-[180px] object-cover rounded-md"
+                        />
+                        <input
+                            id="uploadInput"
+                            name="uploadInput"
+                            type="file"
+                            class="text-xs w-fit"
+                            accept="image/*"
+                        />
+                    </span>
+                </span>
+
+                <span class="flex flex-col items-center gap-4">
+                    <label class="w-full text-left">Give Rating</label>
+
+                    <span
+                        id="ratingSelector" data-set-value={panelInfo.data.rating}
+                        class="flex justify-between relative cursor-pointer w-full p-2 px-3 rounded-md border border-[#f4f4f4] bg-white text-[#555555] shadow-lg"
+                        ><span id="ratingSelectedValue">Select Stars</span>
+                        <i class="fa-solid fa-caret-down"></i>
+                        <span
+                            class="options invisible absolute left-0 top-14 bg-white w-full rounded-md flex flex-col z-[1]"
+                        >
+                            <span
+                                class="ratingOption hover:bg-slate-200 p-4 py-2 rounded-t-md cursor-pointer"
+                                >Select Stars</span
+                            >
+                            <span
+                                class="ratingOption hover:bg-slate-200 p-4 py-2 rounded-t-md cursor-pointer"
+                                >1 <span class="stars text-yellow-400"
+                                    ><i class="fa-solid fa-star"></i><i
+                                        class="fa-regular fa-star"></i><i
+                                        class="fa-regular fa-star"></i><i
+                                        class="fa-regular fa-star"></i><i
+                                        class="fa-regular fa-star"></i></span
+                                ></span
+                            >
+                            <span
+                                class="ratingOption hover:bg-slate-200 p-4 py-2 cursor-pointer"
+                                >2 <span class="stars text-yellow-400"
+                                    ><i class="fa-solid fa-star"></i><i
+                                        class="fa-solid fa-star"></i><i
+                                        class="fa-regular fa-star"></i><i
+                                        class="fa-regular fa-star"></i><i
+                                        class="fa-regular fa-star"></i></span
+                                ></span
+                            >
+                            <span
+                                class="ratingOption hover:bg-slate-200 p-4 py-2 cursor-pointer"
+                                >3 <span class="stars text-yellow-400"
+                                    ><i class="fa-solid fa-star"></i><i
+                                        class="fa-solid fa-star"></i><i
+                                        class="fa-solid fa-star"></i><i
+                                        class="fa-regular fa-star"></i><i
+                                        class="fa-regular fa-star"></i></span
+                                ></span
+                            >
+                            <span
+                                class="ratingOption hover:bg-slate-200 p-4 py-2 cursor-pointer"
+                                >4 <span class="stars text-yellow-400"
+                                    ><i class="fa-solid fa-star"></i><i
+                                        class="fa-solid fa-star"></i><i
+                                        class="fa-solid fa-star"></i><i
+                                        class="fa-solid fa-star"></i><i
+                                        class="fa-regular fa-star"></i></span
+                                ></span
+                            >
+                            <span
+                                class="ratingOption hover:bg-slate-200 p-4 py-2 rounded-b-md cursor-pointer"
+                                >5 <span class="stars text-yellow-400"
+                                    ><i class="fa-solid fa-star"></i><i
+                                        class="fa-solid fa-star"></i><i
+                                        class="fa-solid fa-star"></i><i
+                                        class="fa-solid fa-star"></i><i
+                                        class="fa-solid fa-star"></i></span
+                                ></span
+                            >
+                        </span>
+                    </span>
+                </span>
+
+                <span class="paymentOptions">
+                    <label class="w-full text-left">Add Payment Options</label>
+
+                    <span class="fields flex gap-1 items-end my-2">
+                        <TextInput
+                            isRequired={false}
+                            placeholder="Option"
+                            textBoxId="payOption"
+                            textLabelText="Option"
+                        />
+                        <TextInput
+                            isRequired={false}
+                            placeholder="Min Deposit"
+                            textBoxId="payDepo"
+                            textLabelText="Min Deposit"
+                        />
+                        <button
+                            id="paymentAddBtn"
+                            type="button"
+                            class="size-fit w-fit px-3 py-2 text-white rounded-lg bg-[#5344f5] hover:bg-[#3d32b3]"
+                            >Add</button
+                        >
+                    </span>
+                    <span
+                        id="paymentData"
+                        class="paymentData flex flex-col gap-1"
+                    >
+                    </span>
+                </span>
+            </div>
+        </div>
+
+        <input type="hidden" name="imageName" id="imageName" />
+        <input type="hidden" name="imageBase64" id="imageBase64" />
+        <input type="hidden" name="imageFileType" id="imageFileType" />
+        <input type="hidden" name="rating" id="rating" />
+        <input type="hidden" name="paymentOptions" id="paymentOptions" value={JSON.stringify(panelInfo.data.paymentOptions)}/>
+    </form>
+</div>
+
+<script is:inline>
+    document
+        .getElementById("uploadInput")
+        .addEventListener("change", function (event) {
+            const file = event.target.files[0];
+
+            if (file) {
+                // console.log(file);
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+
+                reader.onload = function () {
+                    const imageDataURL = reader.result;
+                    // const imgbody = new Blob([imageDataURL] , {type : file.type})
+
+                    document.getElementById("imageName").value = file.name;
+                    document.getElementById("uploadedImage").src = imageDataURL;
+                    document.getElementById("imageBase64").value =
+                        imageDataURL.split("base64,")[1];
+                    document.getElementById("imageFileType").value = file.type;
+
+                    // console.log(imgbody);
+                };
+            }
+        });
+
+    //#region Slug
+    document
+        .getElementById("panelTitle")
+        .addEventListener("input", function (event) {
+            var inputText = event.target.value;
+            document.getElementById("panelSlug").value = inputText
+                .toLowerCase()
+                .replaceAll(" ", "-");
+        });
+    //#endregion
+
+    //#region TestAPI
+    const TestAPIBtn = document.getElementById("TestAPIBtn");
+    TestAPIBtn.addEventListener("click", () => {
+        const panelAPILink = document.getElementById("panelAPILink");
+        const panelAPIKey = document.getElementById("panelAPIKey");
+
+        if (panelAPILink.value != "" && panelAPIKey.value != "") {
+            window.open(
+                `${panelAPILink.value}?key=${panelAPIKey.value}&action=services`,
+                "_blank",
+            );
+        } else alert("Please enter both Panel API URL and API Key");
+    });
+    //#endregion
+
+    //#region Rating Selection
+    const ratingSelector = document.getElementById("ratingSelector");
+    const ratingValue = document.getElementById("ratingSelectedValue");
+    const ratingOptions = document.querySelectorAll(
+        "#ratingSelector .options .ratingOption",
+    );
+
+    ratingSelector.onclick = function () {
+        ratingSelector
+            .querySelector("span.options")
+            .classList.toggle("invisible");
+    };
+
+    ratingOptions.forEach((ratingOption) => {
+        ratingOption.addEventListener("click", () => {
+            ratingValue.innerHTML = ratingOption.innerHTML;
+            document.getElementById("rating").value =
+                ratingValue.textContent.trim();
+        });
+    });
+    //#endregion
+
+    //#region Payment Button Additions
+    const paymentAddBtn = document.getElementById("paymentAddBtn");
+    const paymentDataHolder = document.getElementById("paymentData");
+    var paymentOptionsData = [];
+    var paymentOptionJsonObject = [];
+    var allPaymentDeleteBtns;
+
+    paymentAddBtn.addEventListener("click", () => {
+        const payOption = document.getElementById("payOption");
+        const payDepo = document.getElementById("payDepo");
+        document.getElementById("paymentOptions").value = "";
+
+        if (payOption.value != "" && payDepo.value != "") {
+            paymentOptionsData.push([payOption.value, payDepo.value]);
+        }
+
+        formPaymentOptionsJson();
+
+        //Adding Payment Entered data for User
+        showPaymentOptions();
+
+        document.getElementById("payOption").value = "";
+        document.getElementById("payDepo").value = "";
+    });
+
+    function formPaymentOptionsJson() {
+        paymentOptionJsonObject = [];
+        for (var i = 0; i < paymentOptionsData.length; i++) {
+            var tempObj = {
+                payOption: paymentOptionsData[i][0],
+                payDepo: paymentOptionsData[i][1],
+            };
+            paymentOptionJsonObject.push(tempObj);
+        }
+        document.getElementById("paymentOptions").value = JSON.stringify(
+            paymentOptionJsonObject,
+        );
+        // console.log(JSON.stringify(paymentOptionJsonObject));
+    }
+
+    function showPaymentOptions() {
+        paymentDataHolder.innerHTML = "";
+        for (let index = 0; index < paymentOptionsData.length; index++) {
+            paymentDataHolder.insertAdjacentHTML(
+                "beforeend",
+                `
+                <span class="row flex items-center bg-[#f0f8ff] border-b border-b-white p-2">
+                    <p class="w-[45%]">${paymentOptionsData[index][0]}</p>
+                    <p class="w-[45%]">${paymentOptionsData[index][1]}</p>
+                    <i class="cursor-pointer fa-duotone fa-trash"></i>
+                </span>
+                `,
+            );
+        }
+        allPaymentDeleteBtns = document.querySelectorAll(
+            "#paymentData .row .fa-trash",
+        );
+        deletePaymentOption();
+    }
+
+    function deletePaymentOption() {
+        allPaymentDeleteBtns.forEach((deleteBtn) => {
+            deleteBtn.addEventListener("click", () => {
+                for (
+                    let index = 0;
+                    index < paymentOptionsData.length;
+                    index++
+                ) {
+                    if (
+                        paymentOptionsData[index].includes(
+                            deleteBtn.previousElementSibling
+                                .previousElementSibling.textContent,
+                        )
+                    ) {
+                        paymentOptionsData.splice(index, 1);
+                        break;
+                    }
+                }
+                showPaymentOptions();
+            });
+        });
+        formPaymentOptionsJson();
+    }
+    //#endregion
+
+    //#region Page Onload Tasks
+    window.addEventListener("load", ()=>{
+        //Set Ratings in Update Situations
+        if(ratingSelector.dataset.setValue != 0 
+        && ratingSelector.dataset.setValue != null
+        && ratingSelector.dataset.setValue <= 5
+        ){
+            ratingSelector.click();
+            ratingOptions.forEach(ratingOption => {
+                if(ratingOption.textContent.includes(ratingSelector.dataset.setValue.toString())){
+                    ratingOption.click();
+                }
+            });
+        }
+
+        //Set Payment Options in Update Situations
+                
+        // paymentOptionsData.push([payOption.value, payDepo.value]);
+        var paymentOptionsReceieved = document.getElementById("paymentOptions").value;
+        if(paymentOptionsReceieved != ""){
+            paymentOptionsReceieved = JSON.parse(paymentOptionsReceieved);
+            for (let i = 0; i < paymentOptionsReceieved.length; i++) {
+                paymentOptionsData.push([paymentOptionsReceieved[i].payOption , paymentOptionsReceieved[i].payDepo]);
+            }
+
+            showPaymentOptions();
+        }
+    })
+    //#endregion
+</script>

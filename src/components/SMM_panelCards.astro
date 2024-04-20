@@ -13,10 +13,15 @@ const {imageSrc ,panelTitle ,descriptionText ,slugURL} = Astro.props;
 
 ---
 
-<div
+<article
     class="post p-5 rounded-lg flex gap-3 shadow-lg border border-gray-200 bg-white">
     <img
-        src={imageSrc}
+        src=
+        {
+            imageSrc != ""
+            ? imageSrc 
+            :"/assets/images/no-image-available.jpg"
+        }
         alt=""
         class="rounded-lg w-1/4 object-cover object-left"
     />
@@ -31,4 +36,4 @@ const {imageSrc ,panelTitle ,descriptionText ,slugURL} = Astro.props;
             >Know more...</a
         >
     </span>
-</div>
+</article>

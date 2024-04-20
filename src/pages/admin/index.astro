@@ -10,6 +10,9 @@ if(!isAdminLoggedIn(adminCookie)){
     return Astro.redirect("/admin/signin/");
 }
 
+const panelCounts = await fetch(Astro.site + "api/panels.json").then(Response => Response.json());
+const servicesCounts = await fetch(Astro.site + "api/services.json").then(Response => Response.json());
+
 const currentDate = new Date();
 const currentHour = currentDate.getHours();
 let greeting, coverPic;
@@ -23,6 +26,7 @@ if (currentHour < 12) {
     coverPic = "admin-cover3.jpg";
     greeting = "Good evening!";
 }
+
 ---
 
 <AdminLayout pageName="Dashboard" pageTitle="Your Dashboard">
@@ -35,7 +39,7 @@ if (currentHour < 12) {
             </span>
             <span>
                 <p>SMM Panels</p>
-                <p class="text-xl font-bold">Counter</p>
+                <p class="text-xl font-bold">{panelCounts.length}</p>
             </span>
         </div>
         <div class="cards flex gap-3 items-center lg:w-[32%] border border-[#4d4d4d86] rounded-md p-4 hover:shadow-lg">
@@ -43,8 +47,8 @@ if (currentHour < 12) {
                 <i class="fa-solid fa-page text-green-700"></i>
             </span>
             <span>
-                <p>Pages</p>
-                <p class="text-xl font-bold">Counter</p>
+                <p>Services</p>
+                <p class="text-xl font-bold">{servicesCounts.length}</p>
             </span>
         </div>
         <div class="cards flex gap-3 items-center lg:w-[32%] border border-[#4d4d4d86] rounded-md p-4 hover:shadow-lg">

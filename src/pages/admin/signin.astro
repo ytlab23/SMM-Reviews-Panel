@@ -7,7 +7,7 @@ if (Astro.request.method === "POST") {
       
       const data = await Astro.request.formData();
       isFormSubmitted = true;
-      console.log(data.get("username"));
+      // console.log(data.get("username"));
 
       const response = await fetch(Astro.site + "api/adminLogin.json", {
          method: "POST",

@@ -1,0 +1,25 @@
+---
+interface Props {
+    service: {
+        serviceLogo: {
+            url: string;
+        };
+        serviceTitle: string;
+        id: string;
+    };
+}
+
+const { service } = Astro.props;
+---
+
+<span class="chip flex items-center gap-3 p-2 rounded-full border bg-slate-300 hover:bg-slate-400 cursor-pointer">
+    <img
+        src={service.serviceLogo.url}
+        alt={service.serviceTitle}
+        class="rounded-full size-10"
+    />
+    <span>{service.serviceTitle}</span>
+    <a href={"/admin/serviceDelete/"+service.id}>
+        <i class="text-gray-400 fa-solid fa-circle-xmark hover:text-white"></i>
+    </a>
+</span>

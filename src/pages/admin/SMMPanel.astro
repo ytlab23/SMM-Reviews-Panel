@@ -3,11 +3,30 @@ import RowData from "../../components[admin]/rowData.astro";
 import AdminLayout from "../../layouts/adminLayout.astro";
 import {formatDate} from "../../js/utils.ts";
 
+let toastMessage;
+
+const deletePanelID = Astro.cookies.get("deletePanelID");
+const deletePanelMessage = Astro.cookies.get("deletePanelMessage");
+// console.log("Delete Panel ID - ", deletePanelID?.value);
+
+if(deletePanelMessage != undefined ){
+    if(deletePanelMessage?.value == "Delete Successful"){
+        toastMessage = "Panel Deleted"
+    }
+    else
+        toastMessage = "Panel NOT Deleted. An problem occured while deleting."
+
+    Astro.cookies.delete("deletePanelID");
+    Astro.cookies.delete("deletePanelMessage");
+}
+
+
 interface panelStructure {
     id: string;
     panelAPILink: string;
     panelTitle: string;
     panelWebsiteURL: string;
+    panelSlug: string;
     xata: {
         createdAt: string;
     };
@@ -42,4 +61,35 @@ const panelAPIResponse: panelStructure[] = await allSMMPanels.json();
             }
         </div>
     </div>
+
+    {
+        toastMessage && (
+            <span
+                class="toast hidden"
+                id="toast"
+                data-message={toastMessage}
+            />
+        )
+    }
 </AdminLayout>
+
+<script is:inline>
+    //#region Toast Notifications
+    try {
+        Toastify({
+            text: document.querySelector("#toast").getAttribute("data-message"),
+            duration: 3000,
+            close: true,
+            gravity: "bottom", // `top` or `bottom`
+            position: "right", // `left`, `center` or `right`
+            stopOnFocus: true, // Prevents dismissing of toast on hover
+            style: {
+                background: "linear-gradient(to right, #5344f5, #3dbbc9)",
+            },
+            onClick: function () {}, // Callback after click
+        }).showToast();
+    } catch (error) {
+        console.log(error);
+    }
+    //#endregion
+</script>
