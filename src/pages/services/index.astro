@@ -1,0 +1,63 @@
+---
+import PanelLayout from "../../layouts/PanelLayout.astro";
+import SMM_ServicesCards from "../../components/SMM_servicesCards.astro"
+
+interface serviceSchema{
+    serviceColor: string,
+    serviceLogo: {
+        name: string,
+        mediaType: string,
+        url: string,
+    },
+    serviceTitle: string,
+}
+
+let SMMService_APIData : any[] = [];
+let allPanelAPIs : string[] = [];
+let platformsServiceCount : any[] = [];
+
+//Fetching All Services
+const allServicesFetch:any = await fetch(Astro.site + "api/services.json");
+const allServiceRes : serviceSchema[] = await allServicesFetch.json();
+
+//Fetching All Panels
+const allPanelsFetch:any = await fetch(Astro.site + "api/panels.json")
+const allPanelRes = await allPanelsFetch.json();
+
+//Capturing Panel's APIUrl and APIKey
+allPanelRes.map((panel:any) => (
+    allPanelAPIs.push(`${panel.panelAPILink}?key=${panel.panelAPIKey}&action=services`)
+))
+
+//Executing Every Panel's API to get services
+for (let i = 0; i < allPanelAPIs.length; i++) {
+    let panelServicesdata = await fetch(allPanelAPIs[i]).then(Response => Response.json());
+    SMMService_APIData.push(panelServicesdata)
+}
+
+for (let i = 0; i < allServiceRes.length; i++) {
+    let count = 0;
+
+    for (let j = 0; j < SMMService_APIData.length; j++) {
+        for(let k = 0; k < SMMService_APIData[j].length; k++){
+            if(SMMService_APIData[j][k].name.toString().toLowerCase().includes(allServiceRes[i].serviceTitle.toString().toLowerCase()))
+            count++;
+        }
+    }
+
+    platformsServiceCount.push([allServiceRes[i].serviceTitle, count]);
+}
+
+---
+
+<PanelLayout title="List of all Services - SMM Panel" metaDescription="">
+    <h1 class="font-bold text-center text-2xl">Available Social Media Marketing Services</h1>
+    <div class="servicesList flex flex-wrap justify-start gap-5 my-6">
+        {
+            allServiceRes.map((service, index)=>(
+                <SMM_ServicesCards servicesCount={platformsServiceCount[index][1]} title={service.serviceTitle} imageLogoPath={service.serviceLogo.url}></SMM_ServicesCards>
+            ))
+        }
+
+    </div>
+</PanelLayout>
