@@ -67,30 +67,28 @@ const responsePanels = await allPanels.json();
 	<main class="w-full flex gap-5">
 		<!-- SMM Panels Listing -->
 		<section class="panel-container mb-14 w-[60%]">
-			<div class="header flex justify-between items-center w-full my-4">
-				<span>
-					<h2 class="text-xl font-semibold">Latest SMM Panels</h2>
-					<p>
-						Explore the most recently added SMM Panels and more...
-					</p>
-				</span>
-				<a href="/smm-panels">See all</a>
-			</div>
+			{
+				responsePanels.length > 0 
+					? 
+					<div class="header flex justify-between items-center w-full my-4">
+						<span>
+							<h2 class="text-xl font-semibold">Latest SMM Panels</h2>
+							<p>Explore the most recently added SMM Panels and more...</p>
+						</span>
+						<a href="/smm-panels">See all</a>
+					</div>
 
-			<div
-				class="wrapper flex justify-center items-center flex-wrap gap-5"
-			>
-			
-				{
-					responsePanels.reverse().map((panel: panelStructure) => (
-						<SMM_panelCards
-							descriptionText={panel.panelTextDescrition.substring(0, 120)}
-							imageSrc = {panel.paneFeaturedImage == null ? "" : panel.paneFeaturedImage.url }
-							panelTitle={panel.panelTitle}
-							slugURL={panel.panelSlug}
-						/>
-					))
-				}
+					<div class="wrapper flex justify-center items-center flex-wrap gap-5">
+					{
+						responsePanels.reverse().map((panel: panelStructure) => (
+							<SMM_panelCards
+								descriptionText={panel.panelTextDescrition.substring(0, 120)}
+								imageSrc = {panel.paneFeaturedImage == null ? "" : panel.paneFeaturedImage.url }
+								panelTitle={panel.panelTitle}
+								slugURL={panel.panelSlug}
+							/>
+						))
+					}
 
 				<!-- <div class="smmpanelCard lg:w-[32%] p-5 rounded-lg flex flex-col gap-3 shadow-lg border border-gray-200">
 					<a href="/smm-panel/rec_co62js6annbn1jdj2tg0">
@@ -110,6 +108,8 @@ const responsePanels = await allPanels.json();
 					</div>
 				</div> -->
 			</div>
+					: <h2 class="text-xl font-semibold text-center">No Panel is there at the moment.</h2>
+			}
 		</section>
 
 		<aside class="w-[40%] p-5 flex flex-col gap-y-4">
