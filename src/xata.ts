@@ -23,6 +23,7 @@ const tables = [
       { name: "panelTextDescrition", type: "text" },
       { name: "rating", type: "int" },
       { name: "paymentOptions", type: "json" },
+      { name: "servicesList", type: "json" },
     ],
   },
   {
@@ -54,6 +55,18 @@ const tables = [
       { name: "message", type: "text" },
     ],
   },
+  {
+    name: "services",
+    columns: [
+      { name: "serviceTitle", type: "string" },
+      {
+        name: "serviceLogo",
+        type: "file",
+        file: { defaultPublicAccess: true },
+      },
+      { name: "serviceColor", type: "string" },
+    ],
+  },
 ] as const;
 
 export type SchemaTables = typeof tables;
@@ -71,11 +84,15 @@ export type UsersRecord = Users & XataRecord;
 export type ContactMsgs = InferredTypes["contact_msgs"];
 export type ContactMsgsRecord = ContactMsgs & XataRecord;
 
+export type Services = InferredTypes["services"];
+export type ServicesRecord = Services & XataRecord;
+
 export type DatabaseSchema = {
   "panels-datatable": PanelsDatatableRecord;
   pages: PagesRecord;
   users: UsersRecord;
   contact_msgs: ContactMsgsRecord;
+  services: ServicesRecord;
 };
 
 const DatabaseClient = buildClient();
