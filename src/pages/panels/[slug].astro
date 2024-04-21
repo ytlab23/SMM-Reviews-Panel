@@ -1,7 +1,9 @@
 ---
 import PanelLayout from "../../layouts/PanelLayout.astro";
 
-import servicePlatformsData from "../../data/temp-services";
+//import servicePlatformsData from "../../data/temp-services";
+const allServicesFetch = await fetch(Astro.site + "api/services.json");
+const allServices = await allServicesFetch.json();
 
 export const prerender = true;
 export async function getStaticPaths (){
@@ -19,6 +21,7 @@ export async function getStaticPaths (){
 
 const { panel } = Astro.props;
 const { slug } = Astro.params;
+// console.log(panel);
 
 var ratingCollection : String[] = [];
 for (let j = 0; j < 5; j++) {
@@ -40,11 +43,11 @@ servicesResponse.map((service:any) => (
     allServiceNames.push(service.name.toLowerCase())
 ))
 
-for(let i = 0; i < servicePlatformsData.length; i++) {
+for(let i = 0; i < allServices.length; i++) {
     for (let j = 0; j < allServiceNames.length; j++) {
-        if(isSame(allServiceNames[j] , servicePlatformsData[i].platform)){
-            if(platformList.includes(servicePlatformsData[i]) == false)
-            platformList.push(servicePlatformsData[i]);
+        if(isSame(allServiceNames[j] , allServices[i].serviceTitle)){
+            if(platformList.includes(allServices[i]) == false)
+            platformList.push(allServices[i]);
         }
     }
 }
@@ -92,8 +95,8 @@ interface panelSchema{
                 <div class="services-cloud flex flex-wrap gap-3 text-white">
 					{
 						platformList.map((service:any) => (
-							<a class="px-4 capitalize py-2 rounded-md cursor-pointer" style={`background-color: ${service.color}`}
-							>{service.platform}</a>
+							<a href={"/services/"+ service.serviceTitle.toLowerCase().replaceAll(" ", "-")} class="px-4 capitalize py-2 rounded-md cursor-pointer" style={`background-color: ${service.serviceColor}`}
+							>{service.serviceTitle}</a>
 						))
 					}
 				</div>

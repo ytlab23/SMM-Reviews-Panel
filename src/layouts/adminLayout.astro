@@ -72,7 +72,7 @@ try {
         Toastify({
             text: document.querySelector("#toast").getAttribute("data-message"),
             duration: 3000,
-            destination: "/admin/SMMPanel",
+            destination: document.querySelector("#toast").getAttribute("data-destination"),
             close: true,
             gravity: "bottom", // `top` or `bottom`
             position: "right", // `left`, `center` or `right`

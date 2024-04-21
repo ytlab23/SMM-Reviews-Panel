@@ -3,6 +3,7 @@ import MainLayout from "../layouts/MainLayout.astro";
 import SMM_panelCards from "../components/SMM_panelCards.astro";
 
 import servicePlatformsData from "../data/temp-services";
+
 interface serviceSchema{
     serviceColor: string,
     serviceLogo: {
@@ -75,12 +76,12 @@ const responsePanels = await allPanels.json();
 							<h2 class="text-xl font-semibold">Latest SMM Panels</h2>
 							<p>Explore the most recently added SMM Panels and more...</p>
 						</span>
-						<a href="/smm-panels">See all</a>
+						<a href="/panels">See all</a>
 					</div>
 
 					<div class="wrapper flex justify-center items-center flex-wrap gap-5">
 					{
-						responsePanels.reverse().map((panel: panelStructure) => (
+						responsePanels.slice(0,10).reverse().map((panel: panelStructure) => (
 							<SMM_panelCards
 								descriptionText={panel.panelTextDescrition.substring(0, 120)}
 								imageSrc = {panel.paneFeaturedImage == null ? "" : panel.paneFeaturedImage.url }
@@ -96,30 +97,38 @@ const responsePanels = await allPanels.json();
 
 		<aside class="w-[40%] p-5 flex flex-col gap-y-4">
 			<div class="services-cloud-container bg-white p-3 rounded-md">
-				<div class="header flex justify-between items-center w-full">
-					<span class="w-full">
-						<h2 class="text-xl font-semibold text-center">
-							All Services
-						</h2>
-					</span>
-				</div>
 
-				<div class="services-cloud flex flex-wrap gap-3 text-white">
+				{
+					// servicePlatformsData.length > 0
+					allServiceRes.length > 0
+					?	
+					<div class="header flex justify-between items-center w-full">
+						<span class="w-full">
+							<h2 class="text-xl font-semibold text-center">
+								All Services
+							</h2>
+						</span>
+					</div>
 
-					<!-- {
-						allServiceRes.map((panel_service)=>(
-						<a href={"/services/"+ panel_service.serviceTitle.toLowerCase().replaceAll(" ", "-")} class="px-4 capitalize py-2 rounded-md cursor-pointer hover:brightness-110" style={`background-color: ${panel_service.serviceColor}`}
-							>{panel_service.serviceTitle}</a>
-						))
-					} -->
+					<div class="services-cloud flex flex-wrap gap-3 text-white">
 
-					{
-						servicePlatformsData.map((service) => (
-							<a class="px-4 capitalize py-2 rounded-md cursor-pointer" style={`background-color: ${service.color}`}
-							>{service.platform}</a>
-						))
-					}
-				</div>
+						 {
+							allServiceRes.map((panel_service)=>(
+							<a href={"/services/"+ panel_service.serviceTitle.toLowerCase().replaceAll(" ", "-")} class="px-4 capitalize py-2 rounded-md cursor-pointer hover:brightness-110" style={`background-color: ${panel_service.serviceColor}`}
+								>{panel_service.serviceTitle}</a>
+							))
+						}
+
+						<!-- {
+							servicePlatformsData.map((service) => (
+								<a class="px-4 capitalize py-2 rounded-md cursor-pointer" style={`background-color: ${service.color}`}
+								>{service.platform}</a>
+							))
+						}  -->
+					</div>
+					: <h2 class="text-xl font-semibold text-center">No Services Listed at the Moment</h2>
+				}
+				
 			</div>
 
 			<div class="top-panel-container bg-white p-3 rounded-md hidden">
