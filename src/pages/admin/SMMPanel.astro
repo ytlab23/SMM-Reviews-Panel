@@ -1,7 +1,7 @@
 ---
 import RowData from "../../components[admin]/rowData.astro";
 import AdminLayout from "../../layouts/adminLayout.astro";
-import {formatDate} from "../../js/utils.ts";
+import { formatDate } from "../../js/utils.ts";
 
 let toastMessage;
 
@@ -9,17 +9,15 @@ const deletePanelID = Astro.cookies.get("deletePanelID");
 const deletePanelMessage = Astro.cookies.get("deletePanelMessage");
 // console.log("Delete Panel ID - ", deletePanelID?.value);
 
-if(deletePanelMessage != undefined ){
-    if(deletePanelMessage?.value == "Delete Successful"){
-        toastMessage = "Panel Deleted"
-    }
-    else
-        toastMessage = "Panel NOT Deleted. An problem occured while deleting."
+if (deletePanelMessage != undefined) {
+    if (deletePanelMessage?.value == "Delete Successful") {
+        toastMessage = "Panel Deleted";
+    } else
+        toastMessage = "Panel NOT Deleted. An problem occured while deleting.";
 
     Astro.cookies.delete("deletePanelID");
     Astro.cookies.delete("deletePanelMessage");
 }
-
 
 interface panelStructure {
     id: string;
@@ -49,31 +47,71 @@ const panelAPIResponse: panelStructure[] = await allSMMPanels.json();
         </div>
         <div class="table-data w-full rounded-br-lg rounded-bl-lg">
             {
-                panelAPIResponse.reverse().map((panel, index) => (
-                    <RowData
-                        API_URL={panel.panelAPILink}
-                        Action={panel.id}
-                        No={index + 1}
-                        Publish_Date={formatDate(panel.xata.createdAt)}
-                        Title={panel.panelTitle}
-                    />
-                ))
+                panelAPIResponse
+                    .reverse()
+                    .map((panel, index) => (
+                        <RowData
+                            API_URL={panel.panelAPILink}
+                            Action={panel.id}
+                            No={index + 1}
+                            Publish_Date={formatDate(panel.xata.createdAt)}
+                            Title={panel.panelTitle}
+                        />
+                    ))
             }
         </div>
     </div>
 
     {
         toastMessage && (
-            <span
-                class="toast hidden"
-                id="toast"
-                data-message={toastMessage}
-            />
+            <span class="toast hidden" id="toast" data-message={toastMessage} />
         )
     }
 </AdminLayout>
 
 <script is:inline>
+    //#region Delete Button Function
+    var allDeleteBtns = document.querySelectorAll(".actionBtns .DeleteBtn");
+    allDeleteBtns.forEach((deleteBtn) => {
+        deleteBtn.addEventListener("click", async () => {
+            await fetch(
+                "/api/panels/" + deleteBtn.getAttribute("data-id").toString(),
+                {
+                    method: "DELETE",
+                },
+            )
+                .then((response) => response.json())
+                .then((data) => {
+                    var message = "";
+                    if (data.status != 200) {
+                        message =
+                            "Panel NOT Deleted. An problem occured while deleting";
+                    } else {
+                        message = "Panel Deleted";
+                        deleteBtn.parentElement.parentElement.parentElement.remove();
+                    }
+
+                    Toastify({
+                        text: message,
+                        duration: 3000,
+                        close: true,
+                        gravity: "bottom", // `top` or `bottom`
+                        position: "right", // `left`, `center` or `right`
+                        stopOnFocus: true, // Prevents dismissing of toast on hover
+                        style: {
+                            background:
+                                "linear-gradient(to right, #5344f5, #3dbbc9)",
+                        },
+                        onClick: function () {}, // Callback after click
+                    }).showToast();
+                    setTimeout(function () {
+                        location.reload();
+                    }, 1200);
+                });
+        });
+    });
+    //#endregion
+
     //#region Toast Notifications
     try {
         Toastify({

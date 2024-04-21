@@ -19,7 +19,7 @@ export async function GET() {
             "paneFeaturedImage"
          ])
          .getAll();
-
+         
       return new Response(
          JSON.stringify(records),
       )

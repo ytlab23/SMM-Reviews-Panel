@@ -19,7 +19,5 @@ const { service } = Astro.props;
         class="rounded-full size-10"
     />
     <span>{service.serviceTitle}</span>
-    <a href={"/admin/serviceDelete/"+service.id}>
-        <i class="text-gray-400 fa-solid fa-circle-xmark hover:text-white"></i>
-    </a>
+    <i data-service-id={service.id} class="deleteBtn text-gray-400 fa-solid fa-circle-xmark hover:text-white cursor-pointer"></i>
 </span>
