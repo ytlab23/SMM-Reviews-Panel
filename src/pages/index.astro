@@ -112,11 +112,17 @@ const responsePanels = await allPanels.json();
 
 					<div class="services-cloud flex flex-wrap gap-3 text-white">
 
-						 {
-							allServiceRes.map((panel_service)=>(
+						{
+							allServiceRes.slice(0, 20).map((panel_service)=>(
 							<a href={"/services/"+ panel_service.serviceTitle.toLowerCase().replaceAll(" ", "-")} class="px-4 capitalize py-2 rounded-md cursor-pointer hover:brightness-110" style={`background-color: ${panel_service.serviceColor}`}
 								>{panel_service.serviceTitle}</a>
 							))
+						}
+
+						{
+							allServiceRes.length > 20 &&
+							<a href="/services/" class="px-4 text-black capitalize py-2 border-2 border-gray-700 rounded-md cursor-pointer hover:brightness-110"
+								>Show All</a>
 						}
 
 						<!-- {
