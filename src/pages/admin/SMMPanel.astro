@@ -1,8 +1,12 @@
 ---
 import RowData from "../../components[admin]/rowData.astro";
 import AdminLayout from "../../layouts/adminLayout.astro";
-import { formatDate } from "../../js/utils.ts";
+import { formatDate, isAdminLoggedIn } from "../../js/utils.ts";
+const adminCookie = Astro.cookies.get("admin");
 
+if(!isAdminLoggedIn(adminCookie)){
+    return Astro.redirect("/admin/signin/");
+}
 let toastMessage;
 
 interface panelStructure {

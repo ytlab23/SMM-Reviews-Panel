@@ -3,6 +3,11 @@
 import { isAdminLoggedIn } from "../../js/utils";
 import AdminLayout from "../../layouts/adminLayout.astro";
 import AdminPanelFields from "../../layouts/adminPanelFields.astro";
+const adminCookie = Astro.cookies.get("admin");
+
+if(!isAdminLoggedIn(adminCookie)){
+    return Astro.redirect("/admin/signin/");
+}
 var messageToShow = "", showOverlaw = false;
 
 const panelID = Astro.cookies.get("updatePanelID");

@@ -1,8 +1,7 @@
 ---
-
 export const prerender = true;
 export async function getStaticPaths (){
-
+    
 const allPanelsFetch:any = await fetch(Astro.site + "api/panels.json")
 const allPanelRes = await allPanelsFetch.json();
 

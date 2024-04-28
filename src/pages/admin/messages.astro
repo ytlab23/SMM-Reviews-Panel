@@ -1,6 +1,11 @@
 ---
+import { isAdminLoggedIn } from "../../js/utils";
 import AdminLayout from "../../layouts/adminLayout.astro";
+const adminCookie = Astro.cookies.get("admin");
 
+if(!isAdminLoggedIn(adminCookie)){
+    return Astro.redirect("/admin/signin/");
+}
 
 ---
 

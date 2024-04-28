@@ -1,9 +1,14 @@
 ---
 import TextArea from "../../components[admin]/TextArea.astro";
 import TextInput from "../../components[admin]/TextInput.astro";
+import { isAdminLoggedIn } from "../../js/utils";
 import AdminLayout from "../../layouts/adminLayout.astro";
 
+const adminCookie = Astro.cookies.get("admin");
 
+if(!isAdminLoggedIn(adminCookie)){
+    return Astro.redirect("/admin/signin/");
+}
 ---
 
 <AdminLayout pageName="Site Settings" pageTitle="Site Settings">

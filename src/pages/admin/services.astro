@@ -2,6 +2,12 @@
 import AdminLayout from "../../layouts/adminLayout.astro";
 import TextInput from "../../components[admin]/TextInput.astro";
 import ServiceChip from "../../components[admin]/ServiceChip.astro";
+import { isAdminLoggedIn } from "../../js/utils";
+const adminCookie = Astro.cookies.get("admin");
+
+if(!isAdminLoggedIn(adminCookie)){
+    return Astro.redirect("/admin/signin/");
+}
 let showOverlay,
     messageToShow = "";
 
