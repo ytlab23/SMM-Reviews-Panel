@@ -19,13 +19,14 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.5.1/css/all.css">
     <title>{title}</title>
+    <meta name="description" content={metaDescription}>
 </head>
 <body>
     <Navbar></Navbar>
     
     <div class="main-placeholder py-5 flex justify-center items-center bg-slate-100">
         <div class="main-container lg:w-[1150px]">
-            <main>
+            <main class="lg:p-0 px-4 lg:min-h-[80vh]">
                 <slot /> <!-- Main Content Placeholder -->
             </main>
         </div>

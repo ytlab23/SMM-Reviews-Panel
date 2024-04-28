@@ -30,6 +30,7 @@ if (Astro.request.method === "POST") {
 ---
 
 <AdminLayout pageName="New SMM Panels" pageTitle="New SMM Panels" showOverlaw={showOverlay}>
+    <span class="p-5 flex items-center flex-col w-full">
     <AdminPanelFields formType="publish"></AdminPanelFields>
 
     {
@@ -42,4 +43,6 @@ if (Astro.request.method === "POST") {
             />
         )
     }
+    </span>
+    
 </AdminLayout>

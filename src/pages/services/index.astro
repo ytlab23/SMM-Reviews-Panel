@@ -52,7 +52,7 @@ for (let i = 0; i < allServiceRes.length; i++) {
 
 <PanelLayout title="List of all Services - SMM Panel" metaDescription="">
     <h1 class="font-bold text-center text-2xl">Available Social Media Marketing Services</h1>
-    <div class="servicesList flex flex-wrap justify-start gap-5 my-6">
+    <div class="servicesList flex flex-wrap lg:justify-start justify-center gap-5 my-6">
         {
             allServiceRes.map((service, index)=>(
                 <SMM_ServicesCards servicesCount={platformsServiceCount[index][1]} title={service.serviceTitle} imageLogoPath={service.serviceLogo.url}></SMM_ServicesCards>

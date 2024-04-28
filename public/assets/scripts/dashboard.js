@@ -5,8 +5,8 @@ var mainTitle = document.getElementById("pageTitle");
 var menuToggleBtn = document.getElementById("menuToggleBtn");
 var menuCloseToggleBtn = document.getElementById("menuCloseToggleBtn");
 
-menuCloseToggleBtn.addEventListener("click", (e) => { toggleSidebar() })
-menuToggleBtn.addEventListener("click", (e) => { toggleSidebar() })
+menuCloseToggleBtn.addEventListener("click", () => { toggleSidebar() })
+menuToggleBtn.addEventListener("click", () => { toggleSidebar() })
 /* Hide and Show SideMenu bar Ends*/
 
 function toggleSidebar() {
@@ -44,3 +44,26 @@ SidebarMenuOptions.forEach(SidebarMenu => {
     })
 });
 // show Menu ends
+
+//#region Confirm Box Modal
+const confirmBoxContainer = document.querySelector(".Overlay.confirmBox");
+const confirmMsg = confirmBoxContainer.querySelector(".ConfirmMessage .msg");
+var confirmBoxResponse;
+
+function setConfirmBoxMessage(message) {
+    confirmMsg.textContent = message;
+    triggerConfirmBox();
+    confirmBoxResponse = null;
+}
+function triggerConfirmBox() {
+    confirmBoxContainer.classList.toggle("hidden");
+}
+function setConfirmationBoxResponse(btnClickAction){
+    triggerConfirmBox();
+    confirmBoxResponse = btnClickAction
+}
+
+async function getConfirmationBoxResponse() {
+    return confirmBoxResponse;
+}
+//#endregion

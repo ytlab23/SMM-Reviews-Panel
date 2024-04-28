@@ -21,7 +21,7 @@ const {No, Title, Publish_Date, API_URL, Action } = Astro.props;
     <div title={API_URL} class="field px-3 w-[25%] line-clamp-1">{API_URL}</div>
     <div title={Action} class="field px-3 w-[15%] line-clamp-1">
         <div class="actionBtns flex gap-3">
-            <a class="EditBtn px-2 py-1 rounded-md hover:font-semibold text-green-600 bg-green-100" href={"/admin/panelUpdate/" + Action}>Edit</a>
+            <a class="EditBtn px-2 py-1 rounded-md hover:font-semibold text-green-600 bg-green-100" href={"/admin/SMMPanelUpdate/" + Action}>Edit</a>
             <a data-id={Action} class="DeleteBtn px-2 py-1 rounded-md hover:font-semibold text-red-600 bg-red-300 cursor-pointer">Delete</a>
         </div>
     </div>
