@@ -15,7 +15,7 @@ if(!isAdminLoggedIn(panelID)){
 if (Astro.request.method === "POST") {
     try {
         const data = await Astro.request.formData();
-        console.log("Form Data at client side - ", data);
+        // console.log("Form Data at client side - ", data);
         
         showOverlaw = true;
         const response = await fetch(Astro.site + "api/panels/" + panelID?.value, {
@@ -26,8 +26,9 @@ if (Astro.request.method === "POST") {
         const APIResponse = await response.json();
         if (APIResponse.message == "Data Updated Successfully") {
             messageToShow =
-                "SMM Panel is Updated. Click here to see all Saved SMM Panels";
+                "SMM Panel is Updated. Click here to see all Saved SMM Panels";            
         }
+        
     } catch (error) {
         if (error instanceof Error) {
             console.error(error.message);
@@ -50,6 +51,7 @@ const panelInfo = await fetchPanelInfo.json();
                     class="toast hidden"
                     id="toast"
                     data-message={messageToShow}
+                    data-destination={"/admin/SMMPanel"}
                 />
             )
         }

@@ -18,6 +18,8 @@ interface panelStructure {
 
 const allSMMPanels = await fetch(Astro.site + "api/panels.json");
 const panelAPIResponse: panelStructure[] = await allSMMPanels.json();
+Astro.cookies.delete("updatePanelID");
+
 ---
 
 <AdminLayout pageName="SMM Panels" pageTitle="SMM Panels">
