@@ -30,37 +30,39 @@ if (currentHour < 12) {
 ---
 
 <AdminLayout pageName="Dashboard" pageTitle="Your Dashboard">
-    <DashboardGreeting {coverPic} {greeting}></DashboardGreeting>
-
-    <div class="dashboard-cards flex flex-wrap gap-4 justify-center items-center w-full mb-5">
-        <div class="cards flex gap-3 items-center lg:w-[32%] border border-[#4d4d4d86] rounded-md p-4 hover:shadow-lg">
-            <span class="size-12 flex justify-center items-center rounded-full text-xl bg-blue-200">
-                <i class="fa-duotone fa-newspaper text-blue-700"></i>
-            </span>
-            <span>
-                <p>SMM Panels</p>
-                <p class="text-xl font-bold">{panelCounts.length}</p>
-            </span>
+    <span class="p-5 flex items-center flex-col w-full">
+        <DashboardGreeting {coverPic} {greeting}></DashboardGreeting>
+    
+        <div class="dashboard-cards flex flex-wrap gap-4 justify-center items-center w-full mb-5">
+            <div class="cards flex gap-3 items-center lg:w-[32%] border border-[#4d4d4d86] rounded-md p-4 transition-all ease-in-out duration-150 hover:shadow-lg hover:scale-105">
+                <span class="size-12 flex justify-center items-center rounded-full text-xl bg-blue-200">
+                    <i class="fa-duotone fa-newspaper text-blue-700"></i>
+                </span>
+                <span>
+                    <p>SMM Panels</p>
+                    <p class="text-xl font-bold">{panelCounts.length}</p>
+                </span>
+            </div>
+            <div class="cards flex gap-3 items-center lg:w-[32%] border border-[#4d4d4d86] rounded-md p-4 transition-all ease-in-out duration-150 hover:shadow-lg hover:scale-105">
+                <span class="size-12 flex justify-center items-center rounded-full text-xl bg-green-200">
+                    <i class="fa-solid fa-page text-green-700"></i>
+                </span>
+                <span>
+                    <p>Services</p>
+                    <p class="text-xl font-bold">{servicesCounts.length}</p>
+                </span>
+            </div>
+            <div class="cards flex gap-3 items-center lg:w-[32%] border border-[#4d4d4d86] rounded-md p-4 transition-all ease-in-out duration-150 hover:shadow-lg hover:scale-105">
+                <span class="size-12 flex justify-center items-center rounded-full text-xl bg-pink-200">
+                    <i class="fa-duotone fa-messages text-pink-700"></i>
+                </span>
+                <span>
+                    <p>New Messages</p>
+                    <p class="text-xl font-bold">Counter</p>
+                </span>
+            </div>
         </div>
-        <div class="cards flex gap-3 items-center lg:w-[32%] border border-[#4d4d4d86] rounded-md p-4 hover:shadow-lg">
-            <span class="size-12 flex justify-center items-center rounded-full text-xl bg-green-200">
-                <i class="fa-solid fa-page text-green-700"></i>
-            </span>
-            <span>
-                <p>Services</p>
-                <p class="text-xl font-bold">{servicesCounts.length}</p>
-            </span>
-        </div>
-        <div class="cards flex gap-3 items-center lg:w-[32%] border border-[#4d4d4d86] rounded-md p-4 hover:shadow-lg">
-            <span class="size-12 flex justify-center items-center rounded-full text-xl bg-pink-200">
-                <i class="fa-duotone fa-messages text-pink-700"></i>
-            </span>
-            <span>
-                <p>New Messages</p>
-                <p class="text-xl font-bold">Counter</p>
-            </span>
-        </div>
-    </div>
+    </span>
 </AdminLayout>
 
 <script is:inline src="/assets/scripts/main.js"></script>

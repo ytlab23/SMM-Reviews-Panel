@@ -2,14 +2,13 @@
 interface Props {
     title:string,
     servicesCount?: number,
-    panelCount? : number,
     imageLogoPath : string
 }
 
-const {title, servicesCount, panelCount, imageLogoPath} = Astro.props;
+const {title, servicesCount, imageLogoPath} = Astro.props;
 ---
 
-<article class="flex gap-2 w-[32%] p-3 border rounded-md shadow-md hover:shadow-lg">
+<article class="flex gap-2 lg:w-[32%] w-[47%] p-3 border rounded-md shadow-md hover:shadow-lg">
     <img alt={title} class="rounded-lg size-20" src={imageLogoPath}>
     <span>
         <h2 class="font-semibold hover:underline"><a href={"/services/"+ title.toLowerCase().replaceAll(" ", "-")}>{title}</a></h2>

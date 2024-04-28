@@ -1,11 +1,195 @@
 ---
+import TextInput from "../../components[admin]/TextInput.astro";
 import AdminLayout from "../../layouts/adminLayout.astro";
 
 
 ---
 
 <AdminLayout pageName="My Profile" pageTitle="My Profile">
-    <div class="development flex justify-center items-center size-full">
-        <img src="https://www.tnhighways.tn.gov.in/images/under_dev.gif">
+    
+    <div class="wrapper w-full p-5">
+        <div class="profileContainer p-6 my-5 flex justify-center items-center gap-4 border-gray-500 border-2 border-dashed rounded-md">
+            
+            <span class="flex gap-4">
+                <img src="/assets/images/usericon.png" alt="profile Image" class=" rounded-full size-28 border-2 border-blue-500 cursor-pointer">
+                <span>
+                    <p class="text-5xl font-semibold">Full Name</p>
+                    <p class="italic text-xl">username</p>
+                </span>
+            </span>
+    
+        </div>
+
+        <span class="flex items-center gap-2 mb-4 ">
+            <h2 class="py-1 text-xl font-bold">My Details</h2>
+            <button type="button" id="detailsEditBtn" class="EditBtn px-2 py-1 rounded-md hover:font-semibold text-green-600 bg-green-100"><i class="fa-solid fa-pencil"></i> Edit</button>
+
+        </span>
+        <div class="detailsContainer w-full flex gap-7">
+            <ul class="w-1/2">
+                <li class="flex gap-4 p-3 bg-white rounded-lg mb-2"><span class="w-1/2">Name</span> <span class="w-1/2">Jack</span></li>
+                <li class="flex gap-4 p-3 bg-white rounded-lg mb-2"><span class="w-1/2">Username</span> <span class="w-1/2">"admin"</span></li>
+            </ul>
+            <ul class="w-1/2">
+                <li class="flex gap-4 p-3 bg-white rounded-lg mb-2"><span class="w-1/2">Email</span> <span class="w-1/2">Random@email.com</span></li>
+                <li class="flex gap-4 p-3 bg-white rounded-lg mb-2"><span class="w-1/2">Role</span> <span class="w-1/2">superuser</span></li>
+            </ul>
+
+        </div>
+        
+        <div class="updateDetailsContainer hidden">
+            <span class="divider border-t-2 border-dashed border-gray-600 my-5 block"></span>
+            <h2 class="mb-4 text-xl font-bold">Update Details</h2>
+            <div class="EmailAddFields flex gap-7">
+                <form method="post" class="w-full">
+                    <div class="wrapper flex gap-4">
+                        <span
+                            class="flex flex-col justify-center items-center p-2 gap-4 border-2 border-gray-400 border-dashed rounded-md">
+                                <label class="w-full text-left">Upload Profile Picture</label>
+    
+                                <img
+                                    id="uploadedImage"
+                                    src="/assets/images/usericon.png"
+                                    class="size-20 cursor-pointer"
+                                    onclick="document.getElementById(`proPicFile`).click();"
+                                />
+                                <input
+                                    type="file"
+                                    name="proPicFile"
+                                    id="proPicFile"
+                                    class="text-xs w-fit"
+                                    accept="image/png, image/webp, image/avif"
+                                />
+                            </span>
+                        <div class="col w-1/2">
+                            <TextInput isRequired={true} placeholder="New Name" textBoxId="newName" textLabelText="New Name"></TextInput>
+                            <TextInput isRequired={true} placeholder="New Username" textBoxId="newUsername" textLabelText="New Username"></TextInput>
+                        </div>
+                        <div class="col w-1/2">
+                            <TextInput inputType="email" isRequired={true} placeholder="New Email Address" textBoxId="NewEmailAddress" textLabelText="New Email Address"></TextInput>
+                            
+                            <span class="flex flex-col items-center gap-2">
+                                <label class="w-full text-left">Role *</label>
+            
+                                <span
+                                    id="roleSelector" data-set-value=""
+                                    class="flex justify-between relative cursor-pointer w-full p-2 px-3 rounded-md border border-[#f4f4f4] bg-white text-[#555555] shadow-lg"
+                                    ><span id="roleSelectedValue">Select Role</span>
+                                    <i class="fa-solid fa-caret-down"></i>
+                                    <span
+                                        class="options invisible absolute left-0 top-14 bg-white w-full rounded-md flex flex-col z-[1]">
+                                        <span
+                                            class="roleOption hover:bg-slate-200 p-4 py-2 rounded-t-md cursor-pointer">Select Role</span>
+                                        <span
+                                            class="roleOption hover:bg-slate-200 p-4 py-2 rounded-t-md cursor-pointer">Superuser</span>
+                                        <span
+                                            class="roleOption hover:bg-slate-200 p-4 py-2 cursor-pointer">Normal User</span>
+                                    </span>
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+    
+                    <input type="hidden" name="imageName" id="imageName" />
+                    <input type="hidden" name="imageBase64" id="imageBase64" />
+                    <input type="hidden" name="imageFileType" id="imageFileType" />
+                    <input type="hidden" name="role" id="role" />
+    
+                    <button id="updateDetailsBtn"
+                    type="submit"
+                    class="size-fit w-auto my-2 px-5 py-3 text-white rounded-lg bg-[#5344f5] hover:bg-[#3d32b3] capitalize">
+                        Update
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+        <span class="divider border-t-2 border-dashed border-gray-600 my-5 block"></span>
+        
+        <h2 class="mb-4 text-xl font-bold">Change Passwords</h2>
+        <div class="changePassFields flex gap-7">
+            <form method="post" class="w-[55%]">
+
+                <TextInput inputType="password" isRequired={true} placeholder="Current Password" textBoxId="oldPass" textLabelText="Current Password"></TextInput>
+                <TextInput inputType="password" isRequired={true} placeholder="New Password" textBoxId="newPass" textLabelText="New Password"></TextInput>
+                <TextInput inputType="password" isRequired={true} placeholder="Confirm Password" textBoxId="confirmPass" textLabelText="Confirm Password"></TextInput>
+                <button id="passwordChangeBtn"
+                type="button"
+                class="size-fit w-auto my-2 px-5 py-3 text-white rounded-lg bg-[#5344f5] hover:bg-[#3d32b3] capitalize">
+                    Change
+                </button>
+            </form>
+
+            <div class="notes w-[45%]">
+                <ol class="list-decimal text-sm flex flex-col gap-5">
+                    <li>
+                        (Mandatory) Please make a Password using more than 6 characters
+                    </li>
+                    <li>
+                        (Not Mandatory) Use special characters for making Password more secure.
+                    </li>
+                </ol>
+            </div>
+        </div>
     </div>
+
 </AdminLayout>
+
+<script is:inline>
+    //#region role Selection
+    const roleSelector = document.getElementById("roleSelector");
+    const roleValue = document.getElementById("roleSelectedValue");
+    const roleOptions = document.querySelectorAll(
+        "#roleSelector .options .roleOption",
+    );
+
+    roleSelector.onclick = function () {
+        roleSelector
+            .querySelector("span.options")
+            .classList.toggle("invisible");
+    };
+
+    roleOptions.forEach((roleOption) => {
+        roleOption.addEventListener("click", () => {
+            roleValue.innerHTML = roleOption.innerHTML;
+            document.getElementById("role").value =
+                roleValue.textContent.trim();
+        });
+    });
+    //#endregion
+
+    //#region Details Edit 
+    const detailsEditBtn = document.querySelector("#detailsEditBtn");
+    const detailsFields = document.querySelector(".updateDetailsContainer");
+    detailsEditBtn.addEventListener("click", ()=>{
+        detailsFields.classList.remove("hidden");
+    })
+    //#endregion
+
+    //#region profile Picture
+    document
+        .getElementById("proPicFile")
+        .addEventListener("change", function (event) {
+            const file = event.target.files[0];
+
+            if (file) {
+                // console.log(file);
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+
+                reader.onload = function () {
+                    const imageDataURL = reader.result;
+                    // const imgbody = new Blob([imageDataURL] , {type : file.type})
+
+                    document.getElementById("imageName").value = file.name;
+                    document.getElementById("uploadedImage").src = imageDataURL;
+                    document.getElementById("imageBase64").value =
+                        imageDataURL.split("base64,")[1];
+                    document.getElementById("imageFileType").value = file.type;
+
+                    // console.log(imgbody);
+                };
+            }
+        });
+    //#endregion
+</script>

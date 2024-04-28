@@ -106,43 +106,6 @@ if (!panelInfo) {
                     >
                 </span>
 
-            </div>
-
-            <div class="sideBar lg:w-[40%] flex flex-col gap-5">
-                <TextInput
-                    isRequired={true}
-                    placeholder="xyz-smm-panel"
-                    textBoxId="panelSlug"
-                    textLabelText="Panel Permalink/Slug"
-                    textValue = {panelInfo.data.panelSlug || ""}
-                />
-
-                <span class="flex flex-col items-center gap-4">
-                    <label class="w-full text-left">Panel FeaturedImage *</label
-                    >
-                    <span
-                        class="flex flex-col justify-center items-center gap-2 w-full px-12 py-3 border-black border-2 border-dashed rounded-xl"
-                    >
-                        <img
-                            id="uploadedImage"
-                            src=
-                            {
-                                (panelInfo.data.paneFeaturedImage != null)
-                                ? ( panelInfo.data.paneFeaturedImage.url == "" ) ? "/assets/images/placeholderImage.jpg" : panelInfo.data.paneFeaturedImage.url 
-                                : "/assets/images/placeholderImage.jpg"
-                            }
-                            class="w-full h-[180px] object-cover rounded-md"
-                        />
-                        <input
-                            id="uploadInput"
-                            name="uploadInput"
-                            type="file"
-                            class="text-xs w-fit"
-                            accept="image/*"
-                        />
-                    </span>
-                </span>
-
                 <span class="flex flex-col items-center gap-4">
                     <label class="w-full text-left">Give Rating</label>
 
@@ -241,6 +204,47 @@ if (!panelInfo) {
                     >
                     </span>
                 </span>
+
+            </div>
+
+            <div class="sideBar lg:w-[40%] flex flex-col gap-5">
+                <TextInput
+                    isRequired={true}
+                    placeholder="xyz-smm-panel"
+                    textBoxId="panelSlug"
+                    textLabelText="Panel Permalink/Slug"
+                    textValue = {panelInfo.data.panelSlug || ""}
+                />
+
+                <span class="flex flex-col items-center gap-4">
+                    <label class="w-full text-left">Panel FeaturedImage *</label
+                    >
+                    <span
+                        class="flex flex-col justify-center items-center gap-2 w-full px-12 py-3 border-black border-2 border-dashed rounded-xl"
+                    >
+                        <img
+                            id="uploadedImage"
+                            src=
+                            {
+                                (panelInfo.data.paneFeaturedImage != null)
+                                ? ( panelInfo.data.paneFeaturedImage.url == "" ) ? "/assets/images/placeholderImage.jpg" : panelInfo.data.paneFeaturedImage.url 
+                                : "/assets/images/placeholderImage.jpg"
+                            }
+                            class="w-full h-[180px] object-cover rounded-md"
+                        />
+                        <input
+                            id="uploadInput"
+                            name="uploadInput"
+                            type="file"
+                            class="text-xs w-fit"
+                            accept="image/*"
+                        />
+                    </span>
+                </span>
+
+                <TextArea isRequired={false} placeholder="Search Description of about 150 characters" textBoxId="pageMetaDesc" textLabelText="Search Description"></TextArea>
+
+                
             </div>
         </div>
 

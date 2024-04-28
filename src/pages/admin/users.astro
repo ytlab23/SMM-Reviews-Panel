@@ -1,4 +1,5 @@
 ---
+import TextInput from "../../components[admin]/TextInput.astro";
 import AdminLayout from "../../layouts/adminLayout.astro";
 
 
@@ -6,8 +7,129 @@ import AdminLayout from "../../layouts/adminLayout.astro";
 
 <AdminLayout pageTitle="Users" pageName="Users">
     
-    <div class="development flex justify-center items-center size-full">
-        <img src="https://www.tnhighways.tn.gov.in/images/under_dev.gif">
+    <div class="user-container size-full relative">
+        <div class="p-5 w-full">
+            <button id="serviceAddBtn"
+            type="button"
+            class="size-fit w-auto px-5 py-3 text-white rounded-lg bg-[#5344f5] hover:bg-[#3d32b3] capitalize">
+                <i class="fa-solid fa-plus"></i> Add New
+            </button>
+    
+            <div class="userProfile-container w-full flex flex-wrap gap-3 mt-5">
+                <div class="cards relative flex flex-col gap-3 items-center justify-center lg:w-[24%] text-center border border-[#4d4d4d86] rounded-md p-4 transition-all ease-in-out duration-150 hover:shadow-lg hover:scale-105">
+                    
+                    <span class="absolute top-1 right-1 p-1 text-xs rounded bg-red-200 text-red-500 cursor-pointer hover:font-semibold">
+                        Delete
+                    </span>
+    
+                    <img src="/assets/images/usericon.png" alt="profile Image" class="rounded-full size-20">
+                    <span>
+                        <p class="font-semibold">Name</p>
+                        <p class="text-sm italic">Role</p>
+                    </span>
+                </div>
+            </div>
+    
+        </div>
+        <div class="Overlay serviceForm top-0 absolute invisible size-full z-[1] bg-[#525252a5] p-6">
+            <form
+                method="post"
+                class="w-full sticky top-[10vh] p-6 bg-white rounded-md flex flex-col justify-center items-center gap-5">
+                <i class="closeBtn serviceForm absolute -right-2 -top-2 cursor-pointer fa-solid fa-circle-xmark text-xl"></i>
+                <div class="formContainer flex w-full lg:gap-24">
+                    <div class="fields flex flex-col gap-5 w-2/4">
+                        <TextInput
+                            isRequired={true}
+                            placeholder="Elon Musk"
+                            textBoxId="userFullName"
+                            textLabelText="User's Full Name"
+                        />
+
+                        <span class="flex flex-col items-center gap-2">
+                            <label class="w-full text-left">Role *</label>
+        
+                            <span
+                                id="roleSelector" data-set-value=""
+                                class="flex justify-between relative cursor-pointer w-full p-2 px-3 rounded-md border border-[#f4f4f4] bg-white text-[#555555] shadow-lg"
+                                ><span id="roleSelectedValue">Select Role</span>
+                                <i class="fa-solid fa-caret-down"></i>
+                                <span
+                                    class="options invisible absolute left-0 top-14 bg-white w-full rounded-md flex flex-col z-[1]">
+                                    <span
+                                        class="roleOption hover:bg-slate-200 p-4 py-2 rounded-t-md cursor-pointer">Select Role</span>
+                                    <span
+                                        class="roleOption hover:bg-slate-200 p-4 py-2 rounded-t-md cursor-pointer">Superuser</span>
+                                    <span
+                                        class="roleOption hover:bg-slate-200 p-4 py-2 cursor-pointer">Normal User</span>
+                                </span>
+                            </span>
+                        </span>
+
+                        <input type="hidden" name="roleSelectorValue" id="roleSelectorValue" />
+
+                        <button id="userAddBtn"
+                        type="submit"
+                        class="size-fit w-auto my-2 px-5 py-3 text-white rounded-lg bg-[#5344f5] hover:bg-[#3d32b3] capitalize">
+                            Save
+                        </button>
+                    </div>
+
+                    <div class="notes w-[45%]">
+                        <ol class="list-decimal text-sm flex flex-col gap-5">
+                            <li>
+                                After Saving you will be given user's default username and password for First Login
+                            </li>
+                            <li>
+                                Advise new user to change Username and Password from the My Profile Page.
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 
 </AdminLayout>
+
+<script is:inline>
+    //#region Add Service Form Pop Up
+    function triggerServiceForm() {
+        document
+            .querySelector(".Overlay.serviceForm")
+            .classList.toggle("invisible");
+        document.querySelector("#serviceName").value = "";
+        document
+            .querySelector("#uploadedImage")
+            .setAttribute("src", "/assets/images/logo-placeholder-image.png");
+        document.querySelector("#serviceColor").value = "";
+    }
+    const serviceBtn = document.getElementById("serviceAddBtn");
+    const serviceCloseBtn = document.querySelector(".closeBtn.serviceForm");
+    serviceBtn.onclick = () => triggerServiceForm();
+    serviceCloseBtn.onclick = () => triggerServiceForm();
+    //#endregion
+
+
+    //#region role Selection
+    const roleSelector = document.getElementById("roleSelector");
+    const roleValue = document.getElementById("roleSelectedValue");
+    const roleOptions = document.querySelectorAll(
+        "#roleSelector .options .roleOption",
+    );
+
+    roleSelector.onclick = function () {
+        roleSelector
+            .querySelector("span.options")
+            .classList.toggle("invisible");
+    };
+
+    roleOptions.forEach((roleOption) => {
+        roleOption.addEventListener("click", () => {
+            roleValue.innerHTML = roleOption.innerHTML;
+            document.getElementById("role").value =
+                roleValue.textContent.trim();
+        });
+    });
+    //#endregion
+
+</script>

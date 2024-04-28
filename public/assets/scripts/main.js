@@ -13,7 +13,7 @@ function updateTime() {
 
 
    const year = now.getFullYear();
-   const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+   /* const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed */
    const day = String(now.getDate()).padStart(2, '0');
    const dayOfWeek = now.getDay();
    const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];

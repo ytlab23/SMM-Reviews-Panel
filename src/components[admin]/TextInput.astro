@@ -5,15 +5,15 @@ interface Props {
     placeholder : string,
     isRequired : boolean,
     textValue? :string
+    inputType? :any
 }
-
-const {textLabelText, textBoxId ,placeholder ,isRequired,textValue } = Astro.props;
+const {textLabelText, textBoxId, placeholder, isRequired, textValue, inputType="text" } = Astro.props;
 
 ---
 
-<span class="flex flex-col items-center gap-2">
+<span class="flex flex-col items-center gap-2 w-full">
     <label class="w-full text-left" for="">{textLabelText} {isRequired && "*"}</label>
-    <input type="text" id={textBoxId} name={textBoxId} 
+    <input type={inputType} id={textBoxId} name={textBoxId} 
     class="w-full p-2 px-3 rounded-md border border-[#f4f4f4] bg-white text-[#555555] shadow-lg"
     placeholder={placeholder}
     required = {isRequired}

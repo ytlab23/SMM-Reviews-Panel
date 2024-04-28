@@ -5,20 +5,6 @@ import { formatDate } from "../../js/utils.ts";
 
 let toastMessage;
 
-const deletePanelID = Astro.cookies.get("deletePanelID");
-const deletePanelMessage = Astro.cookies.get("deletePanelMessage");
-// console.log("Delete Panel ID - ", deletePanelID?.value);
-
-if (deletePanelMessage != undefined) {
-    if (deletePanelMessage?.value == "Delete Successful") {
-        toastMessage = "Panel Deleted";
-    } else
-        toastMessage = "Panel NOT Deleted. An problem occured while deleting.";
-
-    Astro.cookies.delete("deletePanelID");
-    Astro.cookies.delete("deletePanelMessage");
-}
-
 interface panelStructure {
     id: string;
     panelAPILink: string;
@@ -35,7 +21,7 @@ const panelAPIResponse: panelStructure[] = await allSMMPanels.json();
 ---
 
 <AdminLayout pageName="SMM Panels" pageTitle="SMM Panels">
-    <div class="table-data-container w-full">
+    <div class="table-data-container w-full p-5">
         <div
             class="table-header flex w-full py-4 bg-[#6e7bd9] text-white font-bold rounded-tr-lg rounded-tl-lg"
         >

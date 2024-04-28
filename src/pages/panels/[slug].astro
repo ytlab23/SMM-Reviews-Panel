@@ -95,7 +95,7 @@ interface panelSchema{
                 <div class="services-cloud flex flex-wrap gap-3 text-white">
 					{
 						platformList.map((service:any) => (
-							<a href={"/services/"+ service.serviceTitle.toLowerCase().replaceAll(" ", "-")} class="px-4 capitalize py-2 rounded-md cursor-pointer" style={`background-color: ${service.serviceColor}`}
+							<a href={"/services/"+ service.serviceTitle.toLowerCase().replaceAll(" ", "-")} class="px-4 capitalize py-2 rounded-md cursor-pointer hover:brightness-75" style={`background-color: ${service.serviceColor}`}
 							>{service.serviceTitle}</a>
 						))
 					}

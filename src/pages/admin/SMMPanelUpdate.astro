@@ -42,16 +42,19 @@ const panelInfo = await fetchPanelInfo.json();
 ---
 
 <AdminLayout pageName="Update Panel" pageTitle="Update Panel" showOverlaw={showOverlaw}>
-    {
-        messageToShow && (
-            <span
-                class="toast hidden"
-                id="toast"
-                data-message={messageToShow}
-            />
-        )
-    }
-    
-    <AdminPanelFields panelInfo={panelInfo} formType="update"></AdminPanelFields>
+    <span class="p-5 flex items-center flex-col w-full">
 
+        {
+            messageToShow && (
+                <span
+                    class="toast hidden"
+                    id="toast"
+                    data-message={messageToShow}
+                />
+            )
+        }
+        
+        <AdminPanelFields panelInfo={panelInfo} formType="update"></AdminPanelFields>
+
+    </span>
 </AdminLayout>

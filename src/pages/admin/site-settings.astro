@@ -1,11 +1,130 @@
 ---
+import TextArea from "../../components[admin]/TextArea.astro";
+import TextInput from "../../components[admin]/TextInput.astro";
 import AdminLayout from "../../layouts/adminLayout.astro";
 
 
 ---
 
 <AdminLayout pageName="Site Settings" pageTitle="Site Settings">
-    <div class="development flex justify-center items-center size-full">
-        <img src="https://www.tnhighways.tn.gov.in/images/under_dev.gif">
-    </div>
+    
+    <span class="p-5 flex items-center flex-col w-full">
+        <form method="post" class="w-full">
+            <h2 class="mb-4 text-xl font-bold">General Settings</h2>
+            <div class="fields w-2/3 flex flex-col gap-3">
+                <span class="flex gap-2">
+                    
+                    <span class="flex flex-col items-center gap-4 w-1/2">
+                        <label class="w-full text-left">Site Logo *</label
+                        >
+                        <span
+                            class="flex flex-col justify-center items-center gap-2 w-full px-12 py-3 border-black border-2 border-dashed rounded-xl"
+                        >
+                            <img
+                                id="uploadedImageLogo"
+                                src="/assets/images/placeholderImage.jpg"
+                                class="size-[110px] object-cover rounded-md"
+                            />
+                            <!-- {
+                                    (panelInfo.data.paneFeaturedImage != null)
+                                    ? ( panelInfo.data.paneFeaturedImage.url == "" ) ? "/assets/images/placeholderImage.jpg" : panelInfo.data.paneFeaturedImage.url 
+                                    : "/assets/images/placeholderImage.jpg"
+                                } -->
+                            <input
+                                id="uploadInputLogo"
+                                name="uploadInputLogo"
+                                type="file"
+                                class="text-xs w-fit"
+                                accept="image/*"
+                            />
+                        </span>
+                    </span>
+    
+                    <span class="flex flex-col items-center gap-4 w-1/2">
+                        <label class="w-full text-left">Site Favicon *</label
+                        >
+                        <span
+                            class="flex flex-col justify-center items-center gap-2 w-full px-12 py-3 border-black border-2 border-dashed rounded-xl"
+                        >
+                            <img
+                                id="uploadedImageFavicon"
+                                src="/assets/images/placeholderImage.jpg"
+                                class="size-[110px] object-cover rounded-md"
+                            />
+                            <!-- {
+                                    (panelInfo.data.paneFeaturedImage != null)
+                                    ? ( panelInfo.data.paneFeaturedImage.url == "" ) ? "/assets/images/placeholderImage.jpg" : panelInfo.data.paneFeaturedImage.url 
+                                    : "/assets/images/placeholderImage.jpg"
+                                } -->
+                            <input
+                                id="uploadInputFav"
+                                name="uploadInputFav"
+                                type="file"
+                                class="text-xs w-fit"
+                                accept="image/*"
+                            />
+                        </span>
+                    </span>
+                </span>    
+                
+                <TextInput isRequired={true} placeholder="Example - My SMM Compare Site" textBoxId="webTitle" textLabelText="Website Title"></TextInput>
+
+                <TextArea isRequired={true} placeholder="130 Characters Meta Description" textBoxId="webMetaDes" textLabelText="Site Meta Description"></TextArea>
+            </div>
+            
+            <span class="divider border-t-2 border-dashed border-gray-600 my-5 block"></span>
+            <h2 class="mb-4 text-xl font-bold">Homepage Settings</h2>
+            <div class="fields w-2/3 flex flex-col gap-3">
+                <span class="flex flex-col items-center gap-4 w-full">
+                    <label class="w-full text-left">Header Background Image *</label>
+                    <span class="flex flex-col justify-center items-center gap-2 w-full px-12 py-3 border-black border-2 border-dashed rounded-xl">
+                        <img
+                            id="uploadedImageHeaderBg"
+                            src="/assets/images/placeholderImage.jpg"
+                            class="w-[110px] object-cover rounded-md"
+                        />
+                        <!-- {
+                                (panelInfo.data.paneFeaturedImage != null)
+                                ? ( panelInfo.data.paneFeaturedImage.url == "" ) ? "/assets/images/placeholderImage.jpg" : panelInfo.data.paneFeaturedImage.url 
+                                : "/assets/images/placeholderImage.jpg"
+                            } -->
+                        <input
+                            id="uploadInputHeaderBg"
+                            name="uploadInputHeaderBg"
+                            type="file"
+                            class="text-xs w-fit"
+                            accept="image/*"
+                        />
+                    </span>
+                </span>
+                <TextInput isRequired={true} placeholder="Best SMM Panel" textBoxId="siteHeaderTitle" textLabelText="Header Title"></TextInput>
+                <TextInput isRequired={true} placeholder="Best SMM Panel Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem ipsum blanditiis in officiis distinctio." textBoxId="siteHeaderParagraph" textLabelText="Header Paragraph"></TextInput>
+            </div>
+
+            <span class="divider border-t-2 border-dashed border-gray-600 my-5 block"></span>
+
+            <h2 class="mb-4 text-xl font-bold">Functional Settings</h2>
+            <div class="fields w-2/3 flex flex-col gap-3">
+                <TextInput inputType="number" isRequired={true} placeholder="10" textBoxId="sitePanelCount" textLabelText="Number of Panels to show in Home Page"></TextInput>
+                <TextInput inputType="number" isRequired={true} placeholder="10" textBoxId="siteServiceCount" textLabelText="Number of Services that will be shown per page in Services Page"></TextInput>
+            </div>
+
+            <span class="divider border-t-2 border-dashed border-gray-600 my-5 block"></span>
+
+            <h2 class="mb-4 text-xl font-bold">Manage Sidebar (Homepage)</h2>
+            <div class="sidebarWidgets w-2/3 flex flex-col gap-4 justify-center items-center">
+                <button
+                type="button"
+                class="size-fit w-auto px-5 py-1 text-sm text-white rounded-full bg-[#5344f5] hover:bg-[#3d32b3] capitalize">
+                <i class="fa-solid fa-plus"></i> Add New Widget</button>
+
+                <ol class="w-full">
+                    <li class="flex justify-between items-center rounded-lg my-3 w-full px-4 py-1 bg-gray-200 hover:bg-gray-300">Widget 1 <i class="fa-solid fa-ellipsis-vertical cursor-pointer"></i></li>
+                    <li class="flex justify-between items-center rounded-lg my-3 w-full px-4 py-1 bg-gray-200 hover:bg-gray-300">Widget 2 <i class="fa-solid fa-ellipsis-vertical cursor-pointer"></i></li>
+                </ol>
+            </div>
+
+        </form>
+    </span>
+    
 </AdminLayout>

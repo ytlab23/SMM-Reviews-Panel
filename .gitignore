@@ -23,5 +23,5 @@ pnpm-debug.log*
 
 .env
 
-notes.md
+/notes.md
 .env

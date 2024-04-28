@@ -16,5 +16,7 @@ return allPanelRes.map((panel:any) => (
 const { slug } = Astro.params;
 
 Astro.cookies.set("updatePanelID", slug , {path : "/admin" });
-return Astro.redirect("/admin/panelUpdate");
+return Astro.redirect("/admin/SMMPanelUpdate");
 ---
+
+<p class="hidden">{slug}</p>

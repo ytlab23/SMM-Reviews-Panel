@@ -21,7 +21,7 @@ if (Astro.request.method === "POST") {
         if (APIResponse.message == "Service Data Saved Successfully") {
             messageToShow = "New Service added";
 
-            Astro.redirect("admin/services")
+            Astro.redirect("admin/services");
         }
     } catch (error) {
         if (error instanceof Error) {
@@ -34,12 +34,12 @@ if (Astro.request.method === "POST") {
 
 const allServicesFetch = await fetch(Astro.site + "api/services.json");
 const allServices = await allServicesFetch.json();
-
 ---
 
 <AdminLayout
     pageName="Manage Services/Social Sites"
-    pageTitle="Manage Services">
+    pageTitle="Manage Services"
+>
     {
         messageToShow && (
             <span
@@ -49,96 +49,97 @@ const allServices = await allServicesFetch.json();
             />
         )
     }
-    <div class="servicesContainer w-full flex flex-wrap items-center gap-4 relative">
-        
-        {
-            allServices.map((service:any) => (
-                <ServiceChip {service}></ServiceChip>
-            ))
-        }
-
-        <button id="serviceAddBtn"
-            type="button"
-            class="size-fit w-auto px-5 py-3 text-white rounded-lg bg-[#5344f5] hover:bg-[#3d32b3] capitalize"
-            ><i class="fa-solid fa-plus"></i> Add New</button>
-    </div>
     <div
-        class="Overlay serviceForm top-0 absolute invisible size-full z-[1] flex justify-center items-center bg-[#525252a5] p-6">
-        <form
-            method="post"
-            class="w-full p-6 bg-white rounded-md flex flex-col justify-center items-center gap-5 relative"
-        >
-            <i class="closeBtn serviceForm absolute -right-2 -top-2 cursor-pointer fa-solid fa-circle-xmark text-xl"></i>
-            <div class="formContainer flex w-full lg:gap-24">
-                <div class="fields flex flex-col gap-5 w-2/4">
-                    <TextInput
-                        isRequired={true}
-                        placeholder="eg- Facebook"
-                        textBoxId="serviceName"
-                        textLabelText="Platform/Service Name"
-                    />
+        class="servicesContainer w-full relative"
+    >
+        <span class="flex flex-wrap items-center gap-4 p-5">
+            <button id="serviceAddBtn"
+                type="button"
+                class="size-fit w-auto px-5 py-3 text-white rounded-lg bg-[#5344f5] hover:bg-[#3d32b3] capitalize"
+                ><i class="fa-solid fa-plus"></i> Add New</button
+            >
+            {allServices.map((service: any) => <ServiceChip {service} />)}
+        </span>
 
-                    <span class="flex justify-center items-center gap-4 border-2 border-dashed rounded-md">
-                        <img
-                            id="uploadedImage"
-                            src="/assets/images/logo-placeholder-image.png"
-                            class="size-20 cursor-pointer"
-                            onclick="document.getElementById(`logoFile`).click();"
-                        />
-                        <input
-                            type="file"
-                            name="logoFile"
-                            id="logoFile"
-                            class="text-xs w-fit"
-                            accept="image/png, image/webp, image/avif"
-                        />
-                    </span>
-
-                    <span class="flex gap-3 items-end">
+        <div class="Overlay serviceForm top-0 absolute invisible size-full z-[1] bg-[#525252a5] p-6">
+            <form
+                method="post"
+                class="w-full sticky top-[10vh] p-6 bg-white rounded-md flex flex-col justify-center items-center gap-5">
+                <i class="closeBtn serviceForm absolute -right-2 -top-2 cursor-pointer fa-solid fa-circle-xmark text-xl"></i>
+                <div class="formContainer flex w-full lg:gap-24">
+                    <div class="fields flex flex-col gap-5 w-2/4">
                         <TextInput
                             isRequired={true}
-                            placeholder="eg- #fdfdfd"
-                            textBoxId="serviceColor"
-                            textLabelText="Pick a theme color for Service background"
+                            placeholder="eg- Facebook"
+                            textBoxId="serviceName"
+                            textLabelText="Platform/Service Name"
                         />
-                        <input
-                            type="color"
-                            name="serviceColorPicker"
-                            id="serviceColorPicker"
-                            class="cursor-pointer size-10"
-                        />
-                    </span>
+
+                        <span
+                            class="flex justify-center items-center gap-4 border-2 border-dashed rounded-md"
+                        >
+                            <img
+                                id="uploadedImage"
+                                src="/assets/images/logo-placeholder-image.png"
+                                class="size-20 cursor-pointer"
+                                onclick="document.getElementById(`logoFile`).click();"
+                            />
+                            <input
+                                type="file"
+                                name="logoFile"
+                                id="logoFile"
+                                class="text-xs w-fit"
+                                accept="image/png, image/webp, image/avif"
+                            />
+                        </span>
+
+                        <span class="flex gap-3 items-end">
+                            <TextInput
+                                isRequired={true}
+                                placeholder="eg- #fdfdfd"
+                                textBoxId="serviceColor"
+                                textLabelText="Pick a theme color for Service background"
+                            />
+                            <input
+                                type="color"
+                                name="serviceColorPicker"
+                                id="serviceColorPicker"
+                                class="cursor-pointer size-10"
+                            />
+                        </span>
+                    </div>
+
+                    <div class="notes w-2/4">
+                        <ol class="list-decimal text-sm flex flex-col gap-5">
+                            <li>
+                                Services are nothing but platform or social
+                                websites. Eg- Facebook, Instagram
+                            </li>
+                            <li>
+                                Choose a logo image of the social website in PNG
+                                format and has transparent background.
+                            </li>
+                            <li>
+                                Theme Color is the color related to the Social
+                                Website. Eg- Blue for Facebook. This color will
+                                be used as the background color of Services in
+                                your main site
+                            </li>
+                        </ol>
+                    </div>
                 </div>
 
-                <div class="notes w-2/4">
-                    <ol class="list-decimal text-sm flex flex-col gap-5">
-                        <li>
-                            Services are nothing but platform or social
-                            websites. Eg- Facebook, Instagram
-                        </li>
-                        <li>
-                            Choose a logo image of the social website in PNG
-                            format and has transparent background.
-                        </li>
-                        <li>
-                            Theme Color is the color related to the Social
-                            Website. Eg- Blue for Facebook. This color will be
-                            used as the background color of Services in your
-                            main site
-                        </li>
-                    </ol>
-                </div>
-            </div>
+                <input type="hidden" name="imageName" id="imageName" />
+                <input type="hidden" name="imageBase64" id="imageBase64" />
+                <input type="hidden" name="imageFileType" id="imageFileType" />
 
-            <input type="hidden" name="imageName" id="imageName" />
-            <input type="hidden" name="imageBase64" id="imageBase64" />
-            <input type="hidden" name="imageFileType" id="imageFileType" />
-
-            <button
-                type="submit"
-                class="size-fit w-auto px-5 py-3 text-white rounded-lg bg-[#5344f5] hover:bg-[#3d32b3] capitalize"
-                ><i class="fa-solid fa-play"></i> Save</button>
-        </form>
+                <button
+                    type="submit"
+                    class="size-fit w-auto px-5 py-3 text-white rounded-lg bg-[#5344f5] hover:bg-[#3d32b3] capitalize"
+                    ><i class="fa-solid fa-play"></i> Save</button
+                >
+            </form>
+        </div>
     </div>
 </AdminLayout>
 
@@ -178,55 +179,68 @@ const allServices = await allServicesFetch.json();
     //#endregion
 
     //#region Add Service Form Pop Up
-    function triggerServiceForm () {
-        document.querySelector(".Overlay.serviceForm").classList.toggle("invisible");
+    function triggerServiceForm() {
+        document
+            .querySelector(".Overlay.serviceForm")
+            .classList.toggle("invisible");
         document.querySelector("#serviceName").value = "";
-        document.querySelector("#uploadedImage").setAttribute("src", "/assets/images/logo-placeholder-image.png");
+        document
+            .querySelector("#uploadedImage")
+            .setAttribute("src", "/assets/images/logo-placeholder-image.png");
         document.querySelector("#serviceColor").value = "";
     }
     const serviceBtn = document.getElementById("serviceAddBtn");
     const serviceCloseBtn = document.querySelector(".closeBtn.serviceForm");
-    serviceBtn.onclick = ()=>triggerServiceForm();
-    serviceCloseBtn.onclick = ()=>triggerServiceForm();
+    serviceBtn.onclick = () => triggerServiceForm();
+    serviceCloseBtn.onclick = () => triggerServiceForm();
     //#endregion
 
     //#region Service Delete Functionality
-    var allDeleteBtns = document.querySelectorAll(".servicesContainer .deleteBtn");
-    allDeleteBtns.forEach(serviceDeletebtn => {
-        serviceDeletebtn.addEventListener("click", async()=>{
-            await fetch("/api/services/" + serviceDeletebtn.getAttribute("data-service-id").toString(),
-                {
-                    method: "DELETE",
-                },)
-            .then((response) => response.json())
-            .then((data)=>{
-                var message = "";
-                    if (data.status != 200) {
-                        message =
-                            "Service NOT Deleted. An problem occured while deleting";
-                    } else {
-                        message = "Service Deleted";
-                        serviceDeletebtn.parentElement.remove();
-                    }
+    var allDeleteBtns = document.querySelectorAll(
+        ".servicesContainer .deleteBtn",
+    );
+    allDeleteBtns.forEach((serviceDeletebtn) => {
+        serviceDeletebtn.addEventListener("click", async () => {
 
-                    Toastify({
-                        text: message,
-                        duration: 3000,
-                        close: true,
-                        gravity: "bottom", // `top` or `bottom`
-                        position: "right", // `left`, `center` or `right`
-                        stopOnFocus: true, // Prevents dismissing of toast on hover
-                        style: {
-                            background:
-                                "linear-gradient(to right, #5344f5, #3dbbc9)",
-                        },
-                        onClick: function () {}, // Callback after click
-                    }).showToast();
-                    setTimeout(function () {
-                        location.reload();
-                    }, 1200);
-            })
-        })
+            
+            var resp = window.confirm(`Are you sure you want to delete ${serviceDeletebtn.previousElementSibling.textContent} service?`);
+            if(resp == true)
+            await fetch(
+                    "/api/services/" +
+                        serviceDeletebtn.getAttribute("data-service-id").toString(),
+                    {
+                        method: "DELETE",
+                    },
+                )
+                    .then((response) => response.json())
+                    .then((data) => {
+                        var message = "";
+                        if (data.status != 200) {
+                            message =
+                                "Service NOT Deleted. An problem occured while deleting";
+                        } else {
+                            message = "Service Deleted";
+                            serviceDeletebtn.parentElement.remove();
+                        }
+    
+                        Toastify({
+                            text: message,
+                            duration: 3000,
+                            close: true,
+                            gravity: "bottom", // `top` or `bottom`
+                            position: "right", // `left`, `center` or `right`
+                            stopOnFocus: true, // Prevents dismissing of toast on hover
+                            style: {
+                                background:
+                                    "linear-gradient(to right, #5344f5, #3dbbc9)",
+                            },
+                            onClick: function () {}, // Callback after click
+                        }).showToast();
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1200);
+                    });
+        });
     });
     //#endregion
 </script>
