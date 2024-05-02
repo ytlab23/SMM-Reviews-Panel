@@ -16,8 +16,8 @@ export const POST: APIRoute = async ({ request }) => {
     fuzziness: 0,
     target: ['password']
   })
-
-  if (userID.totalCount == 1 && pass.totalCount == 1) {
+  
+  if (userID.totalCount == 1 && userID.records[0].password == userData.get("password")?.toString()) {
     return new Response(JSON.stringify({
       message: "user found",
       userID: userID.records[0].id,

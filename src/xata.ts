@@ -31,6 +31,7 @@ const tables = [
     columns: [
       { name: "pageTitle", type: "string" },
       { name: "pageContent", type: "text" },
+      { name: "PageDescription", type: "text" },
     ],
   },
   {
@@ -45,6 +46,8 @@ const tables = [
       },
       { name: "email", type: "string", unique: true },
       { name: "fullName", type: "string" },
+      { name: "role", type: "string" },
+      { name: "ProfilePic", type: "file", file: { defaultPublicAccess: true } },
     ],
   },
   {
@@ -53,6 +56,7 @@ const tables = [
       { name: "username", type: "string" },
       { name: "email", type: "string" },
       { name: "message", type: "text" },
+      { name: "status", type: "string", defaultValue: "unread" },
     ],
   },
   {
@@ -66,6 +70,32 @@ const tables = [
       },
       { name: "serviceColor", type: "string" },
     ],
+  },
+  {
+    name: "siteSettings",
+    columns: [
+      { name: "SiteTitle", type: "string" },
+      { name: "siteMetaDescription", type: "string" },
+      {
+        name: "siteFavicon",
+        type: "file",
+        file: { defaultPublicAccess: true },
+      },
+      { name: "siteLog", type: "file", file: { defaultPublicAccess: true } },
+      {
+        name: "homeBackgroundImage",
+        type: "file",
+        file: { defaultPublicAccess: true },
+      },
+      { name: "homeHeaderText", type: "string" },
+      { name: "homeHeaderPara", type: "text" },
+      { name: "homePanelCount", type: "int" },
+      { name: "platformServiceCount", type: "int" },
+    ],
+  },
+  {
+    name: "sidebarWidgets",
+    columns: [{ name: "widgetCodeBlock", type: "text" }],
   },
 ] as const;
 
@@ -87,12 +117,20 @@ export type ContactMsgsRecord = ContactMsgs & XataRecord;
 export type Services = InferredTypes["services"];
 export type ServicesRecord = Services & XataRecord;
 
+export type SiteSettings = InferredTypes["siteSettings"];
+export type SiteSettingsRecord = SiteSettings & XataRecord;
+
+export type SidebarWidgets = InferredTypes["sidebarWidgets"];
+export type SidebarWidgetsRecord = SidebarWidgets & XataRecord;
+
 export type DatabaseSchema = {
   "panels-datatable": PanelsDatatableRecord;
   pages: PagesRecord;
   users: UsersRecord;
   contact_msgs: ContactMsgsRecord;
   services: ServicesRecord;
+  siteSettings: SiteSettingsRecord;
+  sidebarWidgets: SidebarWidgetsRecord;
 };
 
 const DatabaseClient = buildClient();
