@@ -98,6 +98,7 @@ if(!isAdminLoggedIn(adminCookie)){
                     <input type="hidden" name="imageName" id="imageName" />
                     <input type="hidden" name="imageBase64" id="imageBase64" />
                     <input type="hidden" name="imageFileType" id="imageFileType" />
+                    <input type="hidden" name="updateUsersDetails" id="updateUsersDetails" value="true"/>
                     <input type="hidden" name="role" id="role" />
     
                     <button id="updateDetailsBtn"
@@ -118,6 +119,7 @@ if(!isAdminLoggedIn(adminCookie)){
                 <TextInput inputType="password" isRequired={true} placeholder="Current Password" textBoxId="oldPass" textLabelText="Current Password"></TextInput>
                 <TextInput inputType="password" isRequired={true} placeholder="New Password" textBoxId="newPass" textLabelText="New Password"></TextInput>
                 <TextInput inputType="password" isRequired={true} placeholder="Confirm Password" textBoxId="confirmPass" textLabelText="Confirm Password"></TextInput>
+                <input type="hidden" name="updateUsersDetails" id="updateUsersDetails" value="false"/>
                 <button id="passwordChangeBtn"
                 type="button"
                 class="size-fit w-auto my-2 px-5 py-3 text-white rounded-lg bg-[#5344f5] hover:bg-[#3d32b3] capitalize">

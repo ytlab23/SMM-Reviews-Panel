@@ -3,28 +3,16 @@ import { XataClient } from '../../../xata.ts';
 // Generated with CLI
 const xata = new XataClient({ apiKey: import.meta.env.XATA_API_KEY, branch: import.meta.env.XATA_BRANCH });
 
-interface panelStructure{
-    panelTitle : string,
-    panelWebsiteURL : string,
-    panelAPILink : string,
-    panelAPIKey : string,
-    panelSlug : string,
-    panelTextDescrition : string,
-    rating : number,
-    paymentOptions : string,
-    paneFeaturedImage? : {
-        name? : string,
-        mediaType? : string,
-        base64Content? : string
-    },
+interface messageStructure{
+    status: string,
 }
 
-//#region Returns Panel Information by ID
+//#region Returns Message Information by ID
 export const GET: APIRoute = async ({ params }) => {
     const id = params.id;
     // console.log("Parameter received - ", id);
     
-    const record = await xata.db["panels-datatable"].read(id?.toString() || "");
+    const record = await xata.db.contact_msgs.read(id?.toString() || "");
     // console.log(record);
     if (record!.id == id) {
         return new Response(
@@ -45,7 +33,7 @@ export const GET: APIRoute = async ({ params }) => {
 }
 //#endregion
 
-//#region Updates Panels Information by ID
+//#region Updates Message Information by ID
 export const PUT : APIRoute = async ({params, request}) =>{
     const data = await request.formData();
     const id = params.id;
@@ -59,26 +47,14 @@ export const PUT : APIRoute = async ({params, request}) =>{
         );
     }
 
-    let dataToUpdate : panelStructure ={
-        panelTitle : data.get("panelTitle")?.toString() || "",
-        panelWebsiteURL : data.get("panelWebsiteURL")?.toString() || "",
-        panelAPILink : data.get("panelAPILink")?.toString() || "",
-        panelAPIKey : data.get("panelAPIKey")?.toString() || "",
-        panelSlug : data.get("panelSlug")?.toString() || "",
-        panelTextDescrition : data.get("panelTextDescrition")?.toString() || "",
-        rating : Number(data.get("rating")!),
-        paymentOptions : data.get("paymentOptions")?.toString() || "",
-        paneFeaturedImage: {
-            name : data.get("imageName")?.toString() || "",
-            mediaType : data.get("imageFileType")?.toString() || "",
-            base64Content : data.get("imageBase64")?.toString() || "",
-        }
+    let dataToUpdate : messageStructure ={
+        status : data.get("status")?.toString() || ""
     };
 
     // console.log("received in API - " , data);
     // console.log("received in API - " , dataToUpdate);
     
-    const record = await xata.db["panels-datatable"].update(id?.toString() || "", dataToUpdate)
+    const record = await xata.db.contact_msgs.update(id?.toString() || "", dataToUpdate)
     // console.log(record);
     
     if (record!.id) {
@@ -103,7 +79,7 @@ export const PUT : APIRoute = async ({params, request}) =>{
 //#region Delete Panels Information by ID
 export const DELETE: APIRoute = async ({ params }) => {
     const id = params.id;
-    const record = await xata.db["panels-datatable"].delete(id?.toString() || "");
+    const record = await xata.db.contact_msgs.delete(id?.toString() || "");
     // console.log(record);
     if (record!.id == id) {
         return new Response(
