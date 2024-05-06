@@ -6,9 +6,12 @@ interface Props {
     metaDescription?:string
 }
 
+//Fetching Site Settings
+const allSiteFetch:any = await fetch(Astro.site + "api/siteData.json").then(Response => Response.json());
+
 const {
     title, 
-    metaDescription = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reprehenderit officia dolore at earum qui dolorem, alias ipsum molestias asperiores magnam recusandae ratione quos obcaecati repellat maxime. Fugit quaerat repudiandae impedit optio corrupti nobis enim minus magnam pariatur nam, officia porro sunt veniam tenetur. Dicta, incidunt commodi? Sunt est tenetur ut enim deserunt voluptates qui ipsa voluptate placeat eligendi! Perspiciatis odit atque quam minus quod quia totam, suscipit culpa, aut reiciendis consectetur ab maiores a aperiam? Officia sequi adipisci corporis beatae dignissimos debitis ab architecto doloribus! Odio quisquam earum id doloribus quidem, necessitatibus quae ullam ex, quis delectus, repellat debitis. Possimus mollitia dolores nulla veniam tenetur, non atque voluptatem incidunt quod quam totam at nemo, fuga neque. Ab magnam architecto doloribus."
+    metaDescription = allSiteFetch[0].siteMetaDescription
     } = Astro.props;
 ---
 
@@ -17,12 +20,13 @@ const {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href={allSiteFetch[0].siteFavicon.url} type="image/x-icon">
     <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.5.1/css/all.css">
-    <title>{title}</title>
+    <title>{title} - {allSiteFetch[0].SiteTitle}</title>
     <meta name="description" content={metaDescription}>
 </head>
 <body>
-    <Navbar></Navbar>
+    <Navbar logoImgSrc={allSiteFetch[0].siteLog.url}></Navbar>
     
     <div class="main-placeholder py-5 flex justify-center items-center bg-slate-100">
         <div class="main-container lg:w-[1150px]">

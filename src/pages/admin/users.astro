@@ -1,5 +1,6 @@
 ---
 import TextInput from "../../components[admin]/TextInput.astro";
+import UsersCard from "../../components[admin]/UsersCard.astro";
 import { isAdminLoggedIn } from "../../js/utils";
 import AdminLayout from "../../layouts/adminLayout.astro";
 const adminCookie = Astro.cookies.get("admin");
@@ -8,31 +9,61 @@ if(!isAdminLoggedIn(adminCookie)){
     return Astro.redirect("/admin/signin/");
 }
 
+const allUsers = await fetch(Astro.site + "api/users.json");
+const usersAPIResponse = await allUsers.json();
+
+let currentUserID = adminCookie?.value || "";
+
+var messageToShow = "";
+if (Astro.request.method === "POST") {
+    try {
+        const data = await Astro.request.formData();
+        // console.log("Form Data at client side - ", data);
+
+        const response = await fetch(Astro.site + "api/users.json", {
+            method: "POST",
+            body: data,
+        });
+
+        const APIResponse = await response.json();
+        if (APIResponse.message == "User Data Saved Successfully") {
+            messageToShow =
+                `New User Added, with the Username - ${APIResponse.newUsername}`;
+        }
+    } catch (error) {
+        if (error instanceof Error) {
+            console.error(error.message);
+        }
+    }
+}
+
 ---
 
 <AdminLayout pageTitle="Users" pageName="Users">
     
     <div class="user-container size-full relative">
         <div class="p-5 w-full">
-            <button id="serviceAddBtn"
+            <button id="userAddBtn"
             type="button"
             class="size-fit w-auto px-5 py-3 text-white rounded-lg bg-[#5344f5] hover:bg-[#3d32b3] capitalize">
                 <i class="fa-solid fa-plus"></i> Add New
             </button>
     
             <div class="userProfile-container w-full flex flex-wrap gap-3 mt-5">
-                <div class="cards relative flex flex-col gap-3 items-center justify-center lg:w-[24%] text-center border border-[#4d4d4d86] rounded-md p-4 transition-all ease-in-out duration-150 hover:shadow-lg hover:scale-105">
-                    
-                    <span class="absolute top-1 right-1 p-1 text-xs rounded bg-red-200 text-red-500 cursor-pointer hover:font-semibold">
-                        Delete
-                    </span>
-    
-                    <img src="/assets/images/usericon.png" alt="profile Image" class="rounded-full size-20">
-                    <span>
-                        <p class="font-semibold">Name</p>
-                        <p class="text-sm italic">Role</p>
-                    </span>
-                </div>
+                {
+                    usersAPIResponse.map((user:any) => (
+                        <UsersCard 
+                            userImg = {user.ProfilePic != null && user.ProfilePic.url}
+                            isYou = {currentUserID == user.id && true}
+                            id={user.id} 
+                            role={`${user.role.charAt(0).toUpperCase() + user.role.slice(1)} (${user.username.toLowerCase()})`} 
+                            username={currentUserID == user.id ?
+                                `${user.fullName} (YOU)`
+                                : user.fullName
+                            }>
+                        </UsersCard>
+                    ))
+                }
             </div>
     
         </div>
@@ -63,16 +94,14 @@ if(!isAdminLoggedIn(adminCookie)){
                                     <span
                                         class="roleOption hover:bg-slate-200 p-4 py-2 rounded-t-md cursor-pointer">Select Role</span>
                                     <span
-                                        class="roleOption hover:bg-slate-200 p-4 py-2 rounded-t-md cursor-pointer">Superuser</span>
+                                        class="roleOption hover:bg-slate-200 p-4 py-2 cursor-pointer">Superuser</span>
                                     <span
-                                        class="roleOption hover:bg-slate-200 p-4 py-2 cursor-pointer">Normal User</span>
+                                        class="roleOption hover:bg-slate-200 p-4 py-2 rounded-b-md cursor-pointer">Normal User</span>
                                 </span>
                             </span>
                         </span>
 
-                        <input type="hidden" name="roleSelectorValue" id="roleSelectorValue" />
-
-                        <button id="userAddBtn"
+                        <button id="userAddBtnSave"
                         type="submit"
                         class="size-fit w-auto my-2 px-5 py-3 text-white rounded-lg bg-[#5344f5] hover:bg-[#3d32b3] capitalize">
                             Save
@@ -85,6 +114,9 @@ if(!isAdminLoggedIn(adminCookie)){
                                 After Saving you will be given user's default username and password for First Login
                             </li>
                             <li>
+                                Advise the user to use there Username and default password which is always assigned- '<b>new_pass</b>'.
+                            </li>
+                            <li>
                                 Advise new user to change Username and Password from the My Profile Page.
                             </li>
                         </ol>
@@ -95,7 +127,17 @@ if(!isAdminLoggedIn(adminCookie)){
             </form>
         </div>
     </div>
-
+    {
+        messageToShow && (
+            <span
+                class="toast hidden"
+                id="toast"
+                data-message={messageToShow}
+                data-destination={"/admin/users"}
+                data-refresh = {"/admin/users"}
+            />
+        )
+    }
 </AdminLayout>
 
 <script is:inline>
@@ -104,18 +146,12 @@ if(!isAdminLoggedIn(adminCookie)){
         document
             .querySelector(".Overlay.serviceForm")
             .classList.toggle("invisible");
-        document.querySelector("#serviceName").value = "";
-        document
-            .querySelector("#uploadedImage")
-            .setAttribute("src", "/assets/images/logo-placeholder-image.png");
-        document.querySelector("#serviceColor").value = "";
     }
-    const serviceBtn = document.getElementById("serviceAddBtn");
-    const serviceCloseBtn = document.querySelector(".closeBtn.serviceForm");
-    serviceBtn.onclick = () => triggerServiceForm();
-    serviceCloseBtn.onclick = () => triggerServiceForm();
+    const userNewBtn = document.getElementById("userAddBtn");
+    const userCloseBtn = document.querySelector(".closeBtn.serviceForm");
+    userNewBtn.onclick = () => triggerServiceForm();
+    userCloseBtn.onclick = () => triggerServiceForm();
     //#endregion
-
 
     //#region role Selection
     const roleSelector = document.getElementById("roleSelector");
@@ -133,10 +169,44 @@ if(!isAdminLoggedIn(adminCookie)){
     roleOptions.forEach((roleOption) => {
         roleOption.addEventListener("click", () => {
             roleValue.innerHTML = roleOption.innerHTML;
-            document.getElementById("role").value =
-                roleValue.textContent.trim();
+            document.getElementById("roleValue").value = roleValue.textContent.trim().toLowerCase();
         });
     });
     //#endregion
 
+    //#region delete User
+    const allUsersDeleteBtns =document.querySelectorAll(".deleteUserBtn");
+    allUsersDeleteBtns.forEach(deleteUserBtn => {
+        deleteUserBtn.addEventListener("click", async ()=>{
+            await fetch(`/api/users/${deleteUserBtn.getAttribute("data-id")}`, {
+                method : "DELETE"
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                    var message = "";
+                    if (data.status != 200) {
+                        message =
+                            "An problem occured while deleting. User could NOT be Deleted.";
+                    } else {
+                        message = "User Deleted";
+                        deleteUserBtn.parentElement.remove();
+                    }
+
+                    Toastify({
+                        text: message,
+                        duration: 3000,
+                        close: true,
+                        gravity: "bottom", // `top` or `bottom`
+                        position: "right", // `left`, `center` or `right`
+                        stopOnFocus: true, // Prevents dismissing of toast on hover
+                        style: {
+                            background:
+                                "linear-gradient(to right, #5344f5, #3dbbc9)",
+                        },
+                        onClick: function () {}, // Callback after click
+                    }).showToast();
+                });
+        })
+    });
+    //#endregion
 </script>

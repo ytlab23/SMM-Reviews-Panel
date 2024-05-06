@@ -9,52 +9,110 @@ const adminCookie = Astro.cookies.get("admin");
 if(!isAdminLoggedIn(adminCookie)){
     return Astro.redirect("/admin/signin/");
 }
+
+var messageToShow = "";
+let showOverlay = false;
+
+if (Astro.request.method === "POST") {
+    showOverlay = true;
+    try {
+        const data = await Astro.request.formData();
+        // console.log("Form Data at client side - ", data);
+
+        const response = await fetch(Astro.site + "api/siteData/" + import.meta.env.SiteSettingsID, {
+            method: "PUT",
+            body: data,
+        });
+
+        const APIResponse = await response.json();
+        if (APIResponse.message == "Site Setting Data Updated Successfully") {
+            messageToShow = "Site Setting Data Saved. Please Redeploy your site to see the changes";
+        }
+    } catch (error) {
+        if (error instanceof Error) {
+            console.error(error.message);
+        }
+    }
+}
 ---
 
 <AdminLayout pageName="Site Settings" pageTitle="Site Settings">
     
     <span class="p-5 flex items-center flex-col w-full">
-        <form method="post" class="w-full">
-            <h2 class="mb-4 text-xl font-bold">General Settings</h2>
-            <div class="fields w-2/3 flex flex-col gap-3">
-                <span class="flex gap-2">
+        <form method="post" class="w-full flex gap-2">
+            <div class="fieldsWrapper w-10/12">
+                <h2 class="mb-4 text-xl font-bold">General Settings</h2>
+                <div class="fields w-2/3 flex flex-col gap-3">
+                    <span class="flex gap-2">
+                        
+                        <span class="flex flex-col items-center gap-4 w-1/2">
+                            <label class="w-full text-left">Site Logo *</label
+                            >
+                            <span
+                                class="flex flex-col justify-center items-center gap-2 w-full px-12 py-3 border-black border-2 border-dashed rounded-xl"
+                            >
+                                <img
+                                    id="uploadedImageLogo"
+                                    src="/assets/images/placeholderImage.jpg"
+                                    class="size-[110px] object-contain rounded-md"
+                                />
+                                <!-- {
+                                        (panelInfo.data.paneFeaturedImage != null)
+                                        ? ( panelInfo.data.paneFeaturedImage.url == "" ) ? "/assets/images/placeholderImage.jpg" : panelInfo.data.paneFeaturedImage.url 
+                                        : "/assets/images/placeholderImage.jpg"
+                                    } -->
+                                <input
+                                    id="uploadInputLogo"
+                                    name="uploadInputLogo"
+                                    type="file"
+                                    class="text-xs w-fit"
+                                    accept="image/*"
+                                />
+                            </span>
+                        </span>
+        
+                        <span class="flex flex-col items-center gap-4 w-1/2">
+                            <label class="w-full text-left">Site Favicon *</label
+                            >
+                            <span
+                                class="flex flex-col justify-center items-center gap-2 w-full px-12 py-3 border-black border-2 border-dashed rounded-xl"
+                            >
+                                <img
+                                    id="uploadedImageFavicon"
+                                    src="/assets/images/placeholderImage.jpg"
+                                    class="size-[110px] object-cover rounded-md"
+                                />
+                                <!-- {
+                                        (panelInfo.data.paneFeaturedImage != null)
+                                        ? ( panelInfo.data.paneFeaturedImage.url == "" ) ? "/assets/images/placeholderImage.jpg" : panelInfo.data.paneFeaturedImage.url 
+                                        : "/assets/images/placeholderImage.jpg"
+                                    } -->
+                                <input
+                                    id="uploadInputFav"
+                                    name="uploadInputFav"
+                                    type="file"
+                                    class="text-xs w-fit"
+                                    accept="image/*"
+                                />
+                            </span>
+                        </span>
+                    </span>    
                     
-                    <span class="flex flex-col items-center gap-4 w-1/2">
-                        <label class="w-full text-left">Site Logo *</label
-                        >
-                        <span
-                            class="flex flex-col justify-center items-center gap-2 w-full px-12 py-3 border-black border-2 border-dashed rounded-xl"
-                        >
-                            <img
-                                id="uploadedImageLogo"
-                                src="/assets/images/placeholderImage.jpg"
-                                class="size-[110px] object-cover rounded-md"
-                            />
-                            <!-- {
-                                    (panelInfo.data.paneFeaturedImage != null)
-                                    ? ( panelInfo.data.paneFeaturedImage.url == "" ) ? "/assets/images/placeholderImage.jpg" : panelInfo.data.paneFeaturedImage.url 
-                                    : "/assets/images/placeholderImage.jpg"
-                                } -->
-                            <input
-                                id="uploadInputLogo"
-                                name="uploadInputLogo"
-                                type="file"
-                                class="text-xs w-fit"
-                                accept="image/*"
-                            />
-                        </span>
-                    </span>
+                    <TextInput isRequired={true} placeholder="Example - My SMM Compare Site" textBoxId="webTitle" textLabelText="Website Title"></TextInput>
     
-                    <span class="flex flex-col items-center gap-4 w-1/2">
-                        <label class="w-full text-left">Site Favicon *</label
-                        >
-                        <span
-                            class="flex flex-col justify-center items-center gap-2 w-full px-12 py-3 border-black border-2 border-dashed rounded-xl"
-                        >
+                    <TextArea isRequired={true} placeholder="130 Characters Meta Description" textBoxId="webMetaDes" textLabelText="Site Meta Description"></TextArea>
+                </div>
+                
+                <span class="divider border-t-2 border-dashed border-gray-600 my-5 block"></span>
+                <h2 class="mb-4 text-xl font-bold">Homepage Settings</h2>
+                <div class="fields w-2/3 flex flex-col gap-3">
+                    <span class="flex flex-col items-center gap-4 w-full">
+                        <label class="w-full text-left">Header Background Image *</label>
+                        <span class="flex flex-col justify-center items-center gap-2 w-full px-12 py-3 border-black border-2 border-dashed rounded-xl">
                             <img
-                                id="uploadedImageFavicon"
+                                id="uploadedImageHeaderBg"
                                 src="/assets/images/placeholderImage.jpg"
-                                class="size-[110px] object-cover rounded-md"
+                                class="w-[110px] object-cover rounded-md"
                             />
                             <!-- {
                                     (panelInfo.data.paneFeaturedImage != null)
@@ -62,86 +120,128 @@ if(!isAdminLoggedIn(adminCookie)){
                                     : "/assets/images/placeholderImage.jpg"
                                 } -->
                             <input
-                                id="uploadInputFav"
-                                name="uploadInputFav"
+                                id="uploadInputHeaderBg"
+                                name="uploadInputHeaderBg"
                                 type="file"
                                 class="text-xs w-fit"
                                 accept="image/*"
                             />
                         </span>
                     </span>
-                </span>    
-                
-                <TextInput isRequired={true} placeholder="Example - My SMM Compare Site" textBoxId="webTitle" textLabelText="Website Title"></TextInput>
-
-                <TextArea isRequired={true} placeholder="130 Characters Meta Description" textBoxId="webMetaDes" textLabelText="Site Meta Description"></TextArea>
-            </div>
-            
-            <span class="divider border-t-2 border-dashed border-gray-600 my-5 block"></span>
-            <h2 class="mb-4 text-xl font-bold">Homepage Settings</h2>
-            <div class="fields w-2/3 flex flex-col gap-3">
-                <span class="flex flex-col items-center gap-4 w-full">
-                    <label class="w-full text-left">Header Background Image *</label>
-                    <span class="flex flex-col justify-center items-center gap-2 w-full px-12 py-3 border-black border-2 border-dashed rounded-xl">
-                        <img
-                            id="uploadedImageHeaderBg"
-                            src="/assets/images/placeholderImage.jpg"
-                            class="w-[110px] object-cover rounded-md"
-                        />
-                        <!-- {
-                                (panelInfo.data.paneFeaturedImage != null)
-                                ? ( panelInfo.data.paneFeaturedImage.url == "" ) ? "/assets/images/placeholderImage.jpg" : panelInfo.data.paneFeaturedImage.url 
-                                : "/assets/images/placeholderImage.jpg"
-                            } -->
-                        <input
-                            id="uploadInputHeaderBg"
-                            name="uploadInputHeaderBg"
-                            type="file"
-                            class="text-xs w-fit"
-                            accept="image/*"
-                        />
-                    </span>
-                </span>
-                <TextInput isRequired={true} placeholder="Best SMM Panel" textBoxId="siteHeaderTitle" textLabelText="Header Title"></TextInput>
-                <TextInput isRequired={true} placeholder="Best SMM Panel Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem ipsum blanditiis in officiis distinctio." textBoxId="siteHeaderParagraph" textLabelText="Header Paragraph"></TextInput>
-            </div>
-
-            <span class="divider border-t-2 border-dashed border-gray-600 my-5 block"></span>
-
-            <h2 class="mb-4 text-xl font-bold">Functional Settings</h2>
-            <div class="fields w-2/3 flex flex-col gap-3">
-                <TextInput inputType="number" isRequired={true} placeholder="10" textBoxId="sitePanelCount" textLabelText="Number of Panels to show in Home Page"></TextInput>
-                <TextInput inputType="number" isRequired={true} placeholder="10" textBoxId="siteServiceCount" textLabelText="Number of Services that will be shown per page in Services Page"></TextInput>
+                    <TextInput isRequired={true} placeholder="Best SMM Panel" textBoxId="siteHeaderTitle" textLabelText="Header Title"></TextInput>
+                    <TextInput isRequired={true} placeholder="Best SMM Panel Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem ipsum blanditiis in officiis distinctio." textBoxId="siteHeaderParagraph" textLabelText="Header Paragraph"></TextInput>
+                </div>
+    
+                <span class="divider border-t-2 border-dashed border-gray-600 my-5 block"></span>
+    
+                <h2 class="mb-4 text-xl font-bold">Functional Settings</h2>
+                <div class="fields w-2/3 flex flex-col gap-3">
+                    <TextInput inputType="number" isRequired={true} placeholder="10" textBoxId="sitePanelCount" textLabelText="Number of Panels to show in Home Page"></TextInput>
+                    <TextInput inputType="number" isRequired={true} placeholder="10" textBoxId="siteServiceCount" textLabelText="Number of Services that will be shown per page in Services Page"></TextInput>
+                </div>
+    
+                <span class="divider border-t-2 border-dashed border-gray-600 my-5 block"></span>
+    
+                <h2 class="mb-4 text-xl font-bold">Manage Sidebar (Homepage)</h2>
+                <div class="sidebarWidgets w-2/3 flex flex-col gap-4 justify-center items-center">
+                    <button
+                    type="button"
+                    class="size-fit w-auto px-5 py-1 text-sm text-white rounded-full bg-[#5344f5] hover:bg-[#3d32b3] capitalize">
+                    <i class="fa-solid fa-plus"></i> Add New Widget</button>
+    
+                    <ol class="w-full">
+                        <li class="flex justify-between items-center rounded-lg my-3 w-full px-4 py-1 bg-gray-200 hover:bg-gray-300">Widget 1 <i class="fa-solid fa-ellipsis-vertical cursor-pointer"></i></li>
+                        <li class="flex justify-between items-center rounded-lg my-3 w-full px-4 py-1 bg-gray-200 hover:bg-gray-300">Widget 2 <i class="fa-solid fa-ellipsis-vertical cursor-pointer"></i></li>
+                    </ol>
+                </div>
+    
+                <input type="hidden" name="logoImageName" id="logoImageName" />
+                <input type="hidden" name="logoImageBase64" id="logoImageBase64" />
+                <input type="hidden" name="logoImageFileType" id="logoImageFileType" />
+    
+                <input type="hidden" name="faviconImageName" id="faviconImageName" />
+                <input type="hidden" name="faviconImageBase64" id="faviconImageBase64" />
+                <input type="hidden" name="faviconImageFileType" id="faviconImageFileType" />
+    
+                <input type="hidden" name="homepgBgImageName" id="homepgBgImageName" />
+                <input type="hidden" name="homepgBgImageBase64" id="homepgBgImageBase64" />
+                <input type="hidden" name="homepgBgImageFileType" id="homepgBgImageFileType" />
             </div>
 
-            <span class="divider border-t-2 border-dashed border-gray-600 my-5 block"></span>
-
-            <h2 class="mb-4 text-xl font-bold">Manage Sidebar (Homepage)</h2>
-            <div class="sidebarWidgets w-2/3 flex flex-col gap-4 justify-center items-center">
-                <button
-                type="button"
-                class="size-fit w-auto px-5 py-1 text-sm text-white rounded-full bg-[#5344f5] hover:bg-[#3d32b3] capitalize">
-                <i class="fa-solid fa-plus"></i> Add New Widget</button>
-
-                <ol class="w-full">
-                    <li class="flex justify-between items-center rounded-lg my-3 w-full px-4 py-1 bg-gray-200 hover:bg-gray-300">Widget 1 <i class="fa-solid fa-ellipsis-vertical cursor-pointer"></i></li>
-                    <li class="flex justify-between items-center rounded-lg my-3 w-full px-4 py-1 bg-gray-200 hover:bg-gray-300">Widget 2 <i class="fa-solid fa-ellipsis-vertical cursor-pointer"></i></li>
-                </ol>
-            </div>
-
-
-            <input type="hidden" name="logoImageName" id="logoImageName" />
-            <input type="hidden" name="logoImageBase64" id="logoImageBase64" />
-            <input type="hidden" name="logoImageFileType" id="logoImageFileType" />
-
-            <input type="hidden" name="faviconImageName" id="faviconImageName" />
-            <input type="hidden" name="faviconImageBase64" id="faviconImageBase64" />
-            <input type="hidden" name="faviconImageFileType" id="faviconImageFileType" />
-
-            <input type="hidden" name="homepgBgImageName" id="homepgBgImageName" />
-            <input type="hidden" name="homepgBgImageBase64" id="homepgBgImageBase64" />
-            <input type="hidden" name="homepgBgImageFileType" id="homepgBgImageFileType" />
+            <button
+                type="submit"
+                class="size-fit sticky top-4 w-auto px-5 py-3 text-white rounded-lg bg-[#5344f5] hover:bg-[#3d32b3] capitalize"
+                ><i class="fa-solid fa-play"></i> Save</button
+            >
         </form>
     </span>
     
+    {
+        messageToShow && (
+            <span
+                class="toast hidden"
+                id="toast"
+                data-message={messageToShow}
+                data-destination={"/admin/"}
+            />
+        )
+    }
 </AdminLayout>
+
+<script is:inline>
+    //#region Image Upload
+    //LOGO
+    document.getElementById("uploadInputLogo").addEventListener("change", function (event) {
+        const file = event.target.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+
+            reader.onload = function () {
+                const imageDataURL = reader.result;
+                document.getElementById("logoImageName").value = file.name;
+                document.getElementById("logoImageBase64").value = imageDataURL.split("base64,")[1];
+                document.getElementById("logoImageFileType").value = file.type;
+                document.getElementById("uploadedImageLogo").src = imageDataURL;
+            };
+        }
+    });
+    //SITE FAVICON
+    document.getElementById("uploadInputFav").addEventListener("change", function (event) {
+        const file = event.target.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+
+            reader.onload = function () {
+                const imageDataURL = reader.result;
+                document.getElementById("faviconImageName").value = file.name;
+                document.getElementById("faviconImageBase64").value = imageDataURL.split("base64,")[1];
+                document.getElementById("faviconImageFileType").value = file.type;
+                document.getElementById("uploadedImageFavicon").src = imageDataURL;
+            };
+        }
+    });
+    //HOMEPAGE BG
+    document.getElementById("uploadInputHeaderBg").addEventListener("change", function (event) {
+        const file = event.target.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+
+            reader.onload = function () {
+                const imageDataURL = reader.result;
+                document.getElementById("homepgBgImageName").value = file.name;
+                document.getElementById("homepgBgImageBase64").value = imageDataURL.split("base64,")[1];
+                document.getElementById("homepgBgImageFileType").value = file.type;
+                document.getElementById("uploadedImageHeaderBg").src = imageDataURL;
+            };
+        }
+    });
+    //#endregion
+
+
+</script>

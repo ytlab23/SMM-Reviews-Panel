@@ -82,7 +82,9 @@ interface panelSchema{
     <article class="flex flex-col gap-5">
         <h1 class="text-4xl font-bold">{panel.panelTitle}</h1>
         <img src={panel.paneFeaturedImage.url} alt={panel.panelTitle + " Panel Image"} class="shadow-lg rounded-lg">
-
+        <span class="w-full flex justify-center items-center">
+            <a target="_blank" class="rounded-lg p-4 bg-blue-500 text-white" href={panel.panelWebsiteURL}>Visit {panel.panelTitle}</a>
+        </span>
         <div class="article-wrapper flex lg:flex-row flex-col gap-4">
             <div class="post-content lg:w-4/6 w-full flex flex-col gap-4">
                 <p>{panel.panelTextDescrition}</p>
@@ -158,7 +160,7 @@ interface panelSchema{
                             <span class="offer_service line-clamp-1 my-3 w-[41%] text-left" title={service.name}>{service.name}</span>
                             <span class="offer_Minorder line-clamp-1 my-3 w-[18%]">{service.min}</span>
                             <span class="offer_Maxorder line-clamp-1 my-3 w-[18%]">{service.max}</span>
-                            <span class="offer_rate line-clamp-1 my-3 w-[18%]">{service.rate}</span>
+                            <span class="offer_rate line-clamp-1 my-3 w-[18%]">${service.rate}</span>
                         </span>
                     ) )
                 }
