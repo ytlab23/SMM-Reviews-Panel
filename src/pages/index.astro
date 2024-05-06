@@ -13,6 +13,8 @@ interface serviceSchema{
     },
     serviceTitle: string,
 }
+//Fetching Site Settings
+const allSiteFetch:any = await fetch(Astro.site + "api/siteData.json").then(Response => Response.json());
 
 //Fetching All Services
 const allServicesFetch:any = await fetch(Astro.site + "api/services.json");
@@ -40,10 +42,10 @@ const responsePanels = await allPanels.json();
 
 ---
 
-<MainLayout title="SMM Panel Listing - Home">
+<MainLayout title="Home">
 	<div class="indexHero text-center lg:w-2/4" slot="heroContent">
-		<h1 class="text-3xl font-bold my-5">SMM Panel Listings</h1>
-		<p class="my-5">Explore most popular SMM Panels with our listings.</p>
+		<h1 class="text-3xl font-bold my-5">{allSiteFetch[0].homeHeaderText}</h1>
+		<p class="my-5">{allSiteFetch[0].homeHeaderPara}</p>
 
 		<div class="searchBox my-5">
 			<form
@@ -81,7 +83,7 @@ const responsePanels = await allPanels.json();
 
 					<div class="wrapper flex justify-center items-center flex-wrap gap-5">
 					{
-						responsePanels.slice(0,10).reverse().map((panel: panelStructure) => (
+						responsePanels.slice(0, allSiteFetch[0].homePanelCount).reverse().map((panel: panelStructure) => (
 							<SMM_panelCards
 								descriptionText={panel.panelTextDescrition.substring(0, 120)}
 								imageSrc = {panel.paneFeaturedImage == null ? "" : panel.paneFeaturedImage.url }

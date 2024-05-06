@@ -45,6 +45,7 @@ export const GET: APIRoute = async ({ params }) => {
 export const PUT : APIRoute = async ({params, request}) =>{
     const data = await request.formData();
     const id = params.id;
+    // console.log("received in API - " , data);
 
     if (!data) {
         return new Response(
@@ -57,11 +58,11 @@ export const PUT : APIRoute = async ({params, request}) =>{
 
     let dataToUpdate = {};
     if(data.get("updateUsersDetails")?.toString() == "true"){
+        //Other details Update
         dataToUpdate = {
             username: data.get("newUsername")?.toString() || "",
             email: data.get("NewEmailAddress")?.toString() || "",
             fullName: data.get("newName")?.toString() || "",
-            role: data.get("role")?.toString() || "",
             ProfilePic: {
                 name: data.get("imageName")?.toString() || "",
                 mediaType: data.get("imageFileType")?.toString() || "",
@@ -70,12 +71,12 @@ export const PUT : APIRoute = async ({params, request}) =>{
         };
     }
     else{
+        //Only Password Update
         dataToUpdate = {
             password: data.get("newPass")?.toString() || "",
         }
     }
 
-    // console.log("received in API - " , data);
     // console.log("received in API - " , dataToUpdate);
     
     const record = await xata.db.users.update(id?.toString() || "", dataToUpdate)
@@ -85,7 +86,7 @@ export const PUT : APIRoute = async ({params, request}) =>{
         return new Response(
            JSON.stringify({
             id: id,
-            message : "Data Updated Successfully",
+            message : "User Data Updated Successfully",
            }),
            { status: 200 }
         );

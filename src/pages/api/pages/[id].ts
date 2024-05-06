@@ -5,6 +5,7 @@ const xata = new XataClient({ apiKey: import.meta.env.XATA_API_KEY, branch: impo
 
 interface pageStructure{
     pageTitle : string,
+    pageSlug : string,
     pageContent : string,
     PageDescription : string,
 }
@@ -50,33 +51,44 @@ export const PUT : APIRoute = async ({params, request}) =>{
     }
 
     let dataToUpdate : pageStructure ={
-        pageTitle: data.get("pageTitle")?.toString() || "",
+        pageTitle: data.get("titlePage")?.toString() || "",
+        pageSlug: data.get("pageSlug")?.toString() || "",
         pageContent: data.get("pageContent")?.toString() || "",
         PageDescription: data.get("pageMetaDesc")?.toString() || "",
     };
 
     // console.log("received in API - " , data);
     // console.log("received in API - " , dataToUpdate);
-    
-    const record = await xata.db.pages.update(id?.toString() || "", dataToUpdate)
-    // console.log(record);
-    
-    if (record!.id) {
-        return new Response(
-           JSON.stringify({
-            id: id,
-            message : "Data Updated Successfully",
-           }),
-           { status: 200 }
-        );
-     }
-     else
-        return new Response(
-           JSON.stringify({
-              message: "Data saving Error!"
-           }),
-           { status: 300 }
-        );
+    try {
+        const record = await xata.db.pages.update(id?.toString() || "", dataToUpdate)
+        // console.log(record);
+
+        if (record!.id) {
+            return new Response(
+                JSON.stringify({
+                    id: id,
+                    message: "Page Data Updated Successfully",
+                }),
+                { status: 200 }
+            );
+        }
+        else
+            return new Response(
+                JSON.stringify({
+                    message: "Data saving Error!"
+                }),
+                { status: 300 }
+            );
+    } catch (error:any) {
+        // console.log("New Page API Error Message", error.errors[0].message);
+      return new Response(
+        JSON.stringify({
+           status: 422,
+           message: `Page Update API Error Message- ${error.errors[0].message}`
+        }),
+        { status: 422 }
+     );
+    }
 }
 //#endregion
 

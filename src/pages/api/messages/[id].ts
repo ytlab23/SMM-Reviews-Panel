@@ -33,22 +33,45 @@ export const GET: APIRoute = async ({ params }) => {
 }
 //#endregion
 
-//#region Updates Message Information by ID
+//#region Updates as Read Message Information by ID
 export const PUT : APIRoute = async ({params, request}) =>{
-    const data = await request.formData();
     const id = params.id;
-
-    if (!data) {
-        return new Response(
-            JSON.stringify({
-                message: "Missing required fields",
-            }),
-            { status: 400 }
-        );
-    }
-
+    
     let dataToUpdate : messageStructure ={
-        status : data.get("status")?.toString() || ""
+        status : "read"
+    };
+
+    // console.log("received in API - " , data);
+    // console.log("received in API - " , dataToUpdate);
+    
+    const record = await xata.db.contact_msgs.update(id?.toString() || "", dataToUpdate)
+    // console.log(record);
+    
+    if (record!.id) {
+        return new Response(
+           JSON.stringify({
+            id: id,
+            message : "Data Updated Successfully",
+           }),
+           { status: 200 }
+        );
+     }
+     else
+        return new Response(
+           JSON.stringify({
+              message: "Data saving Error!"
+           }),
+           { status: 300 }
+        );
+}
+//#endregion
+
+//#region Updates as unRead Message Information by ID
+export const PATCH : APIRoute = async ({params, request}) =>{
+    const id = params.id;
+    
+    let dataToUpdate : messageStructure ={
+        status : "unread"
     };
 
     // console.log("received in API - " , data);

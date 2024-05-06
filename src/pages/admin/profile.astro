@@ -8,18 +8,85 @@ if(!isAdminLoggedIn(adminCookie)){
     return Astro.redirect("/admin/signin/");
 }
 
+//#region fetching User's information
+let APIResponse;
+try {
+    const adminDetails = await fetch(
+        Astro.site + "api/users/" + adminCookie?.value,
+    );
+    // console.log("cookie found- ",adminCookie?.value);
+
+    APIResponse = await adminDetails.json();
+    
+} catch (error) {
+    console.log("Error Found in AdminLayout- ", error);
+}
+//#endregion
+
+//#region submitting Updated users Information
+let showOverlay, messageToShow = "";
+if (Astro.request.method === "POST") {
+    showOverlay = true;
+    try {
+        const data = await Astro.request.formData();
+        // console.log("Form Data at client side - ", data);
+        if(data.get("updateUsersDetails") == "true"){
+            const response = await fetch(Astro.site + `api/users/${adminCookie?.value}`, {
+                method: "PUT",
+                body: data,
+            });
+    
+            const APIResponse = await response.json();
+            if (APIResponse.message == "User Data Updated Successfully") {
+                messageToShow = "Your Data is Saved";
+            }
+        }
+        else
+        {
+            const response = await fetch(Astro.site + `api/users/${adminCookie?.value}`, {
+                method: "PUT",
+                body: data,
+            });
+    
+            const APIResponse = await response.json();
+            if (APIResponse.message == "User Data Updated Successfully") {
+                messageToShow = "New Password Updated";
+            }
+        }
+    } catch (error) {
+        if (error instanceof Error) {
+            console.error(error.message);
+        }
+    }
+}
+//#endregion
 ---
 
 <AdminLayout pageName="My Profile" pageTitle="My Profile">
-    
+    {
+        messageToShow && (
+            <span
+                class="toast hidden"
+                id="toast"
+                data-message={messageToShow}
+                data-destination={"/admin/profile"}
+                data-refresh = {"/admin/profile"}
+            />
+        )
+    }
     <div class="wrapper w-full p-5">
         <div class="profileContainer p-6 my-5 flex justify-center items-center gap-4 border-gray-500 border-2 border-dashed rounded-md">
             
             <span class="flex gap-4">
-                <img src="/assets/images/usericon.png" alt="profile Image" class=" rounded-full size-28 border-2 border-blue-500 cursor-pointer">
+                <img src={
+                    APIResponse.data.ProfilePic == null ? "/assets/images/usericon.png"
+                    : APIResponse.data.ProfilePic.url
+                    } 
+                
+                alt="profile Image" class="rounded-full size-28 border-2 border-blue-500 cursor-pointer">
                 <span>
-                    <p class="text-5xl font-semibold">Full Name</p>
-                    <p class="italic text-xl">username</p>
+                    <p class="text-5xl font-semibold">{APIResponse.data.fullName}</p>
+                    <p class="italic text-xl">{APIResponse.data.username}</p>
                 </span>
             </span>
     
@@ -32,12 +99,12 @@ if(!isAdminLoggedIn(adminCookie)){
         </span>
         <div class="detailsContainer w-full flex gap-7">
             <ul class="w-1/2">
-                <li class="flex gap-4 p-3 bg-white rounded-lg mb-2"><span class="w-1/2">Name</span> <span class="w-1/2">Jack</span></li>
-                <li class="flex gap-4 p-3 bg-white rounded-lg mb-2"><span class="w-1/2">Username</span> <span class="w-1/2">"admin"</span></li>
+                <li class="flex gap-4 p-3 bg-white rounded-lg mb-2"><span class="w-1/2">Name</span> <span class="w-1/2">{APIResponse.data.fullName}</span></li>
+                <li class="flex gap-4 p-3 bg-white rounded-lg mb-2"><span class="w-1/2">Username</span> <span class="w-1/2">{APIResponse.data.username}</span></li>
             </ul>
             <ul class="w-1/2">
-                <li class="flex gap-4 p-3 bg-white rounded-lg mb-2"><span class="w-1/2">Email</span> <span class="w-1/2">Random@email.com</span></li>
-                <li class="flex gap-4 p-3 bg-white rounded-lg mb-2"><span class="w-1/2">Role</span> <span class="w-1/2">superuser</span></li>
+                <li class="flex gap-4 p-3 bg-white rounded-lg mb-2"><span class="w-1/2">Email</span> <span class="w-1/2">{APIResponse.data.email || "No Email"}</span></li>
+                <li class="flex gap-4 p-3 bg-white rounded-lg mb-2"><span class="w-1/2">Role</span> <span class="w-1/2 capitalize">{APIResponse.data.role}</span></li>
             </ul>
 
         </div>
@@ -54,7 +121,10 @@ if(!isAdminLoggedIn(adminCookie)){
     
                                 <img
                                     id="uploadedImage"
-                                    src="/assets/images/usericon.png"
+                                    src={
+                                        APIResponse.data.ProfilePic == null ? "/assets/images/usericon.png"
+                                        : APIResponse.data.ProfilePic.url
+                                        } 
                                     class="size-20 cursor-pointer"
                                     onclick="document.getElementById(`proPicFile`).click();"
                                 />
@@ -67,31 +137,11 @@ if(!isAdminLoggedIn(adminCookie)){
                                 />
                             </span>
                         <div class="col w-1/2">
-                            <TextInput isRequired={true} placeholder="New Name" textBoxId="newName" textLabelText="New Name"></TextInput>
-                            <TextInput isRequired={true} placeholder="New Username" textBoxId="newUsername" textLabelText="New Username"></TextInput>
+                            <TextInput textValue={APIResponse.data.fullName} isRequired={true} placeholder="New Name" textBoxId="newName" textLabelText="New Name"></TextInput>
+                            <TextInput textValue={APIResponse.data.username} isRequired={true} placeholder="New Username" textBoxId="newUsername" textLabelText="New Username" isLowerCaseText={true}></TextInput>
                         </div>
                         <div class="col w-1/2">
-                            <TextInput inputType="email" isRequired={true} placeholder="New Email Address" textBoxId="NewEmailAddress" textLabelText="New Email Address"></TextInput>
-                            
-                            <span class="flex flex-col items-center gap-2">
-                                <label class="w-full text-left">Role *</label>
-            
-                                <span
-                                    id="roleSelector" data-set-value=""
-                                    class="flex justify-between relative cursor-pointer w-full p-2 px-3 rounded-md border border-[#f4f4f4] bg-white text-[#555555] shadow-lg"
-                                    ><span id="roleSelectedValue">Select Role</span>
-                                    <i class="fa-solid fa-caret-down"></i>
-                                    <span
-                                        class="options invisible absolute left-0 top-14 bg-white w-full rounded-md flex flex-col z-[1]">
-                                        <span
-                                            class="roleOption hover:bg-slate-200 p-4 py-2 rounded-t-md cursor-pointer">Select Role</span>
-                                        <span
-                                            class="roleOption hover:bg-slate-200 p-4 py-2 rounded-t-md cursor-pointer">Superuser</span>
-                                        <span
-                                            class="roleOption hover:bg-slate-200 p-4 py-2 cursor-pointer">Normal User</span>
-                                    </span>
-                                </span>
-                            </span>
+                            <TextInput textValue={APIResponse.data.email || ""} inputType="email" isRequired={true} placeholder="New Email Address" textBoxId="NewEmailAddress" textLabelText="New Email Address"></TextInput>
                         </div>
                     </div>
     
@@ -99,7 +149,6 @@ if(!isAdminLoggedIn(adminCookie)){
                     <input type="hidden" name="imageBase64" id="imageBase64" />
                     <input type="hidden" name="imageFileType" id="imageFileType" />
                     <input type="hidden" name="updateUsersDetails" id="updateUsersDetails" value="true"/>
-                    <input type="hidden" name="role" id="role" />
     
                     <button id="updateDetailsBtn"
                     type="submit"
@@ -114,14 +163,14 @@ if(!isAdminLoggedIn(adminCookie)){
         
         <h2 class="mb-4 text-xl font-bold">Change Passwords</h2>
         <div class="changePassFields flex gap-7">
-            <form method="post" class="w-[55%]">
+            <form method="post" class="w-[55%]" onsubmit="return validatePassword()">
 
                 <TextInput inputType="password" isRequired={true} placeholder="Current Password" textBoxId="oldPass" textLabelText="Current Password"></TextInput>
                 <TextInput inputType="password" isRequired={true} placeholder="New Password" textBoxId="newPass" textLabelText="New Password"></TextInput>
                 <TextInput inputType="password" isRequired={true} placeholder="Confirm Password" textBoxId="confirmPass" textLabelText="Confirm Password"></TextInput>
                 <input type="hidden" name="updateUsersDetails" id="updateUsersDetails" value="false"/>
                 <button id="passwordChangeBtn"
-                type="button"
+                type="submit" data-curntPs={APIResponse.data.password}
                 class="size-fit w-auto my-2 px-5 py-3 text-white rounded-lg bg-[#5344f5] hover:bg-[#3d32b3] capitalize">
                     Change
                 </button>
@@ -139,32 +188,11 @@ if(!isAdminLoggedIn(adminCookie)){
             </div>
         </div>
     </div>
-
+    <script is:inline src="/assets/scripts/main.js"></script>
+    
 </AdminLayout>
 
 <script is:inline>
-    //#region role Selection
-    const roleSelector = document.getElementById("roleSelector");
-    const roleValue = document.getElementById("roleSelectedValue");
-    const roleOptions = document.querySelectorAll(
-        "#roleSelector .options .roleOption",
-    );
-
-    roleSelector.onclick = function () {
-        roleSelector
-            .querySelector("span.options")
-            .classList.toggle("invisible");
-    };
-
-    roleOptions.forEach((roleOption) => {
-        roleOption.addEventListener("click", () => {
-            roleValue.innerHTML = roleOption.innerHTML;
-            document.getElementById("role").value =
-                roleValue.textContent.trim();
-        });
-    });
-    //#endregion
-
     //#region Details Edit 
     const detailsEditBtn = document.querySelector("#detailsEditBtn");
     const detailsFields = document.querySelector(".updateDetailsContainer");
@@ -199,4 +227,25 @@ if(!isAdminLoggedIn(adminCookie)){
             }
         });
     //#endregion
+
+    //#region Validate Password
+    function validatePassword(){
+        let oldPass = document.getElementById("oldPass").value;
+        let passChngBtn = document.getElementById("passwordChangeBtn");
+        let newPassVal = document.getElementById("newPass").value;
+        let confirmPassVal = document.getElementById("confirmPass").value;
+
+        if(passChngBtn.getAttribute("data-curntPs") === oldPass){
+            if(newPassVal === confirmPassVal)
+                return true
+            else
+            {
+                window.alert("Your New Password and Confirming Password are not Same");
+                return false;
+            }
+        }
+        window.alert("Old password doesn't match the password you entered");
+        return false;
+    }
+    //#endregion 
 </script>

@@ -1,5 +1,4 @@
 ---
-import TextArea from "../../components[admin]/TextArea.astro";
 import AdminPageFields from "../../components[admin]/adminPageFields.astro";
 import { isAdminLoggedIn } from "../../js/utils";
 import AdminLayout from "../../layouts/adminLayout.astro";
@@ -8,6 +7,11 @@ const adminCookie = Astro.cookies.get("admin");
 
 if(!isAdminLoggedIn(adminCookie)){
     return Astro.redirect("/admin/signin/");
+}
+
+const pageId = Astro.cookies.get("updatePageID");
+if(!isAdminLoggedIn(pageId)){
+    return Astro.redirect("/admin/pages/");
 }
 
 var messageToShow = "";
@@ -19,17 +23,17 @@ if (Astro.request.method === "POST") {
         const data = await Astro.request.formData();
         // console.log("Form Data at client side - ", data);
 
-        const response = await fetch(Astro.site + "api/pages.json", {
-            method: "POST",
+        const response = await fetch(Astro.site + "api/pages/" + pageId?.value, {
+            method: "PUT",
             body: data,
         });
 
         const APIResponse = await response.json();
         // console.log("Response when Submitting New Page", APIResponse);
         
-        if (APIResponse.message == "Page Data Saved Successfully") {
+        if (APIResponse.message == "Page Data Updated Successfully") {
             messageToShow =
-                "New Page created. Click to See all Pages";
+                "Page Data Updated. Click to See all Pages";
         }
         else if (APIResponse.message.includes("column [pageSlug]: is not unique")) {
             messageToShow =
@@ -41,9 +45,12 @@ if (Astro.request.method === "POST") {
         }
     }
 }
+
+const fetchPagesInfo = await fetch(Astro.site + "api/pages/"+pageId?.value);
+const pageInfo = await fetchPagesInfo.json();
 ---
 
-<AdminLayout pageTitle="New Page" pageName="New Page">
+<AdminLayout pageTitle="Page Update" pageName="Page Update">
     {
         messageToShow && (
             <span
@@ -56,7 +63,10 @@ if (Astro.request.method === "POST") {
     }
 
     <span class="p-5 flex items-center flex-col w-full">
-        <AdminPageFields formType="Submit"></AdminPageFields>
+        <AdminPageFields 
+        {pageInfo}
+        formType="Update"></AdminPageFields>
+
     </span>
 </AdminLayout>
 

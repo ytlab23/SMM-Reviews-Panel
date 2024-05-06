@@ -6,8 +6,8 @@ const xata = new XataClient({ apiKey: import.meta.env.XATA_API_KEY, branch: impo
 //#region Fetching All Services
 export async function GET() {
     try {
-        const records = await xata.db.users
-        .select(["username", "fullName", "role", "email"])
+        const records = await xata.db.users.sort('fullName', 'asc')
+        .select(["username", "fullName", "role", "email", "ProfilePic"])
         .getAll();
 
         return new Response(
@@ -45,7 +45,7 @@ export const POST:APIRoute = async ({request}) => {
     const record = await xata.db.users.create({
         fullName: FName,
         role: userData.get("roleValue")?.toString(),
-        username: randomUsername,
+        username: randomUsername.toLowerCase(),
     });
 
     if (record.id) {

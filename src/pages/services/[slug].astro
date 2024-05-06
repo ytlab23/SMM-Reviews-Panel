@@ -98,7 +98,10 @@ for (let j = 0; j < SMMService_APIData.length; j++) {
 
 // console.log("Relevant Services are - " , relevantServices);
 
-let servicePageListCount = 20;
+//Fetching Site Settings
+const allSiteFetch:any = await fetch(Astro.site + "api/siteData.json").then(Response => Response.json());
+
+let servicePageListCount = allSiteFetch[0].platformServiceCount || 20;
 ---
 
 <PanelLayout title={service.serviceTitle + " Services at SMM Panel"} metaDescription="">

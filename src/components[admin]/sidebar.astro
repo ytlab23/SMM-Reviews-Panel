@@ -3,7 +3,7 @@ interface Props {
     isSuperUser : boolean
 }
 
-const {isSuperUser} = Astro.props;
+const {isSuperUser = false} = Astro.props;
 ---
 
 <div
@@ -100,8 +100,7 @@ const {isSuperUser} = Astro.props;
                 <ul class="innerMenuList h-0 invisible">
                     <li class="pl-6 hover:bg-[#261d8b] py-2 cursor-pointer">
                         <a href="/admin/pagesNew" class="size-full block"
-                            ><i class="px-3 fa-solid fa-file-plus-minus"></i>Add
-                            New Page</a>
+                            ><i class="px-3 fa-solid fa-file-plus-minus"></i>Add New Page</a>
                     </li>
                     <li class="pl-6 hover:bg-[#261d8b] py-2 cursor-pointer">
                         <a href="/admin/pages" class="size-full block"

@@ -2,7 +2,7 @@
 
 import { isAdminLoggedIn } from "../../js/utils";
 import AdminLayout from "../../layouts/adminLayout.astro";
-import AdminPanelFields from "../../layouts/adminPanelFields.astro";
+import AdminPanelFields from "../../components[admin]/adminPanelFields.astro";
 const adminCookie = Astro.cookies.get("admin");
 
 if(!isAdminLoggedIn(adminCookie)){

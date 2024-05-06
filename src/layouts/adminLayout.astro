@@ -19,7 +19,8 @@ try {
     );
     // console.log("cookie found- ",adminCookie?.value);
 
-    APIResponse = await adminDetails.json();
+    APIResponse = await adminDetails.json(); 
+    // console.log(APIResponse);
 
     if (APIResponse.xataResponse.status == 300) {
         // console.log("Page Name- "+pageTitle+ ", Error in authentication Admin");
@@ -48,7 +49,7 @@ try {
         <script is:inline type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
         <div class="dashboard-container w-full relative flex">
-            <Sidebar isSuperUser={true}/>
+            <Sidebar isSuperUser={APIResponse.xataResponse.role == "superuser" && true}/>
             <Container
                 pageTitle={pageName}
                 userFullName={APIResponse.xataResponse.fullName || ""}>
@@ -85,6 +86,13 @@ try {
             },
             onClick: function () {}, // Callback after click
         }).showToast();
+
+        if(document.querySelector("#toast").getAttribute("data-refresh") != null){
+            setTimeout(function () {
+                window.location.href = document.querySelector("#toast").getAttribute("data-refresh");
+            }, 1200);
+        }
+
     } catch (error) {
         console.log(error);
     }

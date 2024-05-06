@@ -32,6 +32,7 @@ const tables = [
       { name: "pageTitle", type: "string" },
       { name: "pageContent", type: "text" },
       { name: "PageDescription", type: "text" },
+      { name: "pageSlug", type: "string", unique: true },
     ],
   },
   {
