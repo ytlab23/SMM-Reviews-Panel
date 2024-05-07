@@ -14,6 +14,7 @@ export async function GET() {
             "panelAPIKey",
             "panelSlug",
             "panelTextDescrition",
+            "panelMetaDesc",
             "rating",
             "paymentOptions",
             "paneFeaturedImage"

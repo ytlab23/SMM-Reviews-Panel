@@ -24,6 +24,7 @@ const tables = [
       { name: "rating", type: "int" },
       { name: "paymentOptions", type: "json" },
       { name: "servicesList", type: "json" },
+      { name: "panelMetaDesc", type: "text" },
     ],
   },
   {

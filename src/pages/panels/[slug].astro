@@ -68,6 +68,7 @@ interface panelSchema{
     panelWebsiteURL:  string,
     panelSlug:  string,
     panelTextDescrition:  string,
+    panelMetaDesc:  string,
     panelTotalServices: number,
     rating : number,
     paymentOptions : {
@@ -77,13 +78,13 @@ interface panelSchema{
 }
 
 ---
-<PanelLayout title={ panel.panelTitle } metaDescription="">
+<PanelLayout title={ panel.panelTitle } metaDescription={panel.panelMetaDesc}>
     
     <article class="flex flex-col gap-5">
         <h1 class="text-4xl font-bold">{panel.panelTitle}</h1>
         <img src={panel.paneFeaturedImage.url} alt={panel.panelTitle + " Panel Image"} class="shadow-lg rounded-lg">
         <span class="w-full flex justify-center items-center">
-            <a target="_blank" class="rounded-lg p-4 bg-blue-500 text-white" href={panel.panelWebsiteURL}>Visit {panel.panelTitle}</a>
+            <a target="_blank" class="rounded-lg p-3 bg-blue-600 text-white" href={panel.panelWebsiteURL}>Visit {panel.panelTitle}</a>
         </span>
         <div class="article-wrapper flex lg:flex-row flex-col gap-4">
             <div class="post-content lg:w-4/6 w-full flex flex-col gap-4">

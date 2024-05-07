@@ -34,6 +34,10 @@ if (Astro.request.method === "POST") {
         }
     }
 }
+
+//Fetching Site Settings
+const allSiteFetch:any = await fetch(Astro.site + "api/siteData.json").then(Response => Response.json());
+
 ---
 
 <AdminLayout pageName="Site Settings" pageTitle="Site Settings">
@@ -53,8 +57,12 @@ if (Astro.request.method === "POST") {
                             >
                                 <img
                                     id="uploadedImageLogo"
-                                    src="/assets/images/placeholderImage.jpg"
                                     class="size-[110px] object-contain rounded-md"
+                                    src={
+                                    allSiteFetch[0].siteLog.url != ""
+                                    ?allSiteFetch[0].siteLog.url
+                                    :"/assets/images/placeholderImage.jpg"
+                                    }
                                 />
                                 <!-- {
                                         (panelInfo.data.paneFeaturedImage != null)
@@ -79,8 +87,14 @@ if (Astro.request.method === "POST") {
                             >
                                 <img
                                     id="uploadedImageFavicon"
-                                    src="/assets/images/placeholderImage.jpg"
                                     class="size-[110px] object-cover rounded-md"
+                                    src=
+                                    {
+                                        allSiteFetch[0].siteFavicon.url != ""
+                                        ?allSiteFetch[0].siteFavicon.url
+                                        :"/assets/images/placeholderImage.jpg"
+                                    }
+                                    
                                 />
                                 <!-- {
                                         (panelInfo.data.paneFeaturedImage != null)
@@ -98,9 +112,9 @@ if (Astro.request.method === "POST") {
                         </span>
                     </span>    
                     
-                    <TextInput isRequired={true} placeholder="Example - My SMM Compare Site" textBoxId="webTitle" textLabelText="Website Title"></TextInput>
+                    <TextInput textValue={allSiteFetch[0].SiteTitle} isRequired={true} placeholder="Example - My SMM Compare Site" textBoxId="webTitle" textLabelText="Website Title"></TextInput>
     
-                    <TextArea isRequired={true} placeholder="130 Characters Meta Description" textBoxId="webMetaDes" textLabelText="Site Meta Description"></TextArea>
+                    <TextArea textValue={allSiteFetch[0].siteMetaDescription} isRequired={true} placeholder="130 Characters Meta Description" textBoxId="webMetaDes" textLabelText="Site Meta Description"></TextArea>
                 </div>
                 
                 <span class="divider border-t-2 border-dashed border-gray-600 my-5 block"></span>
@@ -111,8 +125,14 @@ if (Astro.request.method === "POST") {
                         <span class="flex flex-col justify-center items-center gap-2 w-full px-12 py-3 border-black border-2 border-dashed rounded-xl">
                             <img
                                 id="uploadedImageHeaderBg"
-                                src="/assets/images/placeholderImage.jpg"
                                 class="w-[110px] object-cover rounded-md"
+                                src=
+                                {
+                                    allSiteFetch[0].homeBackgroundImage.url != ""
+                                    ?allSiteFetch[0].homeBackgroundImage.url
+                                    :"/assets/images/placeholderImage.jpg"
+                                }
+                                
                             />
                             <!-- {
                                     (panelInfo.data.paneFeaturedImage != null)
@@ -128,16 +148,16 @@ if (Astro.request.method === "POST") {
                             />
                         </span>
                     </span>
-                    <TextInput isRequired={true} placeholder="Best SMM Panel" textBoxId="siteHeaderTitle" textLabelText="Header Title"></TextInput>
-                    <TextInput isRequired={true} placeholder="Best SMM Panel Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem ipsum blanditiis in officiis distinctio." textBoxId="siteHeaderParagraph" textLabelText="Header Paragraph"></TextInput>
+                    <TextInput textValue={allSiteFetch[0].homeHeaderText} isRequired={true} placeholder="Best SMM Panel" textBoxId="siteHeaderTitle" textLabelText="Header Title"></TextInput>
+                    <TextInput textValue={allSiteFetch[0].homeHeaderPara} isRequired={true} placeholder="Best SMM Panel Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem ipsum blanditiis in officiis distinctio." textBoxId="siteHeaderParagraph" textLabelText="Header Paragraph"></TextInput>
                 </div>
     
                 <span class="divider border-t-2 border-dashed border-gray-600 my-5 block"></span>
     
                 <h2 class="mb-4 text-xl font-bold">Functional Settings</h2>
                 <div class="fields w-2/3 flex flex-col gap-3">
-                    <TextInput inputType="number" isRequired={true} placeholder="10" textBoxId="sitePanelCount" textLabelText="Number of Panels to show in Home Page"></TextInput>
-                    <TextInput inputType="number" isRequired={true} placeholder="10" textBoxId="siteServiceCount" textLabelText="Number of Services that will be shown per page in Services Page"></TextInput>
+                    <TextInput textValue={allSiteFetch[0].homePanelCount} inputType="number" isRequired={true} placeholder="10" textBoxId="sitePanelCount" textLabelText="Number of Panels to show in Home Page"></TextInput>
+                    <TextInput textValue={allSiteFetch[0].platformServiceCount} inputType="number" isRequired={true} placeholder="10" textBoxId="siteServiceCount" textLabelText="Number of Services that will be shown per page in Services Page"></TextInput>
                 </div>
     
                 <span class="divider border-t-2 border-dashed border-gray-600 my-5 block"></span>
