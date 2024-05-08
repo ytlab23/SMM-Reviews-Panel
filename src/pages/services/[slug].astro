@@ -48,6 +48,7 @@ allPanelRes.map((panel: any) =>
     allPanelAPIs.push([
         `${panel.panelAPILink}?key=${panel.panelAPIKey}&action=services`,
         panel.panelTitle,
+        panel.panelWebsiteURL,
     ]),
 );
 
@@ -56,7 +57,7 @@ for (let i = 0; i < allPanelAPIs.length; i++) {
     let panelServicesdata = await fetch(allPanelAPIs[i][0]).then((Response) =>
         Response.json(),
     );
-    SMMService_APIData.push([panelServicesdata, allPanelAPIs[i][1]]);
+    SMMService_APIData.push([panelServicesdata, allPanelAPIs[i][1], allPanelAPIs[i][2]]);
 }
 
 //Counting Services and Collecting all Relevant Services
@@ -74,6 +75,7 @@ for (let j = 0; j < SMMService_APIData.length; j++) {
             var temp = {
                 serviceData: SMMService_APIData[j][0][k],
                 serviceTitle: SMMService_APIData[j][1],
+                serviceRefUrl: SMMService_APIData[j][2],
             };
             relevantServices.push(temp);
         }
@@ -107,25 +109,27 @@ let servicePageListCount = allSiteFetch[0].platformServiceCount || 20;
 <PanelLayout title={service.serviceTitle + " Services at SMM Panel"} metaDescription="">
     <article class="flex flex-col gap-5">
         <span
-            class="header flex gap-4 p-5 rounded-xl text-white"
+            class="header lg:w-full w-[90vw] flex gap-4 flex-col lg:flex-row p-5 rounded-xl text-white"
             style={`background-color: ${service.serviceColor}`}
         >
-            <span class="flex p-3 size-28 rounded-lg bg-white">
-                <img
-                    src={service.serviceLogo.url}
-                    alt={service.serviceTitle}
-                    class="size-full rounded"
-                />
+            <span class="flex gap-4 lg:w-[70%]">
+                <span class="flex p-3 size-28 rounded-lg bg-white">
+                    <img
+                        src={service.serviceLogo.url}
+                        alt={service.serviceTitle}
+                        class="size-full rounded"
+                    />
+                </span>
+                <span>
+                    <h1 class="text-5xl font-bold">
+                        {service.serviceTitle}
+                    </h1>
+                    <span class="text-2xl font-semibold"
+                        >{count! ? count + " Services Available" : ""}</span
+                    >
+                </span>
             </span>
-            <span class="lg:w-[55%]">
-                <h1 class="text-5xl font-bold">
-                    {service.serviceTitle}
-                </h1>
-                <span class="text-2xl font-semibold"
-                    >{count! ? count + " Services Available" : ""}</span
-                >
-            </span>
-            <span class="text-2xl font-semibold"
+            <span class="text-2xl lg:w-[30%] font-semibold"
                 >{
                     panelCount!
                         ? `Panels Providing Services : ${panelCount}`
@@ -137,11 +141,11 @@ let servicePageListCount = allSiteFetch[0].platformServiceCount || 20;
         {
             relevantServices.length > 0 
             ? 
-            <div class="services lg:min-h-[400px]">
+            <div class="services lg:min-h-[400px] flex flex-col justify-center items-center">
             <h2 class="text-3xl font-semibold">Services</h2>
 
-            <div class="offers-table-holder h-auto overflow-auto lg:overflow-hidden w-full flex justify-center md:items-center flex-col text-center align-middle shadow-2xl mt-5">
-                <div class="table-wrapper lg:w-full w-[700px]">
+            <div class="services-table-holder shadow-2xl text-center mt-5 lg:w-full w-[89vw] overflow-auto">
+                <div class="table-wrapper md:w-full w-[900px]">
                     <span
                         class="offerHeader w-full flex bg-[#36304a] font-semibold text-white">
                         <span class="offer_id my-6 w-[5%] pl-2">S.No</span>
@@ -176,10 +180,10 @@ let servicePageListCount = allSiteFetch[0].platformServiceCount || 20;
                                     {smm_service.serviceData.max}
                                 </span>
                                 <span class="offer_rate line-clamp-1 my-3 w-[13.5%]">
-                                    {smm_service.serviceData.rate}
+                                    ${smm_service.serviceData.rate}
                                 </span>
                                 <span class="offer_rate line-clamp-1 my-3 w-[13.5%]">
-                                    {smm_service.serviceTitle}
+                                    <a class="hover:underline hover:font-semibold" href={smm_service.serviceRefUrl}>{smm_service.serviceTitle}</a>
                                 </span>
                             </span>
                         ))

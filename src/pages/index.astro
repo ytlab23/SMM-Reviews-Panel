@@ -48,15 +48,15 @@ const responsePanels = await allPanels.json();
 		<p class="my-5">{allSiteFetch[0].homeHeaderPara}</p>
 
 		<div class="searchBox my-5">
-			<form
-				action=""
+			<form onsubmit="return validateSearchForm()"
+				action="/search"
 				name="searchPanel"
 				class="relative flex gap-3 items-center"
 			>
 				<input
 					type="text"
-					name="searchQuery"
-					id=""
+					name="q"
+					id="searchQuery"
 					class="w-full px-3 py-2 text-gray-800 rounded-lg"
 					placeholder="Search Youtube Services"
 				/>
@@ -67,18 +67,18 @@ const responsePanels = await allPanels.json();
 		</div>
 	</div>
 
-	<main class="w-full flex gap-5">
+	<main class="w-full flex flex-col md:flex-row gap-5">
 		<!-- SMM Panels Listing -->
-		<section class="panel-container mb-14 w-[60%]">
+		<section class="panel-container lg:mb-14 lg:w-[60%] lg:p-0 p-5">
 			{
 				responsePanels.length > 0 
 					? 
-					<div class="header flex justify-between items-center w-full my-4">
+					<div class="header flex justify-between items-center gap-2 w-full my-4">
 						<span>
 							<h2 class="text-xl font-semibold">Latest SMM Panels</h2>
 							<p>Explore the most recently added SMM Panels and more...</p>
 						</span>
-						<a href="/panels">See all</a>
+						<a class="w-[15%] text-right hover:font-semibold hover:underline" href="/panels">See all</a>
 					</div>
 
 					<div class="wrapper flex justify-center items-center flex-wrap gap-5">
@@ -97,7 +97,7 @@ const responsePanels = await allPanels.json();
 			}
 		</section>
 
-		<aside class="w-[40%] p-5 flex flex-col gap-y-4">
+		<aside class="lg:w-[40%] p-5 flex flex-col gap-y-4">
 			<div class="services-cloud-container bg-white p-3 rounded-md">
 
 				{
@@ -201,6 +201,19 @@ const responsePanels = await allPanels.json();
 		</aside>
 	</main>
 </MainLayout>
+
+<script is:inline>
+
+	const searchBox = document.getElementById("searchQuery");
+	function validateSearchForm() {
+		if(searchBox.value === ""){
+			return false;
+		}
+		else
+			return true;
+	}
+
+</script>
 <!-- 
 <div class="smmpanelCard lg:w-[32%] p-5 rounded-lg flex flex-col gap-3 shadow-lg border border-gray-200">
 	<a href="/smm-panel/rec_co62js6annbn1jdj2tg0">
