@@ -32,16 +32,16 @@ Meta Description
 Pending Work
 1. Search in Index Page
 2. Look more Modern with (New Header and Footer Design)
-3. WYSIWYG Editor for Pages and SMM Panel Content
-4. Site Settings
-5. Profile Setting
-6. Others User
-7. Responsive
-8. Messages with API
+3. WYSIWYG Editor for Pages and SMM Panel Content [Done]
+4. Site Settings [Done]
+5. Profile Setting [Done]
+6. Others User [Done]
+7. Responsive [Done]
+8. Messages with API [Done]
 
 Delete Confirmation prompt for Panel/Page/Services/User
 API for admin Login - if there is no user register redirect to admin user signup page
-User Permission in Database
-Admin Profile Page with Password Change
+User Permission in Database  [Done]
+Admin Profile Page with Password Change  [Done]
 add Links to cards in Dashboard
 404 Page

@@ -1,11 +1,11 @@
 ---
-import PanelLayout from "../layouts/PanelLayout.astro";
+import PanelLayout from "../../layouts/PanelLayout.astro";
 
 const allSiteFetch:any = await fetch(Astro.site + "api/siteData.json").then(Response => Response.json());
 const allPanels = await fetch(Astro.site + "api/panels.json").then(Response => Response.json());
 let SMMService_APIData: any[] = [];
 let allPanelAPIs: string[][] = [];
-/* 
+
 //Capturing Panel's APIUrl and APIKey
 allPanels.map((panel: any) =>
     allPanelAPIs.push([
@@ -35,7 +35,7 @@ for (let j = 0; j < SMMService_APIData.length; j++) {
     }
 }
 //Fetching Site Settings
-let servicePageListCount = allSiteFetch[0].platformServiceCount || 20; */
+let servicePageListCount = allSiteFetch[0].platformServiceCount || 20;
 ---
 
 <PanelLayout title={` on ${allSiteFetch[0].SiteTitle}`} metaDescription=`Search among Best SMM Panels, and SMM Services on ${allSiteFetch[0].SiteTitle}`>
@@ -43,23 +43,7 @@ let servicePageListCount = allSiteFetch[0].platformServiceCount || 20; */
     <div class="content-wrapper flex flex-wrap lg:justify-start justify-center gap-5 my-6 px-5">
         
         <article class="flex flex-col gap-5 w-full">
-            <h1 class="searchResTitle text-2xl font-semibold"></h1>
-            
-            <div class="searchResultsPanels">
-                <h2 class="searchResTitle text-xl font-semibold">SMM Panels found:</h2>
-                <div id="panelsWrapper" class="panelsWrapper flex lg:justify-start md:justify-center items-center flex-wrap gap-4 my-5">
-                    
-                </div>
-            </div>
-            
-            <div class="searchResultsServices">
-                <h2 class="searchResTitle text-xl font-semibold">Services found:</h2>
-                <div id="servicesWrapper" class="panelsWrapper flex lg:justify-start md:justify-center items-center flex-wrap gap-4 my-5">
-                    
-                </div>
-            </div>
-
-            <!-- {
+            {
                 relevantServices.length > 0 
                 ? 
                 <div class="services lg:min-h-[400px] flex flex-col justify-center items-center">
@@ -136,7 +120,7 @@ let servicePageListCount = allSiteFetch[0].platformServiceCount || 20; */
                 }
             </div>
                 : <h2 class="font-bold text-xl text-center">Sorry No Service Available right now for this Website.</h2>
-            } -->
+            }
         </article>
         
     </div>
