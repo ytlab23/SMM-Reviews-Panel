@@ -191,6 +191,12 @@ if (!panelInfo) {
                             textBoxId="payDepo"
                             textLabelText="Min Deposit"
                         />
+                        <TextInput
+                            isRequired={false}
+                            placeholder="Bonus"
+                            textBoxId="payBonus"
+                            textLabelText="Bonus"
+                        />
                         <button
                             id="paymentAddBtn"
                             type="button"
@@ -340,10 +346,11 @@ if (!panelInfo) {
     paymentAddBtn.addEventListener("click", () => {
         const payOption = document.getElementById("payOption");
         const payDepo = document.getElementById("payDepo");
+        const payBonus = document.getElementById("payBonus");
         document.getElementById("paymentOptions").value = "";
 
         if (payOption.value != "" && payDepo.value != "") {
-            paymentOptionsData.push([payOption.value, payDepo.value]);
+            paymentOptionsData.push([payOption.value, payDepo.value, payBonus.value]);
         }
 
         formPaymentOptionsJson();
@@ -353,6 +360,7 @@ if (!panelInfo) {
 
         document.getElementById("payOption").value = "";
         document.getElementById("payDepo").value = "";
+        document.getElementById("payBonus").value = "";
     });
 
     function formPaymentOptionsJson() {
@@ -361,6 +369,7 @@ if (!panelInfo) {
             var tempObj = {
                 payOption: paymentOptionsData[i][0],
                 payDepo: paymentOptionsData[i][1],
+                payBonus: paymentOptionsData[i][2],
             };
             paymentOptionJsonObject.push(tempObj);
         }
@@ -377,8 +386,9 @@ if (!panelInfo) {
                 "beforeend",
                 `
                 <span class="row flex items-center bg-[#f0f8ff] border-b border-b-white p-2">
-                    <p class="w-[45%]">${paymentOptionsData[index][0]}</p>
-                    <p class="w-[45%]">${paymentOptionsData[index][1]}</p>
+                    <p class="w-[31%]">${paymentOptionsData[index][0]}</p>
+                    <p class="w-[31%]">${paymentOptionsData[index][1]}</p>
+                    <p class="w-[31%]">${paymentOptionsData[index][2] || "-"}</p>
                     <i class="cursor-pointer fa-duotone fa-trash"></i>
                 </span>
                 `,

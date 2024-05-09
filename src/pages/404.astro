@@ -1,4 +1,17 @@
 ---
+import PanelLayout from "../layouts/PanelLayout.astro";
+
 ---
 
-<h1>404</h1>
+<PanelLayout title="Page Not Found" metaDescription=`Page Not Found`>
+    <div class="content-wrapper flex flex-wrap lg:justify-start justify-center gap-5 my-6 px-5">
+        <div class="404Content py-8 gap-y-7 size-full flex flex-col justify-center items-center">
+            <h1 class="text-2xl">OOOOPS!! ERROR 404 </h1>
+            <span class="text-4xl">PAGE NOT FOUND</span>
+            <p>It might has been removed, renamed Or temporarily unavailable. Let's go to home!</p>
+
+            <a href="/" class="rounded px-4 py-2 bg-slate-700 text-white"><i class="fa-solid fa-house"></i> Home</a>
+
+        </div>
+    </div>
+</PanelLayout>
