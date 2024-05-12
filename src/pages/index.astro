@@ -1,6 +1,7 @@
 ---
 import MainLayout from "../layouts/MainLayout.astro";
 import SMM_panelCards from "../components/SMM_panelCards.astro";
+import SearchForm from "../components/SearchForm.astro";
 
 // import servicePlatformsData from "../data/temp-services";
 
@@ -47,24 +48,7 @@ const responsePanels = await allPanels.json();
 		<h1 class="text-3xl font-bold my-5">{allSiteFetch[0].homeHeaderText}</h1>
 		<p class="my-5">{allSiteFetch[0].homeHeaderPara}</p>
 
-		<div class="searchBox my-5">
-			<form onsubmit="return validateSearchForm()"
-				action="/search"
-				name="searchPanel"
-				class="relative flex gap-3 items-center"
-			>
-				<input
-					type="text"
-					name="q"
-					id="searchQuery"
-					class="w-full px-3 py-2 text-gray-800 rounded-lg"
-					placeholder="Search Youtube Services"
-				/>
-				<i
-					class="fa-solid fa-magnifying-glass absolute right-7 text-blue-500"
-				></i>
-			</form>
-		</div>
+		<SearchForm searchPagePath={"/search"}/>
 	</div>
 
 	<main class="w-full flex flex-col md:flex-row gap-5">

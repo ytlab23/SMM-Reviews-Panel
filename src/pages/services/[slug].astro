@@ -225,6 +225,8 @@ let servicePageListCount = allSiteFetch[0].platformServiceCount || 20;
     </div>
 </PanelLayout>
 
+
+<script is:inline src="/assets/scripts/main.js"></script>
 <script is:inline>
     try {
         let pageSize = Number(
@@ -265,14 +267,18 @@ let servicePageListCount = allSiteFetch[0].platformServiceCount || 20;
             });
 
             if (paginateType == "next") {
-                if (currentPosition + pageSize < lastPosition)
+                if (currentPosition + pageSize < lastPosition){
+                    bringToView("header");
                     currentPosition = currentPosition + pageSize;
+                }
                 else {
                     //block Next Button
                 }
             } else if (paginateType == "prev") {
-                if (currentPosition - pageSize >= 0)
+                if (currentPosition - pageSize >= 0){
+                    bringToView("header");
                     currentPosition = currentPosition - pageSize;
+                }
                 else {
                     //block prev Button
                 }

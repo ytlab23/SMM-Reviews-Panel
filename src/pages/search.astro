@@ -1,11 +1,12 @@
 ---
+import SearchForm from "../components/SearchForm.astro";
 import PanelLayout from "../layouts/PanelLayout.astro";
 
 const allSiteFetch:any = await fetch(Astro.site + "api/siteData.json").then(Response => Response.json());
 const allPanels = await fetch(Astro.site + "api/panels.json").then(Response => Response.json());
 let SMMService_APIData: any[] = [];
 let allPanelAPIs: string[][] = [];
-/* 
+
 //Capturing Panel's APIUrl and APIKey
 allPanels.map((panel: any) =>
     allPanelAPIs.push([
@@ -34,8 +35,9 @@ for (let j = 0; j < SMMService_APIData.length; j++) {
         relevantServices.push(temp);
     }
 }
+
 //Fetching Site Settings
-let servicePageListCount = allSiteFetch[0].platformServiceCount || 20; */
+let servicePageListCount = allSiteFetch[0].platformServiceCount || 20;
 ---
 
 <PanelLayout title={` on ${allSiteFetch[0].SiteTitle}`} metaDescription=`Search among Best SMM Panels, and SMM Services on ${allSiteFetch[0].SiteTitle}`>
@@ -44,25 +46,30 @@ let servicePageListCount = allSiteFetch[0].platformServiceCount || 20; */
         
         <article class="flex flex-col gap-5 w-full">
             <h1 class="searchResTitle text-2xl font-semibold"></h1>
+		    <div class="searchBox flex justify-center items-center">
+                <div class="wrapper w-1/2">
+                    <SearchForm searchPagePath={"/search"}/>
+                </div>
+            </div>
             
-            <div class="searchResultsPanels">
+            <div class="searchResultsPanels hidden">
                 <h2 class="searchResTitle text-xl font-semibold">SMM Panels found:</h2>
                 <div id="panelsWrapper" class="panelsWrapper flex lg:justify-start md:justify-center items-center flex-wrap gap-4 my-5">
                     
                 </div>
             </div>
             
-            <div class="searchResultsServices">
+            <div class="searchResultsServices hidden">
                 <h2 class="searchResTitle text-xl font-semibold">Services found:</h2>
                 <div id="servicesWrapper" class="panelsWrapper flex lg:justify-start md:justify-center items-center flex-wrap gap-4 my-5">
                     
                 </div>
             </div>
 
-            <!-- {
+            {
                 relevantServices.length > 0 
                 ? 
-                <div class="services lg:min-h-[400px] flex flex-col justify-center items-center">
+                <div class="services hidden lg:min-h-[400px] flex flex-col justify-center items-center">
                 <h2 class="text-3xl font-semibold">Services</h2>
     
                 <div class="services-table-holder shadow-2xl text-center mt-5 lg:w-full w-[89vw] overflow-auto">
@@ -103,7 +110,7 @@ let servicePageListCount = allSiteFetch[0].platformServiceCount || 20; */
                                     <span class="offer_rate line-clamp-1 my-3 w-[13.5%]">
                                         ${smm_service.serviceData.rate}
                                     </span>
-                                    <span class="offer_rate line-clamp-1 my-3 w-[13.5%]">
+                                    <span class="offer_panelTitle line-clamp-1 my-3 w-[13.5%]">
                                         <a class="hover:underline hover:font-semibold" href={smm_service.serviceRefUrl}>{smm_service.serviceTitle}</a>
                                     </span>
                                 </span>
@@ -136,7 +143,7 @@ let servicePageListCount = allSiteFetch[0].platformServiceCount || 20; */
                 }
             </div>
                 : <h2 class="font-bold text-xl text-center">Sorry No Service Available right now for this Website.</h2>
-            } -->
+            }
         </article>
         
     </div>
@@ -144,3 +151,8 @@ let servicePageListCount = allSiteFetch[0].platformServiceCount || 20; */
 </PanelLayout>
 
 <script is:inline src="/assets/scripts/search.js"></script>
+<script is:inline src="/assets/scripts/main.js"></script>
+
+<script is:inline>
+    allowServiceCardClick("#servicesWrapper")
+</script>

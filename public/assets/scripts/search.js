@@ -108,7 +108,7 @@ function getPanelsCards(rating, service, websiteURL, imageSrc, panelTitle, slugU
                     } <span class="text-black">${rating}/5</span>
                 </span>
             </span>
-            <span class="hidden">
+            <span>
                 ${service.toString()} ${service > 1 ? "Services" : "Service"}
             </span>
         </div>
@@ -121,24 +121,47 @@ function getPanelsCards(rating, service, websiteURL, imageSrc, panelTitle, slugU
 `
 }
 
-function getServicesCards(title, imageLogoPath) {
+function getServicesCards(title, imageLogoPath, servicesCount) {
     return `
     <article class="cursor-pointer hover:bg-white flex flex-col lg:flex-row lg:justify-start justify-center lg:items-start items-center lg:text-left text-center gap-2 lg:w-[32%] w-[47%] p-3 border rounded-md shadow-md hover:shadow-2xl">
         <a href="${"/services/"+ title.toLowerCase().replaceAll(" ", "-")}"><img alt="${title}" class="rounded-lg size-20" src="${imageLogoPath}"></a>
         <span>
             <h2 class="font-semibold hover:underline"><a href="${"/services/"+ title.toLowerCase().replaceAll(" ", "-")}">${title}</a></h2>
+            <span class="block">${servicesCount} Services</span>
         </span>
     </article>
     `
 }
 
+function getPanelCount(searchTerm){
+    var count=0;
+    const allServices = document.querySelectorAll(".offerList");
+    allServices.forEach(service => {
+        if(service.textContent.includes(searchTerm))
+            count++;
+    });
+    return count;
+}
+
+function getServiceCount(searchTerm){
+    var count=0;
+    const allServicesTitle = document.querySelectorAll(".offer_service");
+    
+    allServicesTitle.forEach(serviceTitle => {
+        if(serviceTitle.textContent.includes(searchTerm))
+            count++;
+    });
+    return count;
+}
+
 function creatingPanelResults(panels) {
     var panelContainer = document.getElementById("panelsWrapper");
     if(panels.length > 0){
+        document.querySelector(".searchResultsPanels").classList.remove("hidden");
         for (let i = 0; i < panels.length; i++) {
             panelContainer.insertAdjacentHTML("afterbegin", getPanelsCards(
                 panels[i].rating,
-                123,
+                getPanelCount(panels[i].panelTitle),
                 panels[i].panelWebsiteURL,
                 panels[i].paneFeaturedImage == null ? "" : panels[i].paneFeaturedImage.url ,
                 panels[i].panelTitle,
@@ -154,10 +177,12 @@ function creatingPanelResults(panels) {
 function creatingServiceResults(services) {
     var serviceContainer = document.getElementById("servicesWrapper");
     if(services.length > 0){
+        document.querySelector(".searchResultsServices").classList.remove("hidden");
         for (let i = 0; i < services.length; i++) {
             serviceContainer.insertAdjacentHTML("beforeend", getServicesCards(
                 services[i].serviceTitle,
-                services[i].serviceLogo == null ? "" : services[i].serviceLogo.url
+                services[i].serviceLogo == null ? "" : services[i].serviceLogo.url,
+                getServiceCount(services[i].serviceTitle)
             ))
         }
     }
@@ -172,9 +197,7 @@ var params = new URLSearchParams(url.search);
 var query = params.get("q");
 var allWordsInQuery = query.split(" ");
 
-document.querySelector(".searchResTitle").textContent = `Search results for "${query}"`;
 document.title = `Search results for "${query}" - ${document.title}`;
-
 
     //#region Search among Panels
     let panelsFound = [];
@@ -204,7 +227,8 @@ document.title = `Search results for "${query}" - ${document.title}`;
             
             for (let j = 0; j < allWordsInQuery.length; j++) {
                 if(allResults.toLowerCase().includes(allWordsInQuery[j].toLowerCase())){
-                    servicesFound.push(data[i]);
+                    if(!servicesFound.includes(data[i]))
+                        servicesFound.push(data[i]);
                 }
             }
         }
@@ -215,4 +239,13 @@ document.title = `Search results for "${query}" - ${document.title}`;
     })
     //#endregion
     
+    function isSearchResultsFound() {
+        if(servicesFound.length == 0 && panelsFound.length == 0){
+            document.querySelector(".searchResTitle").classList.add("text-center");
+            document.querySelector(".searchResTitle").textContent = `No results found for "${query}"`;
+        }
+        else
+            document.querySelector(".searchResTitle").textContent = `Search results for "${query}"`;
+    }
+    setInterval(isSearchResultsFound, 1000);
 //#endregion

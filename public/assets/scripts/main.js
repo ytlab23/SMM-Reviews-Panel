@@ -31,3 +31,24 @@ function updateTime() {
 function forceLower(strInput) {
    strInput.value = strInput.value.toLowerCase();
 }
+
+function allowServiceCardClick(serviceContainer) {
+   const allServicesCards = document.querySelectorAll(`${serviceContainer} article`);
+    allServicesCards.forEach(servicesCard => {
+        servicesCard.addEventListener("click", ()=>{
+            servicesCard.children[0].click();
+        })
+    })
+}
+
+function bringToView(sectionElement){
+   /* if(window.innerWidth < 900){
+       responsiveMenuBar.classList.add("translate-x-full");
+       menuBtn.children[0].classList.remove("hidden");
+           menuBtn.children[1].classList.add("hidden");
+
+   } */
+   element = document.querySelector(sectionElement);
+   console.log(element);
+   element.scrollIntoView();
+}
