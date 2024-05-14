@@ -32,6 +32,7 @@ for (let i = 0; i < allPanelAPIs.length; i++) {
     let panelServicesdata = await fetch(allPanelAPIs[i]).then(Response => Response.json());
     allPanelServiceCount.push(panelServicesdata.length);
 }
+
 ---
 
 <PanelLayout title={"All SMM Panel Listed on SMM Panel"} metaDescription="">
@@ -55,7 +56,7 @@ for (let i = 0; i < allPanelAPIs.length; i++) {
                     responsePanels.reverse().map((panel: panelStructure, index) => (
                         <SMM_panelCards2
                             rating = {panel.rating}
-                            service={allPanelServiceCount[index]}
+                            service={allPanelServiceCount[responsePanels.length - (index + 1)]}
                             websiteURL = {panel.panelWebsiteURL}
                             imageSrc = {panel.paneFeaturedImage == null ? "" : panel.paneFeaturedImage.url }
                             panelTitle={panel.panelTitle}

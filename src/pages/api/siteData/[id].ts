@@ -18,7 +18,7 @@ interface siteSettingsStructure{
 //#region Updates Site Information by ID
 export const PUT : APIRoute = async ({params, request}) =>{
     const data = await request.formData();
-    console.log("received in API - " , data);
+    // console.log("received in API - " , data);
     const id = params.id;
     
     if (!data) {
@@ -55,10 +55,10 @@ export const PUT : APIRoute = async ({params, request}) =>{
         },
     };
 
-    console.log("Modified for API - " , dataToUpdate);
+    // console.log("Modified for API - " , dataToUpdate);
     
     const record = await xata.db.siteSettings.update(id?.toString() || "", dataToUpdate)
-    console.log(record);
+    // console.log(record);
     
     if (record!.id) {
         return new Response(

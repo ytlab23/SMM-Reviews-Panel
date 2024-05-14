@@ -97,7 +97,10 @@ const tables = [
   },
   {
     name: "sidebarWidgets",
-    columns: [{ name: "widgetCodeBlock", type: "text" }],
+    columns: [
+      { name: "widgetCodeBlock", type: "text" },
+      { name: "widgetTitle", type: "string" },
+    ],
   },
 ] as const;
 
