@@ -1,4 +1,36 @@
 
+//#region Search results
+
+function search(nodes, query) {
+    // Split the query into individual words
+    const queryWords = query.split(" ");
+
+    // Filter the nodes to get only the elements containing all words from the query
+    const result = Array.from(nodes).filter((node) => {
+        // Extract text content from the node
+        const textContent = node.textContent.toLowerCase();
+
+        // Check if all words from the query are present in the text content
+        return queryWords.every((word) => textContent.includes(word.toLowerCase()));
+    });
+
+    return result;
+}
+
+const searchURL = window.location.href;
+var url = new URL(searchURL);
+var params = new URLSearchParams(url.search);
+var query = params.get("q");
+
+const allServices = document.querySelectorAll(".offer_service");
+var resultData = search(allServices, query);
+
+allServices.forEach(serviceData => {
+    if(!resultData.includes(serviceData))
+        serviceData.parentElement.remove();
+});
+//#endregion
+
 //#region Services Pagination
 try {
     let pageSize = Number(
@@ -13,10 +45,30 @@ try {
     var currentPosition,
         lastPosition = allServiceList.length;
     var pageNo = 1;
+    
+    if(allServiceList.length == 0){
+        document.querySelector(".services").remove();
+        document.querySelector(".searchResTitle").textContent = `No Service found related to "${query}"`;
+        document.querySelector(".searchResTitle").classList.add("text-center");
+        document.title = `No Results found for "${query}" - ${document.title}`;
+    }
+    else
+    {
+        document.querySelector(".searchResTitle").textContent = `Search results for "${query}"`;
+        document.title = `Search results for "${query}" - ${document.title}`;
+    }
+
+    allServiceList[0].classList.add("pageCounter")
+    //Unhide Initial Results
+    for (let i = 0; i < pageSize; i++) {
+        allServiceList[i].classList.remove("hidden");
+        allServiceList[i].classList.add("flex");
+    }
+    
     allServiceList.forEach((serviceItem) => {
         if (serviceItem.classList.contains("pageCounter")) {
-            currentPosition =
-                Number(serviceItem.children[0].textContent) - 1;
+            var array = Array.from(allServiceList);
+            currentPosition = array.indexOf(serviceItem);
             return;
         }
     });
@@ -59,10 +111,10 @@ try {
         allServiceList.forEach((serviceItem, index) => {
             if (serviceItem.classList.contains("pageCounter")) {
                 for (let i = 0; i < pageSize; i++) {
-                    if (index + i < allServiceList.length)
-                        allServiceList[index + i].classList.remove(
-                            "hidden",
-                        );
+                    if (index + i < allServiceList.length){
+                        allServiceList[index + i].classList.remove("hidden");
+                        allServiceList[index + i].classList.add("flex");
+                    }
                 }
             }
         });
@@ -71,36 +123,4 @@ try {
         pageNumber.textContent = `${pageNo} of ${Math.ceil(allServiceList.length / pageSize)}`;
     }
 } catch (error) {}
-//#endregion
-
-//#region Search results
-
-function search(nodes, query) {
-    // Split the query into individual words
-    const queryWords = query.split(" ");
-
-    // Filter the nodes to get only the elements containing all words from the query
-    const result = Array.from(nodes).filter((node) => {
-        // Extract text content from the node
-        const textContent = node.textContent.toLowerCase();
-
-        // Check if all words from the query are present in the text content
-        return queryWords.every((word) => textContent.includes(word.toLowerCase()));
-    });
-
-    return result;
-}
-
-const searchURL = window.location.href;
-var url = new URL(searchURL);
-var params = new URLSearchParams(url.search);
-var query = params.get("q");
-
-document.querySelector(".searchResTitle").textContent = `Search results for "${query}"`;
-document.title = `Search results for "${query}" - ${document.title}`;
-
-const allServices = document.querySelectorAll(".offer_service");
-var resultData = search(allServices, query);
-console.log(resultData);
-
 //#endregion
