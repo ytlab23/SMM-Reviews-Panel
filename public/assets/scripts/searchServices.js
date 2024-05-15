@@ -55,6 +55,7 @@ try {
     else
     {
         document.querySelector(".searchResTitle").textContent = `Search results for "${query}"`;
+        document.querySelector("#serviceHeading").textContent = `${allServiceList.length} Services Found`;
         document.title = `Search results for "${query}" - ${document.title}`;
     }
 

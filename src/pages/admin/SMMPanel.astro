@@ -85,40 +85,44 @@ Astro.cookies.delete("updatePanelID");
     var allDeleteBtns = document.querySelectorAll(".actionBtns .DeleteBtn");
     allDeleteBtns.forEach((deleteBtn) => {
         deleteBtn.addEventListener("click", async () => {
-            await fetch(
-                "/api/panels/" + deleteBtn.getAttribute("data-id").toString(),
-                {
-                    method: "DELETE",
-                },
-            )
-                .then((response) => response.json())
-                .then((data) => {
-                    var message = "";
-                    if (data.status != 200) {
-                        message =
-                            "Panel NOT Deleted. An problem occured while deleting";
-                    } else {
-                        message = "Panel Deleted";
-                        deleteBtn.parentElement.parentElement.parentElement.remove();
-                    }
-
-                    Toastify({
-                        text: message,
-                        duration: 3000,
-                        close: true,
-                        gravity: "bottom", // `top` or `bottom`
-                        position: "right", // `left`, `center` or `right`
-                        stopOnFocus: true, // Prevents dismissing of toast on hover
-                        style: {
-                            background:
-                                "linear-gradient(to right, #5344f5, #3dbbc9)",
-                        },
-                        onClick: function () {}, // Callback after click
-                    }).showToast();
-                    setTimeout(function () {
-                        location.reload();
-                    }, 1200);
-                });
+            
+            var resp = window.confirm(`Are you sure you want to delete ${deleteBtn.parentElement.parentElement.parentElement.children[1].textContent} SMM Panel?`);
+            if(resp == true){
+                await fetch(
+                    "/api/panels/" + deleteBtn.getAttribute("data-id").toString(),
+                    {
+                        method: "DELETE",
+                    },
+                )
+                    .then((response) => response.json())
+                    .then((data) => {
+                        var message = "";
+                        if (data.status != 200) {
+                            message =
+                                "Panel NOT Deleted. An problem occured while deleting";
+                        } else {
+                            message = "Panel Deleted";
+                            deleteBtn.parentElement.parentElement.parentElement.remove();
+                        }
+    
+                        Toastify({
+                            text: message,
+                            duration: 3000,
+                            close: true,
+                            gravity: "bottom", // `top` or `bottom`
+                            position: "right", // `left`, `center` or `right`
+                            stopOnFocus: true, // Prevents dismissing of toast on hover
+                            style: {
+                                background:
+                                    "linear-gradient(to right, #5344f5, #3dbbc9)",
+                            },
+                            onClick: function () {}, // Callback after click
+                        }).showToast();
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1200);
+                    });
+            }
         });
     });
     //#endregion

@@ -2,6 +2,17 @@
 import PanelLayout from "../../layouts/PanelLayout.astro";
 
 //Pages API for Contact Page Content Only
+const allPagesFetch:any = await fetch(Astro.site + "api/pages.json").then(Response => Response.json())
+var contactPageContent;
+
+for (let i = 0; i < allPagesFetch.length; i++) {
+    console.log(allPagesFetch[i].pageTitle);
+    
+    if(allPagesFetch[i].pageTitle.toLowerCase().includes("contact")){
+        contactPageContent = allPagesFetch[i].pageContent;
+    }
+}
+
 
 var form_message = "";
 var isFormSubmitted = false;
@@ -43,10 +54,7 @@ if (Astro.request.method === "POST") {
 <PanelLayout title="Contact Us" metaDescription="">
     <div class="content-wrapper flex flex-wrap lg:justify-start justify-center gap-5 my-6 px-5">
         <article class="leading-8">
-            <h2 class="text-3xl font-bold text-left w-full mb-4">Contact Us </h2>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed sequi expedita voluptate, nobis eos dicta inventore rem autem facilis neque iusto dolorem magnam itaque accusantium tempora fugit nihil esse cupiditate?</p>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed sequi expedita voluptate, nobis eos dicta inventore rem autem facilis neque iusto dolorem magnam itaque accusantium tempora fugit nihil esse cupiditate?</p>
-
+            <div class="content" set:html={contactPageContent} ></div>
         </article>
 
         {
@@ -81,3 +89,56 @@ if (Astro.request.method === "POST") {
     </div>
 
 </PanelLayout>
+
+<style is:inline>
+    .content h1{
+        font-size: 22px;
+        font-weight: 600;
+        padding-bottom: 15px;
+        padding-top: 10px;
+    }
+    .content h2{
+        font-size: 20px;
+        font-weight: 500;
+        padding-bottom: 15px;
+        padding-top: 10px;
+    }
+    .content h3{
+        font-size: 19px;
+        font-weight: 500;
+        padding-bottom: 15px;
+        padding-top: 10px;
+    }
+    .content h4{
+        font-size: 17px;
+        font-weight: 500;
+        padding-bottom: 15px;
+        padding-top: 10px;
+    }
+    .content h5{
+        font-size: 16px;
+        font-weight: 500;
+        padding-bottom: 15px;
+        padding-top: 10px;
+    }
+    .content h6{
+        font-size: 15px;
+        font-weight: 500;
+        padding-bottom: 15px;
+        padding-top: 10px;
+    }
+    .content ol{
+        list-style-type: decimal;
+        padding-left: 2rem;
+    }
+    .content p{
+        padding-bottom: 15px;
+    }
+
+    .content a{
+        color: blue;
+    }
+    .content a:hover{
+        text-decoration-line: underline;
+    }
+</style>

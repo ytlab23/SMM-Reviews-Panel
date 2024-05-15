@@ -127,12 +127,14 @@ interface panelSchema{
                             <div class="header flex w-full p-2 font-semibold bg-gray-300">
                                 <div class="col w-1/2">Method</div>
                                 <div class="col w-1/2">Minimum Deposit</div>
+                                <div class="col w-1/2">Bonus</div>
                             </div>
                             {
                                 panel.paymentOptions.map((paymentOp:any) => (
                                 <div class="row flex w-full p-2">
                                     <div class="col w-1/2">{paymentOp.payOption}</div>
                                     <div class="col w-1/2">{paymentOp.payDepo}</div>
+                                    <div class="col w-1/2">{paymentOp.payBonus || "-"}</div>
                                 </div>    
                                 ))
                             }

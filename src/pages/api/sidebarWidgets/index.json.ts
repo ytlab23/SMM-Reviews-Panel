@@ -25,8 +25,8 @@ export const POST:APIRoute = async ({request}) => {
     // console.log("Service Received in API - " , servicesData);
   
     const record = await xata.db.sidebarWidgets.create({
-        widgetCodeBlock: dataReceived.get("widgetTitle")?.toString(),
-        widgetTitle: dataReceived.get("widgetHTMLCode")?.toString()
+        widgetTitle: dataReceived.get("widgetTitle")?.toString(),
+        widgetCodeBlock: dataReceived.get("widgetHTMLCode")?.toString()
     });
 
     if (record.id) {

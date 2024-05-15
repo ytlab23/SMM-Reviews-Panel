@@ -178,34 +178,37 @@ if (Astro.request.method === "POST") {
     const allUsersDeleteBtns =document.querySelectorAll(".deleteUserBtn");
     allUsersDeleteBtns.forEach(deleteUserBtn => {
         deleteUserBtn.addEventListener("click", async ()=>{
-            await fetch(`/api/users/${deleteUserBtn.getAttribute("data-id")}`, {
-                method : "DELETE"
-            })
-            .then((response) => response.json())
-            .then((data) => {
-                    var message = "";
-                    if (data.status != 200) {
-                        message =
-                            "An problem occured while deleting. User could NOT be Deleted.";
-                    } else {
-                        message = "User Deleted";
-                        deleteUserBtn.parentElement.remove();
-                    }
-
-                    Toastify({
-                        text: message,
-                        duration: 3000,
-                        close: true,
-                        gravity: "bottom", // `top` or `bottom`
-                        position: "right", // `left`, `center` or `right`
-                        stopOnFocus: true, // Prevents dismissing of toast on hover
-                        style: {
-                            background:
-                                "linear-gradient(to right, #5344f5, #3dbbc9)",
-                        },
-                        onClick: function () {}, // Callback after click
-                    }).showToast();
-                });
+            var resp = window.confirm(`Are you sure you want to delete USER- ${deleteUserBtn.nextElementSibling.nextElementSibling.children[0]} ?`);
+            if(resp == true){
+                await fetch(`/api/users/${deleteUserBtn.getAttribute("data-id")}`, {
+                    method : "DELETE"
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                        var message = "";
+                        if (data.status != 200) {
+                            message =
+                                "An problem occured while deleting. User could NOT be Deleted.";
+                        } else {
+                            message = "User Deleted";
+                            deleteUserBtn.parentElement.remove();
+                        }
+    
+                        Toastify({
+                            text: message,
+                            duration: 3000,
+                            close: true,
+                            gravity: "bottom", // `top` or `bottom`
+                            position: "right", // `left`, `center` or `right`
+                            stopOnFocus: true, // Prevents dismissing of toast on hover
+                            style: {
+                                background:
+                                    "linear-gradient(to right, #5344f5, #3dbbc9)",
+                            },
+                            onClick: function () {}, // Callback after click
+                        }).showToast();
+                    });
+            }
         })
     });
     //#endregion

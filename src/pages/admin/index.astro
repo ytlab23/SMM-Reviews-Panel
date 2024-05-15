@@ -3,6 +3,7 @@ import AdminLayout from "../../layouts/adminLayout.astro";
 
 import {isAdminLoggedIn} from "../../js/utils";
 import DashboardGreeting from "../../components[admin]/DashboardGreeting.astro";
+import DashboardCards from "../../components[admin]/dashboardCards.astro";
 
 const adminCookie = Astro.cookies.get("admin");
 
@@ -54,34 +55,11 @@ if (currentHour < 12) {
         <DashboardGreeting {coverPic} {greeting}></DashboardGreeting>
     
         <div class="dashboard-cards flex flex-wrap gap-4 justify-center items-center w-full mb-5">
-            <div class="cards flex gap-3 items-center lg:w-[32%] border border-[#4d4d4d86] rounded-md p-4 transition-all ease-in-out duration-150 hover:shadow-lg hover:scale-105">
-                <span class="size-12 flex justify-center items-center rounded-full text-xl bg-blue-200">
-                    <i class="fa-duotone fa-newspaper text-blue-700"></i>
-                </span>
-                <span>
-                    <p>SMM Panels</p>
-                    <p class="text-xl font-bold">{panelCounts.length}</p>
-                </span>
-            </div>
-            <div class="cards flex gap-3 items-center lg:w-[32%] border border-[#4d4d4d86] rounded-md p-4 transition-all ease-in-out duration-150 hover:shadow-lg hover:scale-105">
-                <span class="size-12 flex justify-center items-center rounded-full text-xl bg-green-200">
-                    <i class="fa-solid fa-page text-green-700"></i>
-                </span>
-                <span>
-                    <p>Services</p>
-                    <p class="text-xl font-bold">{servicesCounts.length}</p>
-                </span>
-            </div>
+            <DashboardCards iconClass="fa-duotone fa-newspaper" cardColor="blue" cardTitle="SMM Panels" counts={panelCounts.length} redirectPath="/admin/SMMPanel"/>
+            <DashboardCards iconClass="fa-solid fa-page" cardColor="green" cardTitle="Services" counts={servicesCounts.length} redirectPath="/admin/services"/>
+            
             {APIResponse.xataResponse.role == "superuser" && 
-                <div class="cards flex gap-3 items-center lg:w-[32%] border border-[#4d4d4d86] rounded-md p-4 transition-all ease-in-out duration-150 hover:shadow-lg hover:scale-105">
-                    <span class="size-12 flex justify-center items-center rounded-full text-xl bg-pink-200">
-                        <i class="fa-duotone fa-messages text-pink-700"></i>
-                    </span>
-                    <span>
-                        <p>Unread Messages</p>
-                        <p class="text-xl font-bold">{messagesCounts}</p>
-                    </span>
-                </div>
+                <DashboardCards iconClass="fa-duotone fa-messages" cardColor="pink" cardTitle="Unread Messages" counts={messagesCounts} redirectPath="/admin/messages"/>
             }
             
         </div>

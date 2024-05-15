@@ -77,7 +77,7 @@ if (!panelInfo) {
                     isRequired={true}
                     placeholder="https://somesmm.com"
                     textBoxId="panelWebsiteURL"
-                    textLabelText="Panel Website URL"
+                    textLabelText="Panel Website URL (Your Affiliate Link)"
                     textValue = {panelInfo.data.panelWebsiteURL || ""}
                 />
                 <TextInput
@@ -248,7 +248,7 @@ if (!panelInfo) {
                     </span>
                 </span>
 
-                <TextArea isRequired={false} placeholder="Search Description of about 150 characters" textBoxId="pageMetaDesc" textLabelText="Search Description"></TextArea>
+                <TextArea textValue={panelInfo.data.panelMetaDesc} isRequired={false} placeholder="Search Description of about 150 characters" textBoxId="pageMetaDesc" textLabelText="Search Description"></TextArea>
 
                 
             </div>
@@ -447,7 +447,7 @@ if (!panelInfo) {
         if(paymentOptionsReceieved != ""){
             paymentOptionsReceieved = JSON.parse(paymentOptionsReceieved);
             for (let i = 0; i < paymentOptionsReceieved.length; i++) {
-                paymentOptionsData.push([paymentOptionsReceieved[i].payOption , paymentOptionsReceieved[i].payDepo]);
+                paymentOptionsData.push([paymentOptionsReceieved[i].payOption , paymentOptionsReceieved[i].payDepo, paymentOptionsReceieved[i].payBonus]);
             }
 
             showPaymentOptions();

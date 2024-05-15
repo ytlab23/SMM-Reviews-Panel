@@ -8,7 +8,7 @@ const xata = new XataClient({ apiKey: import.meta.env.XATA_API_KEY, branch: impo
 export async function GET() {
    try {
       const records = await xata.db.pages
-         .select(["pageTitle", "pageContent", "PageDescription"])
+         .select(["pageTitle", "pageContent", "PageDescription", "pageSlug"])
          .getAll();
 
       return new Response(

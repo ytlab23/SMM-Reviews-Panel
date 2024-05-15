@@ -36,9 +36,11 @@ interface panelStructure {
 }
 
 const allPanels = await fetch(Astro.site + "api/panels.json");
-console.log("Current API in Use - ", Astro.site + "api/panels.json");
-
 const responsePanels = await allPanels.json();
+
+const allSidebarWidgetsFetch: any = await fetch(Astro.site + "api/sidebarWidgets.json").then(
+    (Response) => Response.json(),
+);
 // console.log(responsePanels);
 
 ---
@@ -121,7 +123,15 @@ const responsePanels = await allPanels.json();
 					: <h2 class="text-xl font-semibold text-center">No Services Listed at the Moment</h2>
 				}
 				
+
 			</div>
+			
+			{
+				allSidebarWidgetsFetch.map((widget:any)=> (
+					<div class="widget-container bg-white p-3 rounded-md text-center" set:html={widget.widgetCodeBlock}>
+					</div>
+				))
+			}
 
 			<div class="top-panel-container bg-white p-3 rounded-md hidden">
 				<div class="header flex justify-between items-center w-full">
