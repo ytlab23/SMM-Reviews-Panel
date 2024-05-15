@@ -208,7 +208,6 @@ const allServices = await allServicesFetch.json();
     allDeleteBtns.forEach((serviceDeletebtn) => {
         serviceDeletebtn.addEventListener("click", async () => {
 
-            
             var resp = window.confirm(`Are you sure you want to delete ${serviceDeletebtn.previousElementSibling.textContent} service?`);
             if(resp == true)
             await fetch(

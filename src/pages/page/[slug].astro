@@ -1,3 +1,89 @@
 ---
+import PanelLayout from "../../layouts/PanelLayout.astro";
+export const prerender = true;
+
+interface pageSchema{
+    pageTitle  : string,
+    pageContent  : string,
+    PageDescription  : string,
+    pageSlug  : string,
+}
+
+export async function getStaticPaths (){
+
+const allPagesFetch:any = await fetch(Astro.site + "api/pages.json")
+const allPageRes : pageSchema[] = await allPagesFetch.json();
+
+return allPageRes.map((page:any) => (
+    {
+        params : { slug: page.pageSlug },
+        props: { page },
+    }
+))
+} ;
+
+const { page } = Astro.props;
 
 ---
+
+<PanelLayout title={page.pageTitle} metaDescription={page.PageDescription}>
+    <article>
+        <div class="content" set:html={page.pageContent}>
+            <h1>{page.pageTitle}</h1>
+        </div>
+    </article>
+</PanelLayout>
+
+<style is:inline>
+    .content h1{
+        font-size: 22px;
+        font-weight: 600;
+        padding-bottom: 15px;
+        padding-top: 10px;
+    }
+    .content h2{
+        font-size: 20px;
+        font-weight: 500;
+        padding-bottom: 15px;
+        padding-top: 10px;
+    }
+    .content h3{
+        font-size: 19px;
+        font-weight: 500;
+        padding-bottom: 15px;
+        padding-top: 10px;
+    }
+    .content h4{
+        font-size: 17px;
+        font-weight: 500;
+        padding-bottom: 15px;
+        padding-top: 10px;
+    }
+    .content h5{
+        font-size: 16px;
+        font-weight: 500;
+        padding-bottom: 15px;
+        padding-top: 10px;
+    }
+    .content h6{
+        font-size: 15px;
+        font-weight: 500;
+        padding-bottom: 15px;
+        padding-top: 10px;
+    }
+    .content ol{
+        list-style-type: decimal;
+        padding-left: 2rem;
+    }
+    .content p{
+        padding-bottom: 15px;
+        padding-top: 10px;
+    }
+
+    .content a{
+        color: blue;
+    }
+    .content a:hover{
+        text-decoration-line: underline;
+    }
+</style>

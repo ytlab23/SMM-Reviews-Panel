@@ -11,7 +11,7 @@ interface sidebarWidgetStructure{
 //#region Updates Site Information by ID
 export const PUT : APIRoute = async ({params, request}) =>{
     const data = await request.formData();
-    // console.log("received in API - " , data);
+    console.log("received in API - " , data);
     const id = params.id;
     
     if (!data) {
@@ -24,8 +24,8 @@ export const PUT : APIRoute = async ({params, request}) =>{
     }
 
     let dataToUpdate : sidebarWidgetStructure ={
-        widgetTitle : data.get("webTitle")?.toString() || "",
-        widgetCodeBlock : data.get("webTitle")?.toString() || "",
+        widgetTitle : data.get("widgetTitle")?.toString() || "",
+        widgetCodeBlock : data.get("widgetHTMLCode")?.toString() || "",
     };
 
     // console.log("Modified for API - " , dataToUpdate);

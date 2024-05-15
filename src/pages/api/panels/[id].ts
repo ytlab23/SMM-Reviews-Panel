@@ -10,6 +10,7 @@ interface panelStructure{
     panelAPIKey : string,
     panelSlug : string,
     panelTextDescrition : string,
+    panelMetaDesc : string,
     rating : number,
     paymentOptions : string,
     paneFeaturedImage? : {
@@ -66,6 +67,7 @@ export const PUT : APIRoute = async ({params, request}) =>{
         panelAPIKey : data.get("panelAPIKey")?.toString() || "",
         panelSlug : data.get("panelSlug")?.toString() || "",
         panelTextDescrition : data.get("panelTextDescrition")?.toString() || "",
+        panelMetaDesc : data.get("pageMetaDesc")?.toString() || "",
         rating : Number(data.get("rating")!),
         paymentOptions : data.get("paymentOptions")?.toString() || "",
         paneFeaturedImage: {

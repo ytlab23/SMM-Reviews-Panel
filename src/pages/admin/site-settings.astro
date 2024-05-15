@@ -17,20 +17,54 @@ if (Astro.request.method === "POST") {
     showOverlay = true;
     try {
         const data = await Astro.request.formData();
-        // console.log("Form Data at client side - ", data);
-
-        const response = await fetch(
-            Astro.site + "api/siteData/" + import.meta.env.SiteSettingsID,
-            {
-                method: "PUT",
-                body: data,
-            },
-        );
-
-        const APIResponse = await response.json();
-        if (APIResponse.message == "Site Setting Data Updated Successfully") {
-            messageToShow =
-                "Site Setting Data Saved. Please Redeploy your site to see the changes";
+        console.log("Form Data at client side - ", data);
+        
+        if(data.get("widgetTitle") != null){
+            if(data.get("widgetId") != null){
+                const response = await fetch(
+                    Astro.site + "api/sidebarWidgets/"+ data.get("widgetId")?.toString(),
+                    {
+                        method: "PUT",
+                        body: data,
+                    },
+                );
+        
+                const APIResponse = await response.json();
+                if (APIResponse.message == "Sidebar Widget Data Updated Successfully") {
+                    messageToShow =
+                        "Sidebar Widget Data Updated Successfully.";
+                }
+            }
+            else{
+                const response = await fetch(
+                    Astro.site + "api/sidebarWidgets.json",
+                    {
+                        method: "POST",
+                        body: data,
+                    },
+                );
+        
+                const APIResponse = await response.json();
+                if (APIResponse.message == "Sidebar Widget Data Saved Successfully") {
+                    messageToShow =
+                        "New Sidebar Widget is Added.";
+                }
+            }
+        }
+        else{
+            const response = await fetch(
+                Astro.site + "api/siteData/" + import.meta.env.SiteSettingsID,
+                {
+                    method: "PUT",
+                    body: data,
+                },
+            );
+    
+            const APIResponse = await response.json();
+            if (APIResponse.message == "Site Setting Data Updated Successfully") {
+                messageToShow =
+                    "Site Setting Data Saved. Please Redeploy your site to see the changes";
+            }
         }
     } catch (error) {
         if (error instanceof Error) {
@@ -41,6 +75,10 @@ if (Astro.request.method === "POST") {
 
 //Fetching Site Settings
 const allSiteFetch: any = await fetch(Astro.site + "api/siteData.json").then(
+    (Response) => Response.json(),
+);
+
+const allSidebarWidgetsFetch: any = await fetch(Astro.site + "api/sidebarWidgets.json").then(
     (Response) => Response.json(),
 );
 ---
@@ -212,26 +250,25 @@ const allSiteFetch: any = await fetch(Astro.site + "api/siteData.json").then(
                 >
                     <button id="widgetAddBtn"
                         type="button"
-                        class="size-fit w-auto px-5 py-1 text-sm text-white rounded-full bg-[#5344f5] hover:bg-[#3d32b3] capitalize"
+                        class="size-fit w-auto p-3 text-sm text-white rounded-full bg-[#5344f5] hover:bg-[#3d32b3] capitalize"
                     >
                         <i class="fa-solid fa-plus"></i> Add New Widget</button
                     >
 
                     <ol class="w-full">
-                        <li
-                            class="flex justify-between items-center rounded-lg my-3 w-full px-4 py-1 bg-gray-200 hover:bg-gray-300"
-                        >
-                            Widget 1 <i
-                                class="fa-solid fa-ellipsis-vertical cursor-pointer"
-                            ></i>
-                        </li>
-                        <li
-                            class="flex justify-between items-center rounded-lg my-3 w-full px-4 py-1 bg-gray-200 hover:bg-gray-300"
-                        >
-                            Widget 2 <i
-                                class="fa-solid fa-ellipsis-vertical cursor-pointer"
-                            ></i>
-                        </li>
+                        {
+                            allSidebarWidgetsFetch.map((SidebarWidget:any) => (
+                                <li class="relative flex justify-between items-center rounded-lg my-3 w-full px-4 py-1 bg-gray-200 hover:bg-gray-300">
+                                    {SidebarWidget.widgetTitle} <i class="h-6 w-6 rounded-full hover:bg-gray-400 flex justify-center items-center  cursor-pointer fa-solid fa-ellipsis-vertical" onclick="triggerMenu(this)"></i> 
+                                    <span class="options hide min-w-[100px] absolute border border-[#8080802e] py-2 top-0 -right-24 z-10 flex flex-col bg-white rounded-lg shadow-sm">
+                                        <ul>
+                                            <li class="p-2 cursor-pointer px-3 hover:bg-[#bebebe5e]" data-id={SidebarWidget.id} onclick="triggerServiceForm(this, true)" data-widgetTitle={SidebarWidget.widgetTitle} data-widgetHTMLCode={SidebarWidget.widgetCodeBlock}>Edit</li>
+                                            <li class="p-2 cursor-pointer px-3 hover:bg-[#bebebe5e] deleteBtn" data-id={SidebarWidget.id} >Delete</li>
+                                        </ul>
+                                    </span>
+                                </li>
+                            ))
+                        }
                     </ol>
                 </div>
 
@@ -262,7 +299,6 @@ const allSiteFetch: any = await fetch(Astro.site + "api/siteData.json").then(
                     name="faviconImageFileType"
                     id="faviconImageFileType"
                 />
-
                 <input
                     type="hidden"
                     name="homepgBgImageName"
@@ -307,11 +343,11 @@ const allSiteFetch: any = await fetch(Astro.site + "api/siteData.json").then(
                             textBoxId="widgetHTMLCode"
                             textLabelText="Write or Paste HTML Code here"
                         />
-                        
+                        <input type="hidden" name="widgetId" id="widgetId">
                     </div>
                 </div>
     
-                <button
+                <button id="formAddWidgetBtn"
                     type="submit"
                     class="size-fit w-auto px-5 py-3 text-white rounded-lg bg-[#5344f5] hover:bg-[#3d32b3] capitalize">
                     <i class="fa-solid fa-play"></i> Add Widget
@@ -405,16 +441,73 @@ const allSiteFetch: any = await fetch(Astro.site + "api/siteData.json").then(
     //#endregion
 
     //#region Add Service Form Pop Up
-    function triggerServiceForm() {
+    function triggerServiceForm(widgetHolder=null, isEdit = false) {
+        var widgetTitleVal = widgetHTMLCodeVal = "";
+
+        if(isEdit == true){
+            widgetTitleVal = widgetHolder.getAttribute("data-widgetTitle");
+            widgetHTMLCodeVal = widgetHolder.getAttribute("data-widgetHTMLCode");
+
+            widgetHolder.parentElement.parentElement.classList.toggle("hide");
+            document.querySelector("#formAddWidgetBtn").textContent="Update Widget";
+            document.querySelector("#formAddWidgetBtn").setAttribute("data-widgetID", widgetHolder.getAttribute("data-id"));
+            document.querySelector("#widgetId").value=widgetHolder.getAttribute("data-id");
+        }
         document
             .querySelector(".Overlay.modalForm")
             .classList.toggle("invisible");
-        document.getElementById("widgetTitle").value = "";
-        document.getElementById("widgetHTMLCode").value = "";
+        document.getElementById("widgetTitle").value = widgetTitleVal;
+        document.getElementById("widgetHTMLCode").value = widgetHTMLCodeVal;
     }
     const addWidgetBtn = document.getElementById("widgetAddBtn");
     const modalCloseBtn = document.querySelector(".closeBtn.modalForm");
     addWidgetBtn.onclick = () => triggerServiceForm();
     modalCloseBtn.onclick = () => triggerServiceForm();
     //#endregion
+    
+    //#region Service Delete Functionality
+    var allDeleteBtns = document.querySelectorAll(
+        ".options .deleteBtn",
+    );
+    allDeleteBtns.forEach((sidebarWidgetDeletebtn) => {
+        sidebarWidgetDeletebtn.addEventListener("click", async () => {
+
+            var resp = window.confirm(`Are you sure you want to delete this Widget?`);
+            if(resp == true)
+            await fetch(
+                    "/api/sidebarWidgets/" +
+                        sidebarWidgetDeletebtn.getAttribute("data-id").toString(),
+                    {
+                        method: "DELETE",
+                    },
+                )
+                    .then((response) => response.json())
+                    .then((data) => {
+                        var message = "";
+                        if (data.status != 200) {
+                            message =
+                                "Widget NOT Deleted. An problem occured while deleting";
+                        } else {
+                            message = "Sidebar Widget Deleted";
+                            sidebarWidgetDeletebtn.parentElement.parentElement.parentElement.remove();
+                        }
+    
+                        Toastify({
+                            text: message,
+                            duration: 3000,
+                            close: true,
+                            gravity: "bottom", // `top` or `bottom`
+                            position: "right", // `left`, `center` or `right`
+                            stopOnFocus: true, // Prevents dismissing of toast on hover
+                            style: {
+                                background:
+                                    "linear-gradient(to right, #5344f5, #3dbbc9)",
+                            },
+                            onClick: function () {}, // Callback after click
+                        }).showToast();
+                    });
+        });
+    });
+    //#endregion
+
 </script>
