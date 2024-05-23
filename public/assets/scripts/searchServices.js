@@ -86,6 +86,7 @@ try {
     });
 
     function paginate(paginateType) {
+        allServiceList = document.querySelectorAll(".offerList");
         allServiceList.forEach((serviceItem) => {
             serviceItem.classList.add("hidden");
             serviceItem.classList.remove("pageCounter");

@@ -5,11 +5,12 @@ interface Props {
     panelTitle : string,
     service : number,
     rating : number,
+    avrg : number,
     slugURL : string,
     websiteURL : string,
 }
 
-const {imageSrc ,panelTitle ,service, rating,slugURL, websiteURL} = Astro.props;
+const {imageSrc ,panelTitle ,service, rating, avrg, slugURL, websiteURL} = Astro.props;
 
 var ratingCollection : String[] = [];
 for (let j = 0; j < 5; j++) {
@@ -48,7 +49,8 @@ for (let j = 0; j < 5; j++) {
                 </span>
             </span>
             <span>
-                {service.toString()} {service > 1 ? "Services" : "Service"}
+                <span class="block text-right">{service.toString()} {service > 1 ? "Services" : "Service"}</span>
+                <span class="block">{`Average Price : $${avrg}`}</span>
             </span>
         </div>
         

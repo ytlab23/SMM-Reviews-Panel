@@ -158,7 +158,7 @@ interface panelSchema{
                     </span>
         
                     {
-                        servicesResponse.slice(0,20).map((service:any, j :number) => (
+                        servicesResponse.map((service:any, j :number) => (
                             <span class="offerList w-full flex border-b border-gray-400">
                                 <span class="offer_id line-clamp-1 my-3 w-[5%] pl-2">{j + 1}</span>
                                 <span class="offer_service line-clamp-1 my-3 w-[41%] text-left" title={service.name}>{service.name}</span>
