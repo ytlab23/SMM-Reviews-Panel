@@ -86,6 +86,7 @@ try {
     });
 
     function paginate(paginateType) {
+        allServiceList = document.querySelectorAll(".offerList");
         allServiceList.forEach((serviceItem) => {
             serviceItem.classList.add("hidden");
             serviceItem.classList.remove("pageCounter");
@@ -121,6 +122,7 @@ try {
         });
     }
     function updatePageNumber() {
+        allServiceList = document.querySelectorAll(".offerList");
         pageNumber.textContent = `${pageNo} of ${Math.ceil(allServiceList.length / pageSize)}`;
     }
 } catch (error) {}

@@ -16,6 +16,7 @@ export async function GET() {
             "panelTextDescrition",
             "panelMetaDesc",
             "rating",
+            "ratingOtherSites",
             "paymentOptions",
             "paneFeaturedImage"
          ])
@@ -62,12 +63,13 @@ export const POST: APIRoute = async ({ request }) => {
       panelTextDescrition: data.get("panelTextDescrition")?.toString(),
       rating: Number(data.get("rating")!),
       paymentOptions: data.get("paymentOptions")?.toString(),
+      ratingOtherSites : data.get("otherRatings")?.toString(),
 
       paneFeaturedImage: {
          name: data.get("imageName")?.toString(),
          mediaType: data.get("imageFileType")?.toString(),
          base64Content: data.get("imageBase64")?.toString()
-      }
+      },
    });
 
    if (record.id) {

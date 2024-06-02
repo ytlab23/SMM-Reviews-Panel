@@ -2,8 +2,12 @@
 import SearchForm from "../../components/SearchForm.astro";
 import PanelLayout from "../../layouts/PanelLayout.astro";
 
-const allSiteFetch:any = await fetch(Astro.site + "api/siteData.json").then(Response => Response.json());
-const allPanels = await fetch(Astro.site + "api/panels.json").then(Response => Response.json());
+const allSiteFetch: any = await fetch(Astro.site + "api/siteData.json").then(
+    (Response) => Response.json(),
+);
+const allPanels = await fetch(Astro.site + "api/panels.json").then((Response) =>
+    Response.json(),
+);
 let SMMService_APIData: any[] = [];
 let allPanelAPIs: string[][] = [];
 
@@ -13,6 +17,7 @@ allPanels.map((panel: any) =>
         `${panel.panelAPILink}?key=${panel.panelAPIKey}&action=services`,
         panel.panelTitle,
         panel.panelWebsiteURL,
+        panel.panelSlug,
     ]),
 );
 
@@ -21,8 +26,14 @@ for (let i = 0; i < allPanelAPIs.length; i++) {
     let panelServicesdata = await fetch(allPanelAPIs[i][0]).then((Response) =>
         Response.json(),
     );
-    SMMService_APIData.push([panelServicesdata, allPanelAPIs[i][1], allPanelAPIs[i][2]]);
+    SMMService_APIData.push([
+        panelServicesdata,
+        allPanelAPIs[i][1],
+        allPanelAPIs[i][2],
+        allPanelAPIs[i][3],
+    ]);
 }
+
 //Counting Services and Collecting all Relevant Services
 let relevantServices: any[] = [];
 for (let j = 0; j < SMMService_APIData.length; j++) {
@@ -31,6 +42,7 @@ for (let j = 0; j < SMMService_APIData.length; j++) {
             serviceData: SMMService_APIData[j][0][k],
             serviceTitle: SMMService_APIData[j][1],
             serviceRefUrl: SMMService_APIData[j][2],
+            serviceSlug: SMMService_APIData[j][3],
         };
         relevantServices.push(temp);
     }
@@ -40,91 +52,339 @@ for (let j = 0; j < SMMService_APIData.length; j++) {
 let servicePageListCount = allSiteFetch[0].platformServiceCount || 20;
 ---
 
-<PanelLayout title={` on ${allSiteFetch[0].SiteTitle}`} metaDescription=`Search among Best SMM Panels, and SMM Services on ${allSiteFetch[0].SiteTitle}`>
-
-    <div class="content-wrapper flex flex-wrap lg:justify-start justify-center gap-5 my-6 px-5">
-        
+<PanelLayout
+    title={` on ${allSiteFetch[0].SiteTitle}`}
+    metaDescription=`Search among Best SMM Panels, and SMM Services on ${allSiteFetch[0].SiteTitle}`
+>
+    <div
+        class="content-wrapper flex flex-wrap lg:justify-start justify-center gap-5 my-6 px-5"
+    >
         <article class="flex flex-col gap-5 w-full">
             <h1 class="searchResTitle text-2xl font-semibold"></h1>
             <div class="searchBox flex justify-center items-center">
                 <div class="wrapper w-1/2">
-                    <SearchForm searchPagePath={"/services/search"}/>
+                    <SearchForm searchPagePath={"/services/search"} />
                 </div>
             </div>
             {
-                relevantServices.length > 0 
-                ? 
-                <div class="services lg:min-h-[400px] flex flex-col justify-center items-center">
-                <h2 id="serviceHeading" class="text-3xl font-semibold">Services</h2>
-    
-                <div class="services-table-holder shadow-2xl text-center mt-5 lg:w-full w-[89vw] overflow-auto">
-                    <div class="table-wrapper md:w-full w-[900px]">
-                        <span
-                            class="offerHeader w-full flex bg-[#36304a] font-semibold text-white">
-                            <span class="offer_service_h my-6 w-[46%]">Service</span>
-                            <span class="offer_Minorder_h my-6 w-[13.5%]">Min order</span>
-                            <span class="offer_Maxorder_h my-6 w-[13.5%]">Max order</span>
-                            <span class="offer_rate_h my-6 w-[13.5%]">Rate per 1000</span>
-                            <span class="offer_rate_h my-6 w-[13.5%]">SMM Panel</span>
-                        </span>
-    
-                        {
-                            relevantServices.map((smm_service: any, j: number) => (
-                                <span
-                                    class="offerList w-full hidden border-b border-gray-400"
-                                >
-                                    <span
-                                        class="offer_service line-clamp-1 my-3 w-[46%] text-left pl-3"
-                                        title={smm_service.serviceData.name}>
-                                        {smm_service.serviceData.name}
-                                    </span>
-                                    <span class="offer_Minorder line-clamp-1 my-3 w-[13.5%]">
-                                        {smm_service.serviceData.min}
-                                    </span>
-                                    <span class="offer_Maxorder line-clamp-1 my-3 w-[13.5%]">
-                                        {smm_service.serviceData.max}
-                                    </span>
-                                    <span class="offer_rate line-clamp-1 my-3 w-[13.5%]">
-                                        ${smm_service.serviceData.rate}
-                                    </span>
-                                    <span class="offer_panelTitle line-clamp-1 my-3 w-[13.5%]">
-                                        <a class="hover:underline hover:font-semibold" href={smm_service.serviceRefUrl}>{smm_service.serviceTitle}</a>
-                                    </span>
+                relevantServices.length > 0 ? (
+                    <div class="services lg:min-h-[400px] flex flex-col justify-center items-center">
+                        <h2 id="serviceHeading" class="text-3xl font-semibold">
+                            Services
+                        </h2>
+
+                        <div class="tableTools w-full flex lg:flex-row flex-col items-center gap-3 py-3">
+                            <div class="filterOptionsHolder w-fit relative">
+                                <span class="filterSelected bg-white cursor-pointer p-3 border rounded-md hover:bg-slate-300 shadow-lg">
+                                    <span>Sort by : Default</span> <i class="fa-solid fa-angle-down" />
                                 </span>
-                            ))
-                        }
-                    </div>
-                </div>
-                {
-                    relevantServices.length > servicePageListCount && (
-                        <div
-                            class="paginationHolder flex flex-col gap-3 w-full items-center my-5"
-                            data-pageSize={servicePageListCount}
-                        >
-                            <div class="paginationBtns flex gap-3 items-center">
-                                <div class="prevbtns flex justify-center items-center cursor-pointer rounded-full size-12 bg-slate-700 text-white border">
-                                    <i class="fa-duotone fa-chevrons-left" />
-                                </div>
-                                <div class="paginationInfo text-center">
-                                    <span class="rounded-lg p-4 h-full font-bold">
-                                        Showing Results
-                                    </span>
-                                    <span class="pageNumber block" />
-                                </div>
-                                <div class="nextbtns flex justify-center items-center cursor-pointer rounded-full size-12 bg-slate-700 text-white border">
-                                    <i class="fa-duotone fa-chevrons-right" />
-                                </div>
+                                <ul class="filterOptions absolute w-full mt-2 py-2 bg-white border rounded-md shadow-lg invisible">
+                                    <li class="p-1 px-3 cursor-pointer hover:bg-slate-300">
+                                        Default (No-Filter)
+                                    </li>
+                                    <li class="p-1 px-3 cursor-pointer hover:bg-slate-300">
+                                        Newest Arrival
+                                    </li>
+                                    <li class="p-1 px-3 cursor-pointer hover:bg-slate-300">
+                                        Services A-Z
+                                    </li>
+                                    <li class="p-1 px-3 cursor-pointer hover:bg-slate-300">
+                                        Price Low to High
+                                    </li>
+                                    <li class="p-1 px-3 cursor-pointer hover:bg-slate-300">
+                                        Price High to Low
+                                    </li>
+                                    <li class="p-1 px-3 cursor-pointer hover:bg-slate-300">
+                                        Set Price Range
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="price-Range gap-2 hidden">
+                                <span class="flex items-center gap-1">
+                                    <p>Low</p>
+                                    <input
+                                        id="priceRangeLow"
+                                        type="number"
+                                        class="p-2 border rounded shadow"
+                                    />
+                                </span>
+                                <span class="flex items-center gap-1">
+                                    <p>High</p>
+                                    <input
+                                        id="priceRangeHigh"
+                                        type="number"
+                                        class="p-2 border rounded shadow"
+                                    />
+                                </span>
+                                <button onclick="setPriceRange();" class="bg-white cursor-pointer p-3 border rounded-md hover:bg-slate-300 shadow-lg">
+                                    Go
+                                </button>
                             </div>
                         </div>
-                    )
-                }
-            </div>
-                : <h2 class="font-bold text-xl text-center">Sorry No Service Available right now for this Website.</h2>
+
+                        <div class="services-table-holder shadow-2xl text-center mt-5 lg:w-full w-[89vw] overflow-auto">
+                            <div class="table-wrapper md:w-full w-[900px]">
+                                <span class="offerHeader w-full flex bg-[#36304a] font-semibold text-white">
+                                    <span class="offer_service_h my-6 w-[32.5%]">
+                                        Service
+                                    </span>
+                                    <span class="offer_Minorder_h my-6 w-[13.5%]">
+                                        Min order
+                                    </span>
+                                    <span class="offer_Maxorder_h my-6 w-[13.5%]">
+                                        Max order
+                                    </span>
+                                    <span class="offer_rate_h my-6 w-[13.5%]">
+                                        Rate per 1000
+                                    </span>
+                                    <span class="offer_rate_h my-6 w-[13.5%]">
+                                        Check Panel Details
+                                    </span>
+                                    <span class="offer_rate_h my-6 w-[13.5%]">
+                                        Visit Panel
+                                    </span>
+                                </span>
+
+                                {relevantServices.map(
+                                    (smm_service: any, j: number) => (
+                                        <span class="offerList w-full hidden border-b border-gray-400">
+                                            <span
+                                                class="offer_service line-clamp-1 my-3 w-[32.5%] text-left pl-3"
+                                                title={
+                                                    smm_service.serviceData.name
+                                                }
+                                            >
+                                                {smm_service.serviceData.name}
+                                            </span>
+                                            <span class="offer_Minorder line-clamp-1 my-3 w-[13.5%]">
+                                                {smm_service.serviceData.min}
+                                            </span>
+                                            <span class="offer_Maxorder line-clamp-1 my-3 w-[13.5%]">
+                                                {smm_service.serviceData.max}
+                                            </span>
+                                            <span class="offer_rate line-clamp-1 my-3 w-[13.5%]">
+                                                ${smm_service.serviceData.rate}
+                                            </span>
+                                            <span class="offer_panelTitle line-clamp-1 my-3 w-[13.5%]">
+                                                <a
+                                                    class="hover:underline hover:font-semibold"
+                                                    href={
+                                                        `/panels/` +
+                                                        smm_service.serviceSlug
+                                                    }
+                                                >
+                                                    {smm_service.serviceTitle}
+                                                </a>
+                                            </span>
+                                            <span class="offer_panelTitle line-clamp-1 my-3 w-[13.5%]">
+                                                <a
+                                                    rel="nofollow"
+                                                    class="hover:underline hover:font-semibold"
+                                                    href={
+                                                        smm_service.serviceRefUrl
+                                                    }
+                                                >
+                                                    {smm_service.serviceTitle}{" "}
+                                                    <i class="fa-solid fa-up-right" />
+                                                </a>
+                                            </span>
+                                        </span>
+                                    ),
+                                )}
+                            </div>
+                        </div>
+                        {relevantServices.length > servicePageListCount && (
+                            <div
+                                class="paginationHolder flex flex-col gap-3 w-full items-center my-5"
+                                data-pageSize={servicePageListCount}
+                            >
+                                <div class="paginationBtns flex gap-3 items-center">
+                                    <div class="prevbtns flex justify-center items-center cursor-pointer rounded-full size-12 bg-slate-700 text-white border">
+                                        <i class="fa-duotone fa-chevrons-left" />
+                                    </div>
+                                    <div class="paginationInfo text-center">
+                                        <span class="rounded-lg p-4 h-full font-bold">
+                                            Showing Results
+                                        </span>
+                                        <span class="pageNumber block" />
+                                    </div>
+                                    <div class="nextbtns flex justify-center items-center cursor-pointer rounded-full size-12 bg-slate-700 text-white border">
+                                        <i class="fa-duotone fa-chevrons-right" />
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                ) : (
+                    <h2 class="font-bold text-xl text-center">
+                        Sorry No Service Available right now for this Website.
+                    </h2>
+                )
             }
         </article>
-        
     </div>
-
 </PanelLayout>
 
 <script is:inline src="/assets/scripts/searchServices.js"></script>
+<script is:inline>
+    //#region Filter Options Tools
+    const selectedFilter = document.querySelector(
+        ".tableTools .filterOptionsHolder .filterSelected",
+    );
+    const filterOptionsList = document.querySelector(
+        ".tableTools .filterOptionsHolder .filterOptions",
+    );
+    const tableHolder = document.querySelector(".table-wrapper");
+    var minValue=0;
+    var maxValue=0;
+    let pageSize = Number(
+        document
+            .querySelector(".paginationHolder")
+            .getAttribute("data-pageSize"),
+    );
+    var allInitialDataList = document.querySelectorAll(".offerList");
+
+    const filterOptions = filterOptionsList.querySelectorAll("li");
+    selectedFilter.addEventListener("click", () => {
+        filterOptionsList.classList.toggle("invisible");
+    });
+
+    filterOptions.forEach((filOption) => {
+        filOption.addEventListener("click", ()=>{
+            filterOptionsList.classList.toggle("invisible");
+            selectedFilter.querySelector("span").textContent = `Sort by : ${filOption.textContent.trim()} `;
+            filterOptionActions(filOption.textContent.trim());
+        })
+    });
+
+    function filterOptionActions(optionName) {
+        if(optionName == "Default (No-Filter)"){
+            reConstructDataTable(allInitialDataList);
+        }
+        else if(optionName == "Newest Arrival"){
+            
+        }
+        else if(optionName == "Services A-Z"){
+            sortService();
+        }
+        else if(optionName == "Price Low to High"){
+            sortPrice("LH");
+        }
+        else if(optionName == "Price High to Low"){
+            sortPrice("HL");
+        }
+        else if(optionName == "Set Price Range"){
+            document.querySelector(".price-Range").classList.add("flex");
+            document.querySelector(".price-Range").classList.remove("hidden");
+            calculatePriceRange();
+        }
+        pageNo = 1;
+        updatePageNumber();
+    }
+
+    function setPriceRange() {
+        sortPrice("LH");
+        var selectedData = [];
+        document.querySelectorAll(".offerList").forEach(data => {
+            const price = Number(data.querySelector(".offer_rate").textContent.trim().slice(1));
+            if((price >= Number(document.getElementById("priceRangeLow").value) && price <= Number(document.getElementById("priceRangeHigh").value))){
+                selectedData.push(data);
+            }
+        });
+
+        //removing all Data
+        allInitialDataList.forEach((data)=>{
+            data.remove();
+        })
+
+        selectedData.forEach((serviceData) => {
+            serviceData.classList.remove("pageCounter");
+            serviceData.classList.add("hidden");
+            tableHolder.insertAdjacentElement("beforeend" , serviceData);
+        });
+
+        selectedData[0].classList.add("pageCounter");
+        //Unhide Initial Results
+        for (let i = 0; i < pageSize; i++) {
+            if(i < selectedData.length){
+                selectedData[i].classList.remove("hidden");
+                selectedData[i].classList.add("flex");
+            }
+        }
+        
+        pageNo = 1;
+        updatePageNumber();
+        currentPosition =   0;
+
+        document.querySelector(".price-Range").classList.add("flex");
+        document.querySelector(".price-Range").classList.remove("hidden");
+    }
+
+    function calculatePriceRange() {
+        //Only for Calculation of Maximum and Minimum Prices
+        const allListArray = Array.from(allInitialDataList);
+        const values = allListArray.map(node => {
+            const priceSpanTag = node.querySelector(".offer_rate");
+            return Number(priceSpanTag.textContent.trim().slice(1));
+        });
+
+        // Find the smallest and largest values
+        minValue = Math.min(...values);
+        maxValue = Math.max(...values);
+        document.getElementById("priceRangeLow").value = minValue;
+        document.getElementById("priceRangeHigh").value = maxValue;
+
+        document.getElementById("priceRangeLow").min = minValue;
+        document.getElementById("priceRangeHigh").max = maxValue;
+    }
+
+    function sortService() {
+        document.querySelector(".price-Range").classList.remove("flex");
+        document.querySelector(".price-Range").classList.add("hidden");
+
+        const allListArray = Array.from(allInitialDataList);
+        allListArray.sort((a, b) =>{
+            return a.querySelector(".offer_service").textContent.localeCompare(b.querySelector(".offer_service").textContent);
+        })
+        reConstructDataTable(allListArray);
+    }
+
+    function sortPrice(sortType) {
+        document.querySelector(".price-Range").classList.remove("flex");
+        document.querySelector(".price-Range").classList.add("hidden");
+        
+        const allPriceListArray = Array.from(allInitialDataList);
+        
+        allPriceListArray.sort((a,b) =>{
+            return sortType == "LH"
+            ? Number(a.querySelector(".offer_rate").textContent.trim().slice(1)) - Number(b.querySelector(".offer_rate").textContent.trim().slice(1))
+            : Number(b.querySelector(".offer_rate").textContent.trim().slice(1)) - Number(a.querySelector(".offer_rate").textContent.trim().slice(1))
+        })
+        
+        reConstructDataTable(allPriceListArray);
+    }
+
+    function reConstructDataTable(arrayList) {
+        const allData = document.querySelectorAll(".offerList");
+        //removing all Previous data 
+        allData.forEach(serviceData => {
+            serviceData.remove();
+        });
+        
+        //adding newly sorted list
+        arrayList.forEach((serviceData)=>{
+            serviceData.classList.remove("pageCounter");
+            serviceData.classList.add("hidden");
+            tableHolder.insertAdjacentElement("beforeend" , serviceData);
+        })
+        arrayList[0].classList.add("pageCounter");
+        //Unhide Initial Results
+        for (let i = 0; i < pageSize; i++) {
+            arrayList[i].classList.remove("hidden");
+            arrayList[i].classList.add("flex");
+        }
+        currentPosition =   0;
+    }
+    //#endregion
+</script>

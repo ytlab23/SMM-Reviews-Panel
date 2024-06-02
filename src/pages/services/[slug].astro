@@ -49,6 +49,7 @@ allPanelRes.map((panel: any) =>
         `${panel.panelAPILink}?key=${panel.panelAPIKey}&action=services`,
         panel.panelTitle,
         panel.panelWebsiteURL,
+        panel.panelSlug,
     ]),
 );
 
@@ -57,7 +58,11 @@ for (let i = 0; i < allPanelAPIs.length; i++) {
     let panelServicesdata = await fetch(allPanelAPIs[i][0]).then((Response) =>
         Response.json(),
     );
-    SMMService_APIData.push([panelServicesdata, allPanelAPIs[i][1], allPanelAPIs[i][2]]);
+    SMMService_APIData.push([
+        panelServicesdata, 
+        allPanelAPIs[i][1], 
+        allPanelAPIs[i][2], 
+        allPanelAPIs[i][3]]);
 }
 
 //Counting Services and Collecting all Relevant Services
@@ -76,6 +81,7 @@ for (let j = 0; j < SMMService_APIData.length; j++) {
                 serviceData: SMMService_APIData[j][0][k],
                 serviceTitle: SMMService_APIData[j][1],
                 serviceRefUrl: SMMService_APIData[j][2],
+                serviceSlug: SMMService_APIData[j][3],
             };
             relevantServices.push(temp);
         }
@@ -151,11 +157,12 @@ let servicePageListCount = allSiteFetch[0].platformServiceCount || 20;
                         <span
                             class="offerHeader w-full flex bg-[#36304a] font-semibold text-white">
                             <span class="offer_id my-6 w-[5%] pl-2">S.No</span>
-                            <span class="offer_service my-6 w-[41%]">Service</span>
+                            <span class="offer_service my-6 w-[27.5%]">Service</span>
                             <span class="offer_Minorder my-6 w-[13.5%]">Min order</span>
                             <span class="offer_Maxorder my-6 w-[13.5%]">Max order</span>
                             <span class="offer_rate my-6 w-[13.5%]">Rate per 1000</span>
                             <span class="offer_rate my-6 w-[13.5%]">SMM Panel</span>
+                            <span class="offer_rate my-6 w-[13.5%]">Visit Panel</span>
                         </span>
     
                         {
@@ -171,7 +178,7 @@ let servicePageListCount = allSiteFetch[0].platformServiceCount || 20;
                                         {j + 1}
                                     </span>
                                     <span
-                                        class="offer_service line-clamp-1 my-3 w-[41%] text-left"
+                                        class="offer_service line-clamp-1 my-3 w-[27.5%] text-left"
                                         title={smm_service.serviceData.name}>
                                         {smm_service.serviceData.name}
                                     </span>
@@ -184,8 +191,11 @@ let servicePageListCount = allSiteFetch[0].platformServiceCount || 20;
                                     <span class="offer_rate line-clamp-1 my-3 w-[13.5%]">
                                         ${smm_service.serviceData.rate}
                                     </span>
+                                    <span class="offer_panelTitle line-clamp-1 my-3 w-[13.5%]">
+                                        <a class="hover:underline hover:font-semibold" href={`/panels/` + smm_service.serviceSlug }>{smm_service.serviceTitle}</a>
+                                    </span>
                                     <span class="offer_rate line-clamp-1 my-3 w-[13.5%]">
-                                        <a class="hover:underline hover:font-semibold" href={smm_service.serviceRefUrl}>{smm_service.serviceTitle}</a>
+                                        <a class="hover:underline hover:font-semibold" href={smm_service.serviceRefUrl}>{smm_service.serviceTitle} <i class="fa-solid fa-up-right"></i></a>
                                     </span>
                                 </span>
                             ))

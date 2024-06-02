@@ -56,7 +56,7 @@ if (!panelInfo) {
                 class="w-[85%] border-b border-b-blue-500 px-4 rounded-md"
                 value={panelInfo.data.panelTitle || ""}
                 />
-            <button
+            <button id="saveBtn"
                 type="submit"
                 class="size-fit w-auto px-5 py-3 text-white rounded-lg bg-[#5344f5] hover:bg-[#3d32b3] capitalize"
                 ><i class="fa-solid fa-play"></i> {formType}</button
@@ -104,6 +104,41 @@ if (!panelInfo) {
                         class="size-fit w-fit px-3 py-1 text-white rounded-lg bg-[#5344f5] hover:bg-[#3d32b3]"
                         >Test API</button
                     >
+                </span>
+                <span class="paymentOptions">
+                    <label class="w-full text-left">Add Payment Options</label>
+
+                    <span class="fields flex gap-1 items-end my-2">
+                        <TextInput
+                            isRequired={false}
+                            placeholder="Option"
+                            textBoxId="payOption"
+                            textLabelText="Option"
+                        />
+                        <TextInput
+                            isRequired={false}
+                            placeholder="Min Deposit"
+                            textBoxId="payDepo"
+                            textLabelText="Min Deposit"
+                        />
+                        <TextInput
+                            isRequired={false}
+                            placeholder="Bonus"
+                            textBoxId="payBonus"
+                            textLabelText="Bonus"
+                        />
+                        <button
+                            id="paymentAddBtn"
+                            type="button"
+                            class="size-fit w-fit px-3 py-2 text-white rounded-lg bg-[#5344f5] hover:bg-[#3d32b3]"
+                            >Add</button
+                        >
+                    </span>
+                    <span
+                        id="paymentData"
+                        class="paymentData flex flex-col gap-1"
+                    >
+                    </span>
                 </span>
 
                 <span class="flex flex-col items-center gap-4">
@@ -175,40 +210,77 @@ if (!panelInfo) {
                     </span>
                 </span>
 
-                <span class="paymentOptions">
-                    <label class="w-full text-left">Add Payment Options</label>
+                <span class="flex flex-col items-center gap-4">
+                    <label class="w-full text-left">Other Ratings</label>
 
-                    <span class="fields flex gap-1 items-end my-2">
-                        <TextInput
-                            isRequired={false}
-                            placeholder="Option"
-                            textBoxId="payOption"
-                            textLabelText="Option"
-                        />
-                        <TextInput
-                            isRequired={false}
-                            placeholder="Min Deposit"
-                            textBoxId="payDepo"
-                            textLabelText="Min Deposit"
-                        />
-                        <TextInput
-                            isRequired={false}
-                            placeholder="Bonus"
-                            textBoxId="payBonus"
-                            textLabelText="Bonus"
-                        />
-                        <button
-                            id="paymentAddBtn"
-                            type="button"
-                            class="size-fit w-fit px-3 py-2 text-white rounded-lg bg-[#5344f5] hover:bg-[#3d32b3]"
-                            >Add</button
-                        >
-                    </span>
-                    <span
-                        id="paymentData"
-                        class="paymentData flex flex-col gap-1"
-                    >
-                    </span>
+                    <div class="otherReviews">
+                        <label class="mt-5 w-full text-left flex gap-5 items-center"><img src="/assets/images/trustpilotlogo.webp" class="h-10"></label>
+                        <span class="fields flex gap-1 items-end my-2">
+                            <TextInput
+                                isRequired={false}
+                                placeholder="TrustPilot Score"
+                                textBoxId="TrustPilotScore"
+                                textLabelText="TrustPilot Score"
+                            />
+                            <TextInput
+                                isRequired={false}
+                                placeholder="TrustPilot Review Count"
+                                textBoxId="TrustPilotRC"
+                                textLabelText="TrustPilot Review Count"
+                            />
+                            <TextInput
+                                isRequired={false}
+                                placeholder="TrustPilot Link"
+                                textBoxId="TrustPilotLink"
+                                textLabelText="TrustPilot Link"
+                            />
+                        </span>
+                        
+                        <label class="mt-5 w-full text-left flex gap-5 items-center"><img src="/assets/images/Sitejabber_logo.png" class="h-10"></label>
+                        <span class="fields flex gap-1 items-end my-2">
+                            <TextInput
+                                isRequired={false}
+                                placeholder="Sitejabber Score"
+                                textBoxId="SitejabberScore"
+                                textLabelText="Sitejabber Score"
+                            />
+                            <TextInput
+                                isRequired={false}
+                                placeholder="Sitejabber Review Count"
+                                textBoxId="SitejabberRC"
+                                textLabelText="Sitejabber Review Count"
+                            />
+                            <TextInput
+                                isRequired={false}
+                                placeholder="Sitejabber Link"
+                                textBoxId="SitejabberLink"
+                                textLabelText="Sitejabber Link"
+                            />
+                        </span>
+    
+                        <label class="mt-5 w-full text-left flex gap-5 items-center"><img src="/assets/images/reviewsLogo.webp" class="h-10"></label>
+                        <span class="fields flex gap-1 items-end my-2">
+                            <TextInput
+                                isRequired={false}
+                                placeholder="Reviews.io Score"
+                                textBoxId="Reviews_ioScore"
+                                textLabelText="Reviews.io Score"
+                            />
+                            <TextInput
+                                isRequired={false}
+                                placeholder="Reviews.io Review Count"
+                                textBoxId="Reviews_ioRC"
+                                textLabelText="Reviews.io Review Count"
+                            />
+                            <TextInput
+                                isRequired={false}
+                                placeholder="Reviews.ior Link"
+                                textBoxId="Reviews_ioLink"
+                                textLabelText="Reviews.io Link"
+                            />
+                        </span>
+                    </div>
+
                 </span>
 
             </div>
@@ -259,6 +331,7 @@ if (!panelInfo) {
         <input type="hidden" name="imageFileType" id="imageFileType" />
         <input type="hidden" name="rating" id="rating" />
         <input type="hidden" name="paymentOptions" id="paymentOptions" value={JSON.stringify(panelInfo.data.paymentOptions)}/>
+        <input type="hidden" name="otherRatings" id="otherRatings" value={JSON.stringify(panelInfo.data.ratingOtherSites)}/>
     </form>
 </div>
 
@@ -334,6 +407,59 @@ if (!panelInfo) {
                 ratingValue.textContent.trim();
         });
     });
+    //#endregion
+
+    //#region Other Rating Sites
+    const saveBtn = document.querySelector("#saveBtn");
+    saveBtn.addEventListener("click", ()=>{
+                        
+        var otherRatingsJson = [
+            {
+                ratingSite: "TrustPilot",
+                score: document.querySelector("#TrustPilotScore").value,
+                TotalReviews: document.querySelector("#TrustPilotRC").value,
+                ratingURL: document.querySelector("#TrustPilotLink").value
+            },
+            {
+                ratingSite: "Sitejabber",
+                score: document.querySelector("#SitejabberScore").value,
+                TotalReviews: document.querySelector("#SitejabberRC").value,
+                ratingURL: document.querySelector("#SitejabberLink").value
+            },
+            {
+                ratingSite: "Reviews.io",
+                score: document.querySelector("#Reviews_ioScore").value,
+                TotalReviews: document.querySelector("#Reviews_ioRC").value,
+                ratingURL: document.querySelector("#Reviews_ioLink").value
+            },
+        ];
+
+        document.querySelector("#otherRatings").value = JSON.stringify(otherRatingsJson);
+
+    })
+
+    function setOtherSiteRating() {
+        var otherSiteRatingReceieved = document.getElementById("otherRatings").value;
+        if(otherSiteRatingReceieved != ""){
+            otherSiteRatingReceieved = JSON.parse(otherSiteRatingReceieved);
+            
+            //TrustPilot
+            document.querySelector("#TrustPilotScore").value = otherSiteRatingReceieved[0].score;
+            document.querySelector("#TrustPilotRC").value = otherSiteRatingReceieved[0].TotalReviews;
+            document.querySelector("#TrustPilotLink").value = otherSiteRatingReceieved[0].ratingURL;
+            
+            //Sitejabber
+            document.querySelector("#SitejabberScore").value = otherSiteRatingReceieved[1].score;
+            document.querySelector("#SitejabberRC").value = otherSiteRatingReceieved[1].TotalReviews;
+            document.querySelector("#SitejabberLink").value = otherSiteRatingReceieved[1].ratingURL;
+            
+            //Reviews.io
+            document.querySelector("#Reviews_ioScore").value = otherSiteRatingReceieved[2].score;
+            document.querySelector("#Reviews_ioRC").value = otherSiteRatingReceieved[2].TotalReviews;
+            document.querySelector("#Reviews_ioLink").value = otherSiteRatingReceieved[2].ratingURL;
+            
+        }
+    }
     //#endregion
 
     //#region Payment Button Additions
@@ -452,6 +578,8 @@ if (!panelInfo) {
 
             showPaymentOptions();
         }
+
+        setOtherSiteRating();
     })
     //#endregion
 </script>
