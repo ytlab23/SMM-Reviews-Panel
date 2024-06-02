@@ -72,12 +72,15 @@ export const PUT : APIRoute = async ({params, request}) =>{
         rating : Number(data.get("rating")!),
         ratingOtherSites : data.get("otherRatings")?.toString() || "",
         paymentOptions : data.get("paymentOptions")?.toString() || "",
-        paneFeaturedImage: {
-            name : data.get("imageName")?.toString() || "",
-            mediaType : data.get("imageFileType")?.toString() || "",
-            base64Content : data.get("imageBase64")?.toString() || "",
-        }
     };
+
+    if (data.get("imageName") || data.get("imageFileType") || data.get("imageBase64")) {
+        dataToUpdate.paneFeaturedImage = {
+            name: data.get("imageName")?.toString() || "",
+            mediaType: data.get("imageFileType")?.toString() || "",
+            base64Content: data.get("imageBase64")?.toString() || ""
+        };
+    }
 
     // console.log("received in API - " , data);
     // console.log("received in API - " , dataToUpdate);
