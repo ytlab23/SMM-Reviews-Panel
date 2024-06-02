@@ -186,25 +186,30 @@ interface panelSchema {
                 </aside>
             </div>
 
-            <div class="otherReviews-Container w-full flex lg:flex-row flex-col justify-between items-center gap-5">
+            <div class="otherReviews-Container w-full mt-5 flex lg:flex-row flex-col justify-center items-center lg:gap-x-12 gap-5">
+                
                 {
+                    (panel.ratingOtherSites != null )  &&
                     panel.ratingOtherSites.map((rating:any)=>(
-                        <a target="_blank"href={rating.ratingURL} class="reviewsBox lg:w-fit md:w-1/2 w-full mb-4 flex flex-col gap-3 items-center bg-white p-3 rounded-md shadow-md">
-                            <img src={ "/assets/images/" + 
-                                (rating.ratingSite == "TrustPilot" ?
-                                "trustpilotlogo.webp" || ""
-                                :
-                                rating.ratingSite == "Sitejabber" ?
-                                "Sitejabber_logo.png" || ""
-                                :
-                                "reviewsLogo.webp" || "")
-                            } alt={rating.ratingSite + " logo"} class="h-10 lg:w-[180px] w-full object-contain" />
-                            <span class="flex gap-2 font-bold text-[#36304a] text-2xl">
-                                {
-                                    `${rating.score} / ${rating.TotalReviews}` 
-                                }
-                            </span>
-                        </a>
+                        rating.ratingURL != "" &&
+                        (
+                            <a target="_blank"href={rating.ratingURL} class="reviewsBox lg:w-fit md:w-1/2 w-full mb-4 flex flex-col gap-3 items-center bg-white p-3 rounded-md shadow-md">
+                                <img src={ "/assets/images/" + 
+                                    (rating.ratingSite == "TrustPilot" ?
+                                    "trustpilotlogo.webp" || ""
+                                    :
+                                    rating.ratingSite == "Sitejabber" ?
+                                    "Sitejabber_logo.png" || ""
+                                    :
+                                    "reviewsLogo.webp" || "")
+                                } alt={rating.ratingSite + " logo"} class="h-10 lg:w-[180px] w-full object-contain" />
+                                <span class="flex gap-2 font-bold text-[#36304a] text-2xl">
+                                    {
+                                        `${rating.score} / ${rating.TotalReviews}` 
+                                    }
+                                </span>
+                            </a>
+                        )
                     ))
                 }
 
