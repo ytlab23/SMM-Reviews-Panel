@@ -23,8 +23,8 @@ const tables = [
       { name: "panelTextDescrition", type: "text" },
       { name: "rating", type: "int" },
       { name: "paymentOptions", type: "json" },
-      { name: "servicesList", type: "json" },
       { name: "panelMetaDesc", type: "text" },
+      { name: "ratingOtherSites", type: "json" },
     ],
   },
   {
@@ -102,6 +102,18 @@ const tables = [
       { name: "widgetTitle", type: "string" },
     ],
   },
+  {
+    name: "panel-services",
+    columns: [
+      { name: "serviceUploadDate", type: "datetime" },
+      { name: "serviceNo", type: "string" },
+      { name: "serviceName", type: "string" },
+      { name: "serviceRate", type: "string" },
+      { name: "serviceMin", type: "string" },
+      { name: "serviceMax", type: "string" },
+      { name: "serviceCategory", type: "string" },
+    ],
+  },
 ] as const;
 
 export type SchemaTables = typeof tables;
@@ -128,6 +140,9 @@ export type SiteSettingsRecord = SiteSettings & XataRecord;
 export type SidebarWidgets = InferredTypes["sidebarWidgets"];
 export type SidebarWidgetsRecord = SidebarWidgets & XataRecord;
 
+export type PanelServices = InferredTypes["panel-services"];
+export type PanelServicesRecord = PanelServices & XataRecord;
+
 export type DatabaseSchema = {
   "panels-datatable": PanelsDatatableRecord;
   pages: PagesRecord;
@@ -136,6 +151,7 @@ export type DatabaseSchema = {
   services: ServicesRecord;
   siteSettings: SiteSettingsRecord;
   sidebarWidgets: SidebarWidgetsRecord;
+  "panel-services": PanelServicesRecord;
 };
 
 const DatabaseClient = buildClient();

@@ -195,7 +195,7 @@ let servicePageListCount = allSiteFetch[0].platformServiceCount || 20;
                                         <a class="hover:underline hover:font-semibold" href={`/panels/` + smm_service.serviceSlug }>{smm_service.serviceTitle}</a>
                                     </span>
                                     <span class="offer_rate line-clamp-1 my-3 w-[13.5%]">
-                                        <a class="hover:underline hover:font-semibold" href={smm_service.serviceRefUrl}>{smm_service.serviceTitle}</a>
+                                        <a class="hover:underline hover:font-semibold" href={smm_service.serviceRefUrl}>{smm_service.serviceTitle} <i class="fa-solid fa-up-right"></i></a>
                                     </span>
                                 </span>
                             ))

@@ -122,6 +122,7 @@ try {
         });
     }
     function updatePageNumber() {
+        allServiceList = document.querySelectorAll(".offerList");
         pageNumber.textContent = `${pageNo} of ${Math.ceil(allServiceList.length / pageSize)}`;
     }
 } catch (error) {}

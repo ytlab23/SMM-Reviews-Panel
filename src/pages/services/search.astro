@@ -279,19 +279,50 @@ let servicePageListCount = allSiteFetch[0].platformServiceCount || 20;
             document.querySelector(".price-Range").classList.remove("hidden");
             calculatePriceRange();
         }
+        pageNo = 1;
+        updatePageNumber();
     }
 
     function setPriceRange() {
         sortPrice("LH");
-        allInitialDataList.forEach(data => {
-            const price = data.querySelector(".offer_rate").textContent.trim().slice(1);
-
-            if(!(price >= document.getElementById("priceRangeLow").value && price <= document.getElementById("priceRangeHigh").value)){
-                data.remove();
+        var selectedData = [];
+        document.querySelectorAll(".offerList").forEach(data => {
+            const price = Number(data.querySelector(".offer_rate").textContent.trim().slice(1));
+            if((price >= Number(document.getElementById("priceRangeLow").value) && price <= Number(document.getElementById("priceRangeHigh").value))){
+                selectedData.push(data);
             }
         });
+
+        //removing all Data
+        allInitialDataList.forEach((data)=>{
+            data.remove();
+        })
+
+        selectedData.forEach((serviceData) => {
+            serviceData.classList.remove("pageCounter");
+            serviceData.classList.add("hidden");
+            tableHolder.insertAdjacentElement("beforeend" , serviceData);
+        });
+
+        selectedData[0].classList.add("pageCounter");
+        //Unhide Initial Results
+        for (let i = 0; i < pageSize; i++) {
+            if(i < selectedData.length){
+                selectedData[i].classList.remove("hidden");
+                selectedData[i].classList.add("flex");
+            }
+        }
+        
+        pageNo = 1;
+        updatePageNumber();
+        currentPosition =   0;
+
+        document.querySelector(".price-Range").classList.add("flex");
+        document.querySelector(".price-Range").classList.remove("hidden");
     }
+
     function calculatePriceRange() {
+        //Only for Calculation of Maximum and Minimum Prices
         const allListArray = Array.from(allInitialDataList);
         const values = allListArray.map(node => {
             const priceSpanTag = node.querySelector(".offer_rate");
@@ -301,8 +332,6 @@ let servicePageListCount = allSiteFetch[0].platformServiceCount || 20;
         // Find the smallest and largest values
         minValue = Math.min(...values);
         maxValue = Math.max(...values);
-        console.log(minValue);
-        console.log(maxValue);
         document.getElementById("priceRangeLow").value = minValue;
         document.getElementById("priceRangeHigh").value = maxValue;
 
