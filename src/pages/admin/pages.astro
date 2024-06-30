@@ -47,6 +47,7 @@ const pagesAPIResponse: pagesStructure[] = await allPages.json();
                                 Title = {page.pageTitle}
                                 Publish_Date={formatDate(page.xata.createdAt)}
                                 Action = {page.id}
+                                slug = {page.pageSlug}
                                 />
                             ))
                     }

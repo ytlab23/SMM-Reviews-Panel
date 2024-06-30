@@ -13,6 +13,7 @@ export default defineConfig({
   integrations: [tailwind(),
     sitemap({
       filter: (page) =>
+        page !== `https://smm-reviews-panel.vercel.app/saveServices/` &&
         page !== `https://smm-reviews-panel.vercel.app/admin/` &&
         page !== `https://smm-reviews-panel.vercel.app/admin/logout/` &&
         page !== `https://smm-reviews-panel.vercel.app/admin/messages/` &&

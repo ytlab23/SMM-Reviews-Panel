@@ -1,9 +1,13 @@
 ---
+import { SEO } from "astro-seo";
+
 import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
 interface Props {
     title:string,
-    metaDescription?:string
+    metaDescription?:string,
+    pageType ?: string,
+    pageFeaturedImage ?: string
 }
 
 //Fetching Site Settings
@@ -11,7 +15,9 @@ const allSiteFetch:any = await fetch(Astro.site + "api/siteData.json").then(Resp
 
 const {
     title, 
-    metaDescription = allSiteFetch[0].siteMetaDescription
+    metaDescription = allSiteFetch[0].siteMetaDescription,
+    pageType = "website",
+    pageFeaturedImage = allSiteFetch[0].siteFavicon.url,
     } = Astro.props;
 ---
 
@@ -22,8 +28,35 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href={allSiteFetch[0].siteFavicon.url} type="image/x-icon">
     <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.5.1/css/all.css">
-    <title>{title} - {allSiteFetch[0].SiteTitle}</title>
-    <meta name="description" content={metaDescription}>
+
+    <SEO
+      title={`${title} - ${allSiteFetch[0].SiteTitle}`}
+      description={metaDescription}
+      openGraph={{
+        basic: {
+          title: `${title} - ${allSiteFetch[0].SiteTitle}`,
+          type: pageType,
+          image: pageFeaturedImage,
+        }
+      }}
+      twitter={{
+        creator: "@Jack"
+      }}
+      extend={{
+        // extending the default link tags{allSiteFetch[0].siteFavicon.url}
+        link: [{ rel: "icon", href: allSiteFetch[0].siteFavicon.url }],
+        // extending the default meta tags
+        meta: [
+          {
+            name: "twitter:image",
+            content: pageFeaturedImage,
+          },
+          { name: "twitter:title", content: `${title} - ${allSiteFetch[0].SiteTitle}` },
+          { name: "twitter:description", content: metaDescription },
+        ],
+      }}
+    />
+    
 </head>
 <body>
     <Navbar logoImgSrc={allSiteFetch[0].siteLog.url}></Navbar>

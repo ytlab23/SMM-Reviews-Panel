@@ -16,3 +16,10 @@ export function formatDate(inputDate:string) {
     };
     return date.toLocaleDateString('en-US', options);
 }
+
+export function removeHTMLTags(str:string) {
+    // Regular expression to match HTML tags
+    const regex = /<\/?[^>]+(>|$)/g;
+    // Replace matched HTML tags with an empty string
+    return str.replace(regex, "");
+}

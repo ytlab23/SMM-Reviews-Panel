@@ -112,7 +112,11 @@ const allSiteFetch:any = await fetch(Astro.site + "api/siteData.json").then(Resp
 let servicePageListCount = allSiteFetch[0].platformServiceCount || 20;
 ---
 
-<PanelLayout title={service.serviceTitle + " Services at SMM Panel"} metaDescription={`Checkout more than ${count-5} services related to `+ service.serviceTitle + " on " + allSiteFetch[0].SiteTitle}>
+<PanelLayout 
+    title={service.serviceTitle + " Services at SMM Panel"} 
+    metaDescription={`Checkout more than ${count-5} services related to `+ service.serviceTitle + " on " + allSiteFetch[0].SiteTitle}
+    pageFeaturedImage = {service.serviceLogo.url}
+    >
     <div class="content-wrapper flex flex-wrap lg:justify-start justify-center gap-5 my-6 px-5">
         
         <article class="flex flex-col gap-5 w-full">
