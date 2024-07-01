@@ -1,52 +1,14 @@
 ---
 import SearchForm from "../../components/SearchForm.astro";
 import PanelLayout from "../../layouts/PanelLayout.astro";
+import {timeDifference} from "../../js/utils.js";
 
 const allSiteFetch: any = await fetch(Astro.site + "api/siteData.json").then(
     (Response) => Response.json(),
 );
-const allPanels = await fetch(Astro.site + "api/panels.json").then((Response) =>
-    Response.json(),
-);
-let SMMService_APIData: any[] = [];
-let allPanelAPIs: string[][] = [];
 
-//Capturing Panel's APIUrl and APIKey
-allPanels.map((panel: any) =>
-    allPanelAPIs.push([
-        `${panel.panelAPILink}?key=${panel.panelAPIKey}&action=services`,
-        panel.panelTitle,
-        panel.panelWebsiteURL,
-        panel.panelSlug,
-    ]),
-);
-
-//Executing Every Panel's API to get services
-for (let i = 0; i < allPanelAPIs.length; i++) {
-    let panelServicesdata = await fetch(allPanelAPIs[i][0]).then((Response) =>
-        Response.json(),
-    );
-    SMMService_APIData.push([
-        panelServicesdata,
-        allPanelAPIs[i][1],
-        allPanelAPIs[i][2],
-        allPanelAPIs[i][3],
-    ]);
-}
-
-//Counting Services and Collecting all Relevant Services
-let relevantServices: any[] = [];
-for (let j = 0; j < SMMService_APIData.length; j++) {
-    for (let k = 0; k < SMMService_APIData[j][0].length; k++) {
-        var temp = {
-            serviceData: SMMService_APIData[j][0][k],
-            serviceTitle: SMMService_APIData[j][1],
-            serviceRefUrl: SMMService_APIData[j][2],
-            serviceSlug: SMMService_APIData[j][3],
-        };
-        relevantServices.push(temp);
-    }
-}
+const allPanelServicesFetch: any = await fetch(Astro.site + "api/panelServices.json");
+const allPanelServicesFrm_database = await allPanelServicesFetch.json();
 
 //Fetching Site Settings
 let servicePageListCount = allSiteFetch[0].platformServiceCount || 20;
@@ -67,7 +29,7 @@ let servicePageListCount = allSiteFetch[0].platformServiceCount || 20;
                 </div>
             </div>
             {
-                relevantServices.length > 0 ? (
+                allPanelServicesFrm_database.length > 0 ? (
                     <div class="services lg:min-h-[400px] flex flex-col justify-center items-center">
                         <h2 id="serviceHeading" class="text-3xl font-semibold">
                             Services
@@ -146,35 +108,45 @@ let servicePageListCount = allSiteFetch[0].platformServiceCount || 20;
                                     </span>
                                 </span>
 
-                                {relevantServices.map(
+                                {allPanelServicesFrm_database.map(
                                     (smm_service: any, j: number) => (
-                                        <span class="offerList w-full hidden border-b border-gray-400">
+                                        <span 
+                                        class="offerList w-full hidden border-b border-gray-400">
                                             <span
-                                                class="offer_service line-clamp-1 my-3 w-[32.5%] text-left pl-3"
+                                                class:list={[ timeDifference(smm_service.serviceUploadDate) == "NA" ? "line-clamp-1" : "line-clamp-2"]}
+                                                class="offer_service my-3 w-[32.5%] text-left pl-3"
                                                 title={
-                                                    smm_service.serviceData.name
+                                                    smm_service.serviceName
                                                 }
                                             >
-                                                {smm_service.serviceData.name}
+                                                {
+                                                    timeDifference(smm_service.serviceUploadDate) != "NA" 
+                                                    ? smm_service.serviceName.substring(0, 45)
+                                                    : smm_service.serviceName
+                                                }
+                                                {
+                                                    timeDifference(smm_service.serviceUploadDate) != "NA" &&
+                                                    <span class="p-1 rounded-lg bg-green-300 text-green-500 block w-fit font-semibold text-[9px]">Added {timeDifference(smm_service.serviceUploadDate)} ago</span>
+                                                }
                                             </span>
                                             <span class="offer_Minorder line-clamp-1 my-3 w-[13.5%]">
-                                                {smm_service.serviceData.min}
+                                                {smm_service.serviceMin}
                                             </span>
                                             <span class="offer_Maxorder line-clamp-1 my-3 w-[13.5%]">
-                                                {smm_service.serviceData.max}
+                                                {smm_service.serviceMax}
                                             </span>
                                             <span class="offer_rate line-clamp-1 my-3 w-[13.5%]">
-                                                ${smm_service.serviceData.rate}
+                                                ${smm_service.serviceRate}
                                             </span>
                                             <span class="offer_panelTitle line-clamp-1 my-3 w-[13.5%]">
                                                 <a
                                                     class="hover:underline hover:font-semibold"
                                                     href={
                                                         `/panels/` +
-                                                        smm_service.serviceSlug
+                                                        smm_service.panelSlug
                                                     }
                                                 >
-                                                    {smm_service.serviceTitle}
+                                                    {smm_service.panelName}
                                                 </a>
                                             </span>
                                             <span class="offer_panelTitle line-clamp-1 my-3 w-[13.5%]">
@@ -182,10 +154,10 @@ let servicePageListCount = allSiteFetch[0].platformServiceCount || 20;
                                                     rel="nofollow"
                                                     class="hover:underline hover:font-semibold"
                                                     href={
-                                                        smm_service.serviceRefUrl
+                                                        smm_service.panelRefUrl
                                                     }
                                                 >
-                                                    {smm_service.serviceTitle}{" "}
+                                                    {smm_service.panelName}{" "}
                                                     <i class="fa-solid fa-up-right" />
                                                 </a>
                                             </span>
@@ -194,7 +166,7 @@ let servicePageListCount = allSiteFetch[0].platformServiceCount || 20;
                                 )}
                             </div>
                         </div>
-                        {relevantServices.length > servicePageListCount && (
+                        {allPanelServicesFrm_database.length > servicePageListCount && (
                             <div
                                 class="paginationHolder flex flex-col gap-3 w-full items-center my-5"
                                 data-pageSize={servicePageListCount}

@@ -21,33 +21,20 @@ let platformsServiceCount : any[] = [];
 const allServicesFetch:any = await fetch(Astro.site + "api/services.json");
 const allServiceRes : serviceSchema[] = await allServicesFetch.json();
 
-//Fetching All Panels
-const allPanelsFetch:any = await fetch(Astro.site + "api/panels.json")
-const allPanelRes = await allPanelsFetch.json();
-
-//Capturing Panel's APIUrl and APIKey
-allPanelRes.map((panel:any) => (
-    allPanelAPIs.push(`${panel.panelAPILink}?key=${panel.panelAPIKey}&action=services`)
-))
-
-//Executing Every Panel's API to get services
-for (let i = 0; i < allPanelAPIs.length; i++) {
-    let panelServicesdata = await fetch(allPanelAPIs[i]).then(Response => Response.json());
-    SMMService_APIData.push(panelServicesdata)
-}
+//Fetching Already Saved Services
+const allPanelServicesFetch: any = await fetch(Astro.site + "api/panelServices.json");
+const allPanelServicesFrm_database = await allPanelServicesFetch.json();
 
 for (let i = 0; i < allServiceRes.length; i++) {
     let count = 0;
 
-    for (let j = 0; j < SMMService_APIData.length; j++) {
-        for(let k = 0; k < SMMService_APIData[j].length; k++){
-            if(SMMService_APIData[j][k].name.toString().toLowerCase().includes(allServiceRes[i].serviceTitle.toString().toLowerCase()))
-            count++;
-        }
+    for (let j = 0; j < allPanelServicesFrm_database.length; j++) {
+        if(allPanelServicesFrm_database[j].serviceName.toString().toLowerCase().includes(allServiceRes[i].serviceTitle.toString().toLowerCase()))
+        count++;
     }
-
     platformsServiceCount.push([allServiceRes[i].serviceTitle, count]);
 }
+console.log(platformsServiceCount);
 
 ---
 

@@ -105,12 +105,15 @@ const tables = [
   {
     name: "panel-services",
     columns: [
-      { name: "serviceUploadDate", type: "datetime" },
+      { name: "panelName", type: "string" },
+      { name: "panelSlug", type: "string" },
+      { name: "panelRefUrl", type: "string" },
       { name: "serviceNo", type: "string" },
       { name: "serviceName", type: "string" },
       { name: "serviceRate", type: "string" },
       { name: "serviceMin", type: "string" },
       { name: "serviceMax", type: "string" },
+      { name: "serviceUploadDate", type: "datetime" },
       { name: "serviceCategory", type: "string" },
     ],
   },

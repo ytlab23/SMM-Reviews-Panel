@@ -6,7 +6,6 @@ const xata = new XataClient({ apiKey: import.meta.env.XATA_API_KEY, branch: impo
 const allPanelServicesFetch: any = await fetch(Astro.site + "api/panelServices.json");
 const allPanelServicesFrm_database = await allPanelServicesFetch.json();
 
-
 //Fetching All Services freshly 
 const allPanelsFetch: any = await fetch(Astro.site + "api/panels.json");
 const allPanelRes = await allPanelsFetch.json();
@@ -15,19 +14,24 @@ var AllApiLinks: any[] = [];
 var AllServicesCollection :any[] = [];
 var AllPanelServices :any[] = [];
 allPanelRes.map((panel:any) =>(
-    AllApiLinks.push(`${panel.panelAPILink}?key=${panel.panelAPIKey}&action=services`)
+    AllApiLinks.push([`${panel.panelAPILink}?key=${panel.panelAPIKey}&action=services` ,panel.panelTitle, panel.panelSlug, panel.panelWebsiteURL ])
 ))
 
 //Executing every API and Storing services in a Array
 for (let i = 0; i < AllApiLinks.length; i++) {
-    let panelServicesdata = await fetch(AllApiLinks[i]).then((Response) =>
+    let panelServicesdata = await fetch(AllApiLinks[i][0]).then((Response) =>
         Response.json(),
     );
 
+    for (let j = 0; j < panelServicesdata.length; j++) {
+        panelServicesdata[j].panelName = AllApiLinks[i][1];
+        panelServicesdata[j].panelSlug = AllApiLinks[i][2];
+        panelServicesdata[j].panelRefUrl = AllApiLinks[i][3];
+    }
     AllServicesCollection.push(panelServicesdata);
 }
 
-//Extracting every services 
+//Editing attributes of every services 
 for (let i = 0; i < AllServicesCollection.length; i++) { //Loop over Services per Panels
     for (let j = 0; j < AllServicesCollection[i].length; j++) { //Loop over All Services Collectively
         // if(AllServicesCollection[i][j].rate > 1000)
@@ -56,6 +60,7 @@ for (let i = 0; i < AllServicesCollection.length; i++) { //Loop over Services pe
     }
 }
 
+//Editing attributes of Services from Database
 for (let i = 0; i < allPanelServicesFrm_database.length; i++) {
     delete allPanelServicesFrm_database[i].serviceUploadDate;
     delete allPanelServicesFrm_database[i].xata;
@@ -104,11 +109,14 @@ function getDeletedServices(PanelServices : any , DatabaseServices : any){
 // console.log(AllPanelServices[0]);
 // console.log(allPanelServicesFrm_database[0]);
 
-
 const newServicesData = getNewServices( AllPanelServices , allPanelServicesFrm_database);
+
+// Setting up date of creation
 for (let i = 0; i < newServicesData.length; i++) {
     newServicesData[i].serviceUploadDate = new Date();
 }
+
+// console.log("New Services - ", newServicesData);
 
 const deleteServicesData = getDeletedServices( AllPanelServices , allPanelServicesFrm_database)
 var deleteServicesID : string[] = [];
@@ -137,7 +145,6 @@ if(deleteServicesID.length > 0){
     }
 }
 
-//AllServicesCollection[i][j].serviceUploadDate
 //console.log(AllServices.length);
 //console.log(AllServices[0]);
 

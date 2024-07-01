@@ -11,15 +11,16 @@ interface pageSchema{
 
 export async function getStaticPaths (){
 
-const allPagesFetch:any = await fetch(Astro.site + "api/pages.json")
-const allPageRes : pageSchema[] = await allPagesFetch.json();
+    const allPagesFetch:any = await fetch(Astro.site + "api/pages.json")
+    const allPageRes : pageSchema[] = await allPagesFetch.json();
+    
+    return allPageRes.map((page:any) => (
+        {
+            params : { slug: page.pageSlug },
+            props: { page },
+        }
+    ))
 
-return allPageRes.map((page:any) => (
-    {
-        params : { slug: page.pageSlug },
-        props: { page },
-    }
-))
 } ;
 
 const { page } = Astro.props;

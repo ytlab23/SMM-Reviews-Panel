@@ -7,13 +7,16 @@ export async function GET() {
     try {
        const records = await xata.db["panel-services"]
           .select([
-             "serviceNo",
-             "serviceName",
-             "serviceRate",
-             "serviceMin",
-             "serviceMax",
-             "serviceCategory",
-             "serviceUploadDate",
+            "panelName",
+            "panelSlug",
+            "panelRefUrl",
+            "serviceNo",
+            "serviceName",
+            "serviceRate",
+            "serviceMin",
+            "serviceMax",
+            "serviceUploadDate",
+            "serviceCategory",
           ])
           .getAll();
           
