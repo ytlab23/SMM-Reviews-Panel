@@ -97,12 +97,12 @@ if (Astro.request.method === "POST") {
             <button type="button" id="detailsEditBtn" class="EditBtn px-2 py-1 rounded-md hover:font-semibold text-green-600 bg-green-100"><i class="fa-solid fa-pencil"></i> Edit</button>
 
         </span>
-        <div class="detailsContainer w-full flex gap-7">
-            <ul class="w-1/2">
+        <div class="detailsContainer w-full flex lg:flow-row flex-col lg:gap-7">
+            <ul class="lg:w-1/2 w-full">
                 <li class="flex gap-4 p-3 bg-white rounded-lg mb-2"><span class="w-1/2">Name</span> <span class="w-1/2">{APIResponse.data.fullName}</span></li>
                 <li class="flex gap-4 p-3 bg-white rounded-lg mb-2"><span class="w-1/2">Username</span> <span class="w-1/2">{APIResponse.data.username}</span></li>
             </ul>
-            <ul class="w-1/2">
+            <ul class="lg:w-1/2 w-full">
                 <li class="flex gap-4 p-3 bg-white rounded-lg mb-2"><span class="w-1/2">Email</span> <span class="w-1/2">{APIResponse.data.email || "No Email"}</span></li>
                 <li class="flex gap-4 p-3 bg-white rounded-lg mb-2"><span class="w-1/2">Role</span> <span class="w-1/2 capitalize">{APIResponse.data.role}</span></li>
             </ul>
@@ -114,7 +114,7 @@ if (Astro.request.method === "POST") {
             <h2 class="mb-4 text-xl font-bold">Update Details</h2>
             <div class="EmailAddFields flex gap-7">
                 <form method="post" class="w-full">
-                    <div class="wrapper flex gap-4">
+                    <div class="wrapper flex lg:flex-row flex-col gap-4">
                         <span
                             class="flex flex-col justify-center items-center p-2 gap-4 border-2 border-gray-400 border-dashed rounded-md">
                                 <label class="w-full text-left">Upload Profile Picture</label>
@@ -136,11 +136,11 @@ if (Astro.request.method === "POST") {
                                     accept="image/png, image/webp, image/avif"
                                 />
                             </span>
-                        <div class="col w-1/2">
+                        <div class="col lg:w-1/2 w-full">
                             <TextInput textValue={APIResponse.data.fullName} isRequired={true} placeholder="New Name" textBoxId="newName" textLabelText="New Name"></TextInput>
                             <TextInput textValue={APIResponse.data.username} isRequired={true} placeholder="New Username" textBoxId="newUsername" textLabelText="New Username" isLowerCaseText={true}></TextInput>
                         </div>
-                        <div class="col w-1/2">
+                        <div class="col lg:w-1/2 w-full">
                             <TextInput textValue={APIResponse.data.email || ""} inputType="email" isRequired={true} placeholder="New Email Address" textBoxId="NewEmailAddress" textLabelText="New Email Address"></TextInput>
                         </div>
                     </div>

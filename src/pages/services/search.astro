@@ -12,6 +12,7 @@ const allPanelServicesFrm_database = await allPanelServicesFetch.json();
 
 //Fetching Site Settings
 let servicePageListCount = allSiteFetch[0].platformServiceCount || 20;
+
 ---
 
 <PanelLayout
@@ -114,19 +115,19 @@ let servicePageListCount = allSiteFetch[0].platformServiceCount || 20;
                                         class="offerList w-full hidden border-b border-gray-400">
                                             <span
                                                 class:list={[ timeDifference(smm_service.serviceUploadDate) == "NA" ? "line-clamp-1" : "line-clamp-2"]}
-                                                class="offer_service my-3 w-[32.5%] text-left pl-3"
+                                                class="offer_service my-3 lg:w-[32.5%] w-[38.5%] text-left pl-3"
                                                 title={
                                                     smm_service.serviceName
                                                 }
                                             >
                                                 {
                                                     timeDifference(smm_service.serviceUploadDate) != "NA" 
-                                                    ? smm_service.serviceName.substring(0, 45)
-                                                    : smm_service.serviceName
+                                                    ? smm_service.serviceName.trim().substring(0, 41)
+                                                    : smm_service.serviceName.trim()
                                                 }
                                                 {
                                                     timeDifference(smm_service.serviceUploadDate) != "NA" &&
-                                                    <span class="p-1 rounded-lg bg-green-300 text-green-500 block w-fit font-semibold text-[9px]">Added {timeDifference(smm_service.serviceUploadDate)} ago</span>
+                                                    <span class="newArrival p-1 rounded-lg bg-green-300 text-green-500 block w-fit font-semibold text-[9px]">Added {timeDifference(smm_service.serviceUploadDate)} ago</span>
                                                 }
                                             </span>
                                             <span class="offer_Minorder line-clamp-1 my-3 w-[13.5%]">
@@ -167,10 +168,8 @@ let servicePageListCount = allSiteFetch[0].platformServiceCount || 20;
                             </div>
                         </div>
                         {allPanelServicesFrm_database.length > servicePageListCount && (
-                            <div
-                                class="paginationHolder flex flex-col gap-3 w-full items-center my-5"
-                                data-pageSize={servicePageListCount}
-                            >
+                            <div class="paginationHolder flex flex-col gap-3 w-full items-center my-5"
+                                data-pageSize={servicePageListCount} >
                                 <div class="paginationBtns flex gap-3 items-center">
                                     <div class="prevbtns flex justify-center items-center cursor-pointer rounded-full size-12 bg-slate-700 text-white border">
                                         <i class="fa-duotone fa-chevrons-left" />
@@ -217,11 +216,15 @@ let servicePageListCount = allSiteFetch[0].platformServiceCount || 20;
     );
     var allInitialDataList = document.querySelectorAll(".offerList");
 
+    if(allInitialDataList.length < pageSize){
+        document.querySelector(".paginationHolder").classList.add("hidden")
+    }
+
     const filterOptions = filterOptionsList.querySelectorAll("li");
     selectedFilter.addEventListener("click", () => {
         filterOptionsList.classList.toggle("invisible");
     });
-
+    
     filterOptions.forEach((filOption) => {
         filOption.addEventListener("click", ()=>{
             filterOptionsList.classList.toggle("invisible");
@@ -235,7 +238,8 @@ let servicePageListCount = allSiteFetch[0].platformServiceCount || 20;
             reConstructDataTable(allInitialDataList);
         }
         else if(optionName == "Newest Arrival"){
-            
+            const ele = setNewestArrival(Array.from(allInitialDataList));
+            reConstructDataTable(ele);
         }
         else if(optionName == "Services A-Z"){
             sortService();
@@ -252,7 +256,23 @@ let servicePageListCount = allSiteFetch[0].platformServiceCount || 20;
             calculatePriceRange();
         }
         pageNo = 1;
-        updatePageNumber();
+        if(allInitialDataList.length > pageSize)
+            updatePageNumber();
+    }
+
+    function setNewestArrival(elements){
+        return elements.sort((a, b) => {
+            const aHasSpan = a.querySelector('span.newArrival') !== null;
+            const bHasSpan = b.querySelector('span.newArrival') !== null;
+
+            if (aHasSpan && !bHasSpan) {
+                return -1;
+            } else if (!aHasSpan && bHasSpan) {
+                return 1;
+            } else {
+                return 0;
+            }
+        });
     }
 
     function setPriceRange() {
@@ -353,6 +373,8 @@ let servicePageListCount = allSiteFetch[0].platformServiceCount || 20;
         arrayList[0].classList.add("pageCounter");
         //Unhide Initial Results
         for (let i = 0; i < pageSize; i++) {
+            if(i == arrayList.length)
+                break;
             arrayList[i].classList.remove("hidden");
             arrayList[i].classList.add("flex");
         }
