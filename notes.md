@@ -1,4 +1,4 @@
-https://smmpanelreviews.org/
+https://smmpanelreviews.org
 
 Main Site design like this
 https://www.comparesmm.com/services/search?q=youtube
