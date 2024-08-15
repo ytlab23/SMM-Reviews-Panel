@@ -1,8 +1,9 @@
 {
-    "crons": [
-      {
-        "path": "/saveServices",
-        "schedule": "0 23 * * 0"
-      }
-    ]
-  }
+  "crons": [
+    {
+      "path": "/saveServices",
+      "schedule": "0 23 * * 0"
+    }
+  ]
+  ,"GeneratePages": "true"
+}
