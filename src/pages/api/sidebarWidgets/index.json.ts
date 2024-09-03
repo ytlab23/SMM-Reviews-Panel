@@ -18,7 +18,7 @@ export async function GET() {
     }
 }
  
-//#region Inserting a Services record
+//#region Inserting a Sidebar Widget record
 export const POST:APIRoute = async ({request}) => {
 
     const dataReceived = await request.formData();

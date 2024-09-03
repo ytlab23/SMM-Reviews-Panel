@@ -23,5 +23,6 @@ pnpm-debug.log*
 
 .env
 
+test.js
 plan.md
 .env
