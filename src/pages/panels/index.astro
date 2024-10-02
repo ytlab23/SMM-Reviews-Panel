@@ -1,7 +1,7 @@
 ---
 import PanelLayout from "../../layouts/PanelLayout.astro";
 import SMM_panelCards2 from "../../components/SMM_panelCards2.astro";
-import { number } from "astro/zod";
+import { optimizeImageUrl } from "../../js/utils";
 
 interface panelStructure {
 	paneFeaturedImage: {
@@ -67,7 +67,7 @@ for (let i = 0; i < allPanelAPIs.length; i++) {
                             avrg = {Number(allPanelServiceCount[responsePanels.length - (index + 1)][1].toFixed(2))}
                             service={Number(allPanelServiceCount[responsePanels.length - (index + 1)][0])}
                             websiteURL = {panel.panelWebsiteURL}
-                            imageSrc = {panel.paneFeaturedImage == null ? "" : panel.paneFeaturedImage.url }
+                            imageSrc = {panel.paneFeaturedImage == null ? "" : optimizeImageUrl(panel.paneFeaturedImage.url, 250) }
                             panelTitle={panel.panelTitle}
                             slugURL={panel.panelSlug}
                         />

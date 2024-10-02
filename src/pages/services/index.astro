@@ -2,6 +2,7 @@
 import PanelLayout from "../../layouts/PanelLayout.astro";
 import SMM_ServicesCards from "../../components/SMM_servicesCards.astro"
 import SearchForm from "../../components/SearchForm.astro";
+import { optimizeImageUrl } from "../../js/utils";
 
 interface serviceSchema{
     serviceColor: string,
@@ -51,7 +52,7 @@ for (let i = 0; i < allServiceRes.length; i++) {
                 <SMM_ServicesCards 
                     servicesCount={platformsServiceCount[index][1]} 
                     title={service.serviceTitle} 
-                    imageLogoPath={service.serviceLogo.url}>
+                    imageLogoPath={optimizeImageUrl(service.serviceLogo.url)}>
                 </SMM_ServicesCards>
             ))
         }

@@ -51,6 +51,15 @@ export function timeDifference(dateTime: string | Date): string {
     return `${diffInMin} Min`;
 }
 
-
+export function optimizeImageUrl(url:string, height = 100, format = 'webp') {
+    // Split the URL at the last slash to separate the base URL from the image identifier
+    const baseUrl = url.substring(0, url.lastIndexOf('/'));
+    const imageId = url.substring(url.lastIndexOf('/') + 1);
+    
+    // Construct the optimized URL
+    const optimizedUrl = `${baseUrl}/transform/height=${height},format=${format}/${imageId}`;
+    
+    return optimizedUrl;
+}
 // Example usage:
 //   console.log(timeDifference('2024-07-01T10:00:00')); // Adjust the date and time as needed

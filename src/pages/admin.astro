@@ -1,3 +1,5 @@
 ---
-return Astro.redirect("https://smm-admin.vercel.app/ ")
+const siteData = await fetch(Astro.site + "api/siteData.json").then(Response => Response.json())
+
+return Astro.redirect(siteData[0].adminPath)
 ---

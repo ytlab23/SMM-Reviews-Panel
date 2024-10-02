@@ -2,7 +2,7 @@
 import MainLayout from "../layouts/MainLayout.astro";
 import SMM_panelCards from "../components/SMM_panelCards.astro";
 import SearchForm from "../components/SearchForm.astro";
-
+import { optimizeImageUrl } from "../js/utils";
 // import servicePlatformsData from "../data/temp-services";
 
 interface serviceSchema{
@@ -72,7 +72,7 @@ const allSidebarWidgetsFetch: any = await fetch(Astro.site + "api/sidebarWidgets
 						responsePanels.slice(0, allSiteFetch[0].homePanelCount).reverse().map((panel: panelStructure) => (
 							<SMM_panelCards
 								descriptionText={panel.panelTextDescrition}
-								imageSrc = {panel.paneFeaturedImage == null ? "" : panel.paneFeaturedImage.url }
+								imageSrc = {panel.paneFeaturedImage == null ? "" : optimizeImageUrl(panel.paneFeaturedImage.url, 250) }
 								panelTitle={panel.panelTitle}
 								slugURL={panel.panelSlug}
 							/>

@@ -15,7 +15,8 @@ export default defineConfig({
   //   }
   // },
   // site: 'https://smm-reviews-panel.vercel.app',
-  site: 'https://smmsearch.io',
+  // site: 'https://smmsearch.io',
+  site: 'https://smm-reviews-panel-v2.vercel.app/',
   output: 'server',
   adapter: vercel(),
   integrations: [tailwind(),
