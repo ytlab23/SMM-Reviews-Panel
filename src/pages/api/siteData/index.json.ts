@@ -17,9 +17,8 @@ export async function GET() {
                 "siteFavicon",
                 "siteLog",
                 "homeBackgroundImage",
-                "homeBackgroundImage2",
-                "site1DeployHook",
-                "site2DeployHook",
+                "siteDeployHook",
+                "adminPath",
             ])
             .getAll();
 

@@ -33,10 +33,6 @@ export const POST: APIRoute = async ({ request }) => {
         fuzziness: 0,
         target: ['username']
     })
-    const pass = await xata.db.users.search(userData.get("password")?.toString() || "", {
-        fuzziness: 0,
-        target: ['password']
-    })
 
     if (!responseData.success) {
         return new Response(JSON.stringify({

@@ -34,7 +34,7 @@ export const GET: APIRoute = async ({ params }) => {
 //#endregion
 
 //#region Updates as Read Message Information by ID
-export const PUT : APIRoute = async ({params, request}) =>{
+export const PUT : APIRoute = async ({params}) =>{
     const id = params.id;
     
     let dataToUpdate : messageStructure ={
@@ -67,7 +67,7 @@ export const PUT : APIRoute = async ({params, request}) =>{
 //#endregion
 
 //#region Updates as unRead Message Information by ID
-export const PATCH : APIRoute = async ({params, request}) =>{
+export const PATCH : APIRoute = async ({params}) =>{
     const id = params.id;
     
     let dataToUpdate : messageStructure ={

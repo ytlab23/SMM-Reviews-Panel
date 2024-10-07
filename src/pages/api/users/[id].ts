@@ -6,14 +6,17 @@ interface usersStructure{
     username : string
     email : string
     fullName : string
-    rol : string
-    ProfilePic : any
+    ProfilePic ?: {
+        name? : string,
+        mediaType? : string,
+        base64Content? : string
+    },
 }
-
+/* 
 interface userPasswordStructure{
     password : string
     previousPassword : string
-}
+} */
 
 //#region Returns user Information by ID
 export const GET: APIRoute = async ({ params }) => {
@@ -21,6 +24,7 @@ export const GET: APIRoute = async ({ params }) => {
     // console.log("Parameter received - ", id);
     
     const record = await xata.db.users.read(id?.toString() || "");
+    
     // console.log(record);
     if (record!.id == id) {
         return new Response(
@@ -59,16 +63,19 @@ export const PUT : APIRoute = async ({params, request}) =>{
     let dataToUpdate = {};
     if(data.get("updateUsersDetails")?.toString() == "true"){
         //Other details Update
-        dataToUpdate = {
+        let dataToUpdate : usersStructure = {
             username: data.get("newUsername")?.toString() || "",
             email: data.get("NewEmailAddress")?.toString() || "",
             fullName: data.get("newName")?.toString() || "",
-            ProfilePic: {
+        };
+
+        if (data.get("imageName") || data.get("imageFileType") || data.get("imageBase64")) {
+            dataToUpdate.ProfilePic = {
                 name: data.get("imageName")?.toString() || "",
                 mediaType: data.get("imageFileType")?.toString() || "",
-                base64Content: data.get("imageBase64")?.toString() || "",
-            }
-        };
+                base64Content: data.get("imageBase64")?.toString() || ""
+            };
+        }
     }
     else{
         //Only Password Update

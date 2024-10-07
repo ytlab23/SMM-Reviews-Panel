@@ -8,14 +8,12 @@ interface siteSettingsStructure{
     siteMetaDescription : string
     homeHeaderText : string
     homeHeaderPara : string
-    site1DeployHook : string
-    site2DeployHook : string
+    siteDeployHook : string
     homePanelCount : number
     platformServiceCount : number
     siteFavicon ?: any
     siteLog ?: any,
     homeBackgroundImage ?: any
-    homeBackgroundImage2 ?: any
 }
 
 //#region Updates Site Information by ID
@@ -40,8 +38,7 @@ export const PUT : APIRoute = async ({params, request}) =>{
         homeHeaderPara: data.get("siteHeaderParagraph")?.toString() || "",
         homePanelCount: Number(data.get("sitePanelCount")?.toString() || 0),
         platformServiceCount: Number(data.get("siteServiceCount")?.toString() || 0),
-        site1DeployHook: data.get("site1DeployHook")?.toString() || "",
-        site2DeployHook: data.get("site2DeployHook")?.toString() || "",
+        siteDeployHook: data.get("siteDeployHook")?.toString() || "",
     };
 
     //#region If Logo, Favicon and other Image is not updated, it will be checked here
@@ -66,14 +63,6 @@ export const PUT : APIRoute = async ({params, request}) =>{
             name: data.get("homepgBgImageName")?.toString(),
             mediaType: data.get("homepgBgImageFileType")?.toString(),
             base64Content: data.get("homepgBgImageBase64")?.toString()
-        }
-    }
-
-    if(data.get("homepgBgImageName_2")?.toString() || data.get("homepgBgImageFileType_2")?.toString() || data.get("homepgBgImageBase64_2")?.toString()){
-        dataToUpdate.homeBackgroundImage2 = {
-            name: data.get("homepgBgImageName_2")?.toString(),
-            mediaType: data.get("homepgBgImageFileType_2")?.toString(),
-            base64Content: data.get("homepgBgImageBase64_2")?.toString()
         }
     }
     //#endregion

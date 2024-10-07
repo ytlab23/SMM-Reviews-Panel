@@ -11,17 +11,9 @@ export const POST: APIRoute = async ({ request }) => {
         fuzziness: 0,
         target: ['username']
     })
-    const email = await xata.db.users.search(userData.get("email")?.toString() || "", {
-        fuzziness: 0,
-        target: ['email']
-    })
 
     if (userID.totalCount == 1 && userID.records[0].email == userData.get("email")?.toString()) {
         let resetPass = generateRandomText();
-        
-        const record = await xata.db.users.update(userID.records[0].id, {
-            password: resetPass,
-        });
         
         return new Response(JSON.stringify({
             message: "user found",
