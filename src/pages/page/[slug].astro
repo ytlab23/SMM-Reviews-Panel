@@ -1,4 +1,5 @@
 ---
+import { getAPIPath } from "../../js/utils";
 import PanelLayout from "../../layouts/PanelLayout.astro";
 export const prerender = true;
 
@@ -11,7 +12,7 @@ interface pageSchema{
 
 export async function getStaticPaths (){
 
-    const allPagesFetch:any = await fetch(Astro.site + "api/pages.json")
+    const allPagesFetch:any = await fetch(getAPIPath() + "api/pages.json")
     const allPageRes : pageSchema[] = await allPagesFetch.json();
     
     return allPageRes.map((page:any) => (

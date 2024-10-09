@@ -2,7 +2,7 @@
 import PanelLayout from "../../layouts/PanelLayout.astro";
 import SMM_ServicesCards from "../../components/SMM_servicesCards.astro"
 import SearchForm from "../../components/SearchForm.astro";
-import { optimizeImageUrl } from "../../js/utils";
+import { getAPIPath, optimizeImageUrl } from "../../js/utils";
 
 interface serviceSchema{
     serviceColor: string,
@@ -19,11 +19,11 @@ let allPanelAPIs : string[] = [];
 let platformsServiceCount : any[] = [];
 
 //Fetching All Services
-const allServicesFetch:any = await fetch(Astro.site + "api/services.json");
+const allServicesFetch:any = await fetch(getAPIPath() + "api/services.json");
 const allServiceRes : serviceSchema[] = await allServicesFetch.json();
 
 //Fetching Already Saved Services
-const allPanelServicesFetch: any = await fetch(Astro.site + "api/panelServices.json");
+const allPanelServicesFetch: any = await fetch(getAPIPath() + "api/panelServices.json");
 const allPanelServicesFrm_database = await allPanelServicesFetch.json();
 
 for (let i = 0; i < allServiceRes.length; i++) {

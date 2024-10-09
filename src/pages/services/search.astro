@@ -1,13 +1,13 @@
 ---
 import SearchForm from "../../components/SearchForm.astro";
 import PanelLayout from "../../layouts/PanelLayout.astro";
-import {timeDifference} from "../../js/utils.js";
+import {getAPIPath, timeDifference} from "../../js/utils.js";
 
-const allSiteFetch: any = await fetch(Astro.site + "api/siteData.json").then(
+const allSiteFetch: any = await fetch(getAPIPath() + "api/siteData.json").then(
     (Response) => Response.json(),
 );
 
-const allPanelServicesFetch: any = await fetch(Astro.site + "api/panelServices.json");
+const allPanelServicesFetch: any = await fetch(getAPIPath() + "api/panelServices.json");
 const allPanelServicesFrm_database = await allPanelServicesFetch.json();
 
 //Fetching Site Settings

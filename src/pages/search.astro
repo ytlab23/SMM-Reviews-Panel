@@ -1,9 +1,10 @@
 ---
 import SearchForm from "../components/SearchForm.astro";
+import { getAPIPath } from "../js/utils";
 import PanelLayout from "../layouts/PanelLayout.astro";
 
-const allSiteFetch:any = await fetch(Astro.site + "api/siteData.json").then(Response => Response.json());
-const allPanels = await fetch(Astro.site + "api/panels.json").then(Response => Response.json());
+const allSiteFetch:any = await fetch(getAPIPath() + "api/siteData.json").then(Response => Response.json());
+const allPanels = await fetch(getAPIPath() + "api/panels.json").then(Response => Response.json());
 let SMMService_APIData: any[] = [];
 let allPanelAPIs: string[][] = [];
 

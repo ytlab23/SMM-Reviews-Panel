@@ -2,13 +2,14 @@
 import HeroSection from "../components/HeroSection.astro";
 import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
+import { getAPIPath } from "../js/utils";
 interface Props {
     title:string,
     metaDescription?:string
 }
 
 //Fetching Site Settings
-const allSiteFetch:any = await fetch(Astro.site + "api/siteData.json").then(Response => Response.json());
+const allSiteFetch:any = await fetch(getAPIPath() + "api/siteData.json").then(Response => Response.json());
 
 const {
     title, 
@@ -26,6 +27,8 @@ const {
     <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.5.1/css/all.css">
     <title>{title} - {allSiteFetch[0].SiteTitle}</title>
     <meta name="description" content={metaDescription}>
+    <meta name="generator" content={Astro.generator} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
 </head>
 <body>
     <Navbar logoImgSrc={allSiteFetch[0].siteLog.url}></Navbar>

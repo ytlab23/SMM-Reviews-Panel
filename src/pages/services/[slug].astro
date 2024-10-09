@@ -1,4 +1,5 @@
 ---
+import { getAPIPath } from "../../js/utils";
 import PanelLayout from "../../layouts/PanelLayout.astro";
 interface serviceSchema {
     serviceColor: string;
@@ -12,7 +13,7 @@ interface serviceSchema {
 
 export const prerender = true;
 export async function getStaticPaths() {
-    const allServicesFetch: any = await fetch(Astro.site + "api/services.json");
+    const allServicesFetch: any = await fetch(getAPIPath() + "api/services.json");
     const allServiceRes: serviceSchema[] = await allServicesFetch.json();
     //     {
     // "cause": {
@@ -40,7 +41,7 @@ let allPanelAPIs: string[][] = [];
 let platformsServiceCount: any[] = [];
 
 //Fetching All Panels
-const allPanelsFetch: any = await fetch(Astro.site + "api/panels.json");
+const allPanelsFetch: any = await fetch(getAPIPath() + "api/panels.json");
 const allPanelRes = await allPanelsFetch.json();
 
 //Capturing Panel's APIUrl and APIKey
@@ -107,7 +108,7 @@ for (let j = 0; j < SMMService_APIData.length; j++) {
 // console.log("Relevant Services are - " , relevantServices);
 
 //Fetching Site Settings
-const allSiteFetch:any = await fetch(Astro.site + "api/siteData.json").then(Response => Response.json());
+const allSiteFetch:any = await fetch(getAPIPath() + "api/siteData.json").then(Response => Response.json());
 
 let servicePageListCount = allSiteFetch[0].platformServiceCount || 20;
 ---

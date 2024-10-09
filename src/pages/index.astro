@@ -2,7 +2,7 @@
 import MainLayout from "../layouts/MainLayout.astro";
 import SMM_panelCards from "../components/SMM_panelCards.astro";
 import SearchForm from "../components/SearchForm.astro";
-import { optimizeImageUrl } from "../js/utils";
+import { getAPIPath, optimizeImageUrl } from "../js/utils";
 // import servicePlatformsData from "../data/temp-services";
 
 interface serviceSchema{
@@ -15,10 +15,10 @@ interface serviceSchema{
     serviceTitle: string,
 }
 //Fetching Site Settings
-const allSiteFetch:any = await fetch(Astro.site + "api/siteData.json").then(Response => Response.json());
+const allSiteFetch:any = await fetch(getAPIPath() + "api/siteData.json").then(Response => Response.json());
 
 //Fetching All Services
-const allServicesFetch:any = await fetch(Astro.site + "api/services.json");
+const allServicesFetch:any = await fetch(getAPIPath() + "api/services.json");
 const allServiceRes : serviceSchema[] = await allServicesFetch.json();
 
 interface panelStructure {
@@ -35,10 +35,10 @@ interface panelStructure {
 	panelWebsiteURL: string;
 }
 
-const allPanels = await fetch(Astro.site + "api/panels.json");
+const allPanels = await fetch(getAPIPath() + "api/panels.json");
 const responsePanels = await allPanels.json();
 
-const allSidebarWidgetsFetch: any = await fetch(Astro.site + "api/sidebarWidgets.json").then(
+const allSidebarWidgetsFetch: any = await fetch(getAPIPath() + "api/sidebarWidgets.json").then(
     (Response) => Response.json(),
 );
 // console.log(responsePanels);

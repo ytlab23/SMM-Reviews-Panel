@@ -1,8 +1,9 @@
 ---
+import { getAPIPath } from "../../js/utils";
 import PanelLayout from "../../layouts/PanelLayout.astro";
 
 //Pages API for Contact Page Content Only
-const allPagesFetch:any = await fetch(Astro.site + "api/pages.json").then(Response => Response.json())
+const allPagesFetch:any = await fetch(getAPIPath() + "api/pages.json").then(Response => Response.json())
 var contactPageContent;
 
 for (let i = 0; i < allPagesFetch.length; i++) {
@@ -23,7 +24,7 @@ if (Astro.request.method === "POST") {
       isFormSubmitted = true;
     //   console.log(data);
 
-      const response = await fetch(Astro.site + "api/messages.json", {
+      const response = await fetch(getAPIPath() + "api/messages.json", {
          method: "POST",
          body: data,
       });

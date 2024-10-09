@@ -61,5 +61,10 @@ export function optimizeImageUrl(url:string, height = 100, format = 'webp') {
     
     return optimizedUrl;
 }
+
+export function getAPIPath() {
+    let siteIs = "https://smmpanels.net/";
+    return siteIs
+}
 // Example usage:
 //   console.log(timeDifference('2024-07-01T10:00:00')); // Adjust the date and time as needed

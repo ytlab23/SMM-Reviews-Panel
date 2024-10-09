@@ -1,13 +1,14 @@
 ---
+import { getAPIPath } from "../../js/utils";
 import PanelLayout from "../../layouts/PanelLayout.astro";
 
 //import servicePlatformsData from "../../data/temp-services";
-const allServicesFetch = await fetch(Astro.site + "api/services.json");
+const allServicesFetch = await fetch(getAPIPath() + "api/services.json");
 const allServices = await allServicesFetch.json();
 
 export const prerender = true;
 export async function getStaticPaths() {
-    const allPanelsFetch: any = await fetch(Astro.site + "api/panels.json");
+    const allPanelsFetch: any = await fetch(getAPIPath() + "api/panels.json");
     const allPanelRes: panelSchema[] = await allPanelsFetch.json();
 
     return allPanelRes.map((panel: any) => ({
@@ -93,6 +94,7 @@ interface panelSchema {
     metaDescription={panel.panelMetaDesc} 
     pageType="article"
     pageFeaturedImage={panel.paneFeaturedImage.url}>
+    
     <div
         class="content-wrapper flex flex-wrap lg:justify-start justify-center gap-5 my-6 px-5"
     >
@@ -200,12 +202,12 @@ interface panelSchema {
                             <a target="_blank"href={rating.ratingURL} class="reviewsBox lg:w-fit md:w-1/2 w-full mb-4 flex flex-col gap-3 items-center bg-white p-3 rounded-md shadow-md">
                                 <img src={ "/assets/images/" + 
                                     (rating.ratingSite == "TrustPilot" ?
-                                    "trustpilotlogo.webp" || ""
+                                    "trustpilotlogo.webp"
                                     :
                                     rating.ratingSite == "Sitejabber" ?
-                                    "Sitejabber_logo.png" || ""
+                                    "Sitejabber_logo.png"
                                     :
-                                    "reviewsLogo.webp" || "")
+                                    "reviewsLogo.webp")
                                 } alt={rating.ratingSite + " logo"} class="h-10 lg:w-[180px] w-full object-contain" />
                                 <span class="flex gap-2 font-bold text-[#36304a] text-2xl">
                                     {

@@ -1,7 +1,7 @@
 ---
 import PanelLayout from "../../layouts/PanelLayout.astro";
 import SMM_panelCards2 from "../../components/SMM_panelCards2.astro";
-import { optimizeImageUrl } from "../../js/utils";
+import { getAPIPath, optimizeImageUrl } from "../../js/utils";
 
 interface panelStructure {
 	paneFeaturedImage: {
@@ -17,7 +17,7 @@ interface panelStructure {
 	rating: number;
 	panelWebsiteURL: string;
 }
-const allPanels = await fetch(Astro.site + "api/panels.json");
+const allPanels = await fetch(getAPIPath() + "api/panels.json");
 
 const responsePanels : panelStructure[] = await allPanels.json();
 
