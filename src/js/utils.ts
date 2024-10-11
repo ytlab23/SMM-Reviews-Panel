@@ -63,7 +63,7 @@ export function optimizeImageUrl(url:string, height = 100, format = 'webp') {
 }
 
 export function getAPIPath() {
-    let siteIs = "https://smmpanels.net/";
+    let siteIs = "https://smm-admin.vercel.app/";
     return siteIs
 }
 // Example usage:
