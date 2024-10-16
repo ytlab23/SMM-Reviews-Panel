@@ -7,7 +7,7 @@ const allPagesFetch:any = await fetch(getAPIPath() + "api/pages.json").then(Resp
 var contactPageContent;
 
 for (let i = 0; i < allPagesFetch.length; i++) {
-    console.log(allPagesFetch[i].pageTitle);
+    // console.log(allPagesFetch[i].pageTitle);
     
     if(allPagesFetch[i].pageTitle.toLowerCase().includes("contact")){
         contactPageContent = allPagesFetch[i].pageContent;

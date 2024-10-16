@@ -1,6 +1,0 @@
-{
-  "databaseURL": "https://Bishal-Biswas-s-workspace-rug17p.eu-central-1.xata.sh/db/SMMPanels-db",
-  "codegen": {
-    "output": "src/xata.ts"
-  }
-}

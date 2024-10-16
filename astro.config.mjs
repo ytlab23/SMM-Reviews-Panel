@@ -4,16 +4,9 @@ import vercel from "@astrojs/vercel/serverless";
 
 import sitemap from "@astrojs/sitemap";
 
-let mainSite = "https://smmsearch.io/";
-
 // https://astro.build/config
 export default defineConfig({
   // site: 'http://localhost:4321',
-  // server: {
-  //   headers: {
-  //       "Access-Control-Allow-Origin": "*"
-  //   }
-  // },
   // site: 'https://smm-reviews-panel.vercel.app',
   // site: 'https://smmsearch.io',
   site: 'https://smmsearch.io/',
