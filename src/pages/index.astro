@@ -69,7 +69,7 @@ const allSidebarWidgetsFetch: any = await fetch(getAPIPath() + "api/sidebarWidge
 
 					<div class="wrapper flex justify-center items-center flex-wrap gap-5">
 					{
-						responsePanels.slice(0, allSiteFetch[0].homePanelCount).reverse().map((panel: panelStructure) => (
+						responsePanels.reverse().slice(0, allSiteFetch[0].homePanelCount).map((panel: panelStructure) => (
 							<SMM_panelCards
 								descriptionText={panel.panelTextDescrition}
 								imageSrc = {panel.paneFeaturedImage == null ? "" : optimizeImageUrl(panel.paneFeaturedImage.url, 250) }

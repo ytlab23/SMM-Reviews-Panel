@@ -1,5 +1,5 @@
 ---
-import { getAPIPath } from "../../js/utils";
+import { getAPIPath, JSONConvertToHTML } from "../../js/utils";
 import PanelLayout from "../../layouts/PanelLayout.astro";
 
 //import servicePlatformsData from "../../data/temp-services";
@@ -114,7 +114,7 @@ interface panelSchema {
             </span>
             <div class="article-wrapper flex lg:flex-row flex-col gap-4">
                 <div class="post-content lg:w-4/6 w-full flex flex-col gap-4">
-                    <div class="content" set:html={panel.panelTextDescrition}></div>
+                    <div class="content" set:html={JSONConvertToHTML(panel.panelTextDescrition)}></div>
 
                     <div class="aboutPanel flex justify-between items-center">
                         <h2 class="text-3xl font-semibold">

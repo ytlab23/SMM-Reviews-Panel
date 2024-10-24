@@ -1,5 +1,5 @@
 ---
-import { removeHTMLTags } from '../js/utils'
+import { removeHTMLTags, JSONConvertToHTML } from '../js/utils'
 interface Props {
     imageSrc : string,
     panelTitle : string,
@@ -26,7 +26,7 @@ const {imageSrc ,panelTitle ,descriptionText ,slugURL} = Astro.props;
     />
     <span class="details w-3/4">
         <h3 class="text-blue-600 font-semibold"><a href={"/panels/"+ slugURL}>{panelTitle}</a></h3>
-        <span class="textContent line-clamp-2" set:html={removeHTMLTags(descriptionText).substring(0, 120)}></span>
+        <span class="textContent line-clamp-2" set:html={removeHTMLTags(JSONConvertToHTML(descriptionText)).substring(0, 120)}></span>
         <a
             href={"/panels/"+ slugURL}
             class="linkbtn block w-fit p-1 px-2 my-1 rounded-xl text-black border hover:text-white hover:bg-[#3838be] hover:shadow-lg hover:underline"

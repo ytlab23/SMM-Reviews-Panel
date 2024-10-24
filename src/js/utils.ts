@@ -1,3 +1,4 @@
+import edjsHTML from 'editorjs-html';
 export function isAdminLoggedIn(param_cookie: any) {
     if (param_cookie == undefined || param_cookie == "")
         return false
@@ -22,6 +23,17 @@ export function removeHTMLTags(str: string) {
     const regex = /<\/?[^>]+(>|$)/g;
     // Replace matched HTML tags with an empty string
     return str.replace(regex, "");
+}
+
+export function JSONConvertToHTML(JSONStringParameter : string) {
+    const JSONString = JSON.stringify({
+        blocks: JSON.parse(JSONStringParameter)
+      });
+    const edjsParser = edjsHTML();
+    // Parse the JSON string to get an object (if it is not already parsed)
+    const parsedJSON = JSON.parse(JSONString);
+    const html = edjsParser.parse(parsedJSON);  // Pass the parsed object
+    return html.join("");
 }
 
 export function timeDifference(dateTime: string | Date): string {
