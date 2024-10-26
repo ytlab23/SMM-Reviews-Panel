@@ -19,9 +19,16 @@ allPanels.map((panel: any) =>
 
 //Executing Every Panel's API to get services
 for (let i = 0; i < allPanelAPIs.length; i++) {
-    let panelServicesdata = await fetch(allPanelAPIs[i][0]).then((Response) =>
+    let panelServicesdata = await fetch(allPanelAPIs[i][0], {method:'POST'}).then((Response) =>
         Response.json(),
     );
+    //Fallback to fetch with GET Request
+    if(panelServicesdata.length==0){
+        panelServicesdata = await fetch(allPanelAPIs[i][0]).then((Response) =>
+            Response.json(),
+        );
+    }
+
     SMMService_APIData.push([panelServicesdata, allPanelAPIs[i][1], allPanelAPIs[i][2]]);
 }
 //Counting Services and Collecting all Relevant Services

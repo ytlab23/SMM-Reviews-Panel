@@ -1,0 +1,174 @@
+---
+import PanelLayout from "../../layouts/PanelLayout.astro";
+import SMM_panelCards2 from "../../components/SMM_panelCards2.astro";
+import { getAPIPath, optimizeImageUrl } from "../../js/utils";
+import type { Page } from "@xata.io/client";
+export const prerender = true;
+
+interface panelStructure {
+    paneFeaturedImage: {
+        url: string;
+    };
+    id: string;
+    panelAPIKey: string;
+    panelAPILink: string;
+    panelSlug: string;
+    panelTextDescrition: string;
+    panelTitle: string;
+    panelTotalServices: number;
+    rating: number;
+    panelWebsiteURL: string;
+}
+
+export async function getStaticPaths({ paginate }: { paginate: any }) {
+    const allPanels = await fetch(getAPIPath() + "api/panels.json");
+
+    const responsePanels: panelStructure[] = await allPanels.json();
+    // Generate pages from our array of astronauts, with 2 to a page
+    return paginate(responsePanels.reverse(), { pageSize: 15 });
+}
+
+interface Props {
+    page: {
+        data: panelStructure[];
+        start: number;
+        end: number;
+        size: number;
+        total: number;
+        currentPage: number;
+        lastPage: number;
+        url: {
+            current: string;
+            next: string;
+            prev: string;
+            first: string;
+            last: string;
+        };
+    };
+}
+
+// All paginated data is passed on the "page" prop
+const { page } = Astro.props;
+
+let allPanelAPIs: string[] = [];
+let allPanelServiceCount: any[][] = [];
+//Capturing Panel's APIUrl and APIKey
+page.data.map((panel) =>
+    allPanelAPIs.push(
+        `${panel.panelAPILink}?key=${panel.panelAPIKey}&action=services`,
+    ),
+);
+
+//Executing Every Panel's API to get services
+let panelServicesdata;
+for (let i = 0; i < allPanelAPIs.length; i++) {
+    var totalPrice = 0;
+    panelServicesdata = await fetch(allPanelAPIs[i], { method: "POST" }).then(
+        (Response) => Response.json(),
+    );
+    //Fallback to fetch with GET Request
+    if(panelServicesdata.length === 0){
+        panelServicesdata = await fetch(allPanelAPIs[i]).then(
+        (Response) => Response.json(),
+    );
+    }
+
+    for (let j = 0; j < panelServicesdata.length; j++) {
+        if (
+            Number(panelServicesdata[j].rate) < 850 &&
+            Number(panelServicesdata[j].rate) > 0.0001
+        )
+            totalPrice += Number(panelServicesdata[j].rate);
+    }
+    allPanelServiceCount.push([
+        panelServicesdata.length,
+        totalPrice / panelServicesdata.length,
+    ]);
+}
+
+const {data, ...rest} = page;
+
+---
+
+<PanelLayout title={"All SMM Panel Listed on SMM Panel"} metaDescription="">
+    <div
+        class="content-wrapper flex flex-wrap lg:justify-start justify-center gap-5 my-6 px-5"
+    >
+        <div class="header flex gap-3 items-end">
+            <span>
+                <h1 class="text-xl font-bold mb-3">Compare SMM Panels</h1>
+                <p class="font-semi/bold mb-3 leading-6">
+                    Discover the best SMM Panels, checkout their services &
+                    offers and find the right SMM Panel for you! Bring your
+                    brand to the next level by buying the best signals, likes,
+                    followers & much more!
+                </p>
+            </span>
+
+            <img
+                src="/assets/images/icons.png"
+                alt="icons image"
+                class="size-36"
+            />
+        </div>
+
+        <div class="panels-container w-full">
+            <span class="text-base font-semibold"
+                >Check out our favorite SMM Panels below 👇</span
+            >
+
+            <div class="wrapper flex lg:justify-start md:justify-center items-center flex-wrap gap-4 my-5" >
+                {
+                    page.data.map((panel: panelStructure, index) => (
+                        <SMM_panelCards2
+                            rating={panel.rating}
+                            avrg={Number(
+                                allPanelServiceCount[index][1].toFixed(2),
+                            )}
+                            service={Number(allPanelServiceCount[index][0])}
+                            websiteURL={panel.panelWebsiteURL}
+                            imageSrc={
+                                panel.paneFeaturedImage == null
+                                    ? ""
+                                    : optimizeImageUrl(
+                                          panel.paneFeaturedImage.url,
+                                          250,
+                                      )
+                            }
+                            panelTitle={panel.panelTitle}
+                            slugURL={panel.panelSlug}
+                        />
+                    ))
+                }
+                <!-- allPanelServiceCount[0][responsePanels.length - (index + 1)] -->
+            </div>
+
+            <div class="paginationHolder flex flex-col gap-3 w-full items-center my-5" >
+                <div class="paginationBtns flex gap-3 items-center">
+                    <a href={rest.url.prev}
+                        class="prevbtns flex justify-center items-center rounded-full size-12 text-white border"
+                        class:list={[
+                            rest.url.prev ? "bg-slate-700 cursor-pointer" : "bg-gray-300 cursor-not-allowed"
+                        ]}>
+                        <i class="fa-duotone fa-chevrons-left"></i>
+                    </a>
+
+                    <div class="paginationInfo text-center">
+                        <span class="rounded-lg p-4 h-full font-bold">
+                            Showing Results
+                        </span>
+                        <span class="pageNumber block">{rest.currentPage} of {rest.lastPage}</span>
+                    </div>
+                    <a href={rest.url.next}
+                        class="nextbtns flex justify-center items-center rounded-full size-12 text-white border"
+                        class:list={[
+                        rest.url.next ? "bg-slate-700 cursor-pointer" : "bg-gray-300 cursor-not-allowed"
+                        ]}>
+                        <i class="fa-duotone fa-chevrons-right"></i>
+                    </a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</PanelLayout>

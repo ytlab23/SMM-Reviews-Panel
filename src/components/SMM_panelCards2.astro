@@ -37,9 +37,14 @@ for (let j = 0; j < 5; j++) {
     </a>
     
     <div class="data w-full">
-        <div class="articleLink p-3 w-full flex justify-between">
-            <span>
+        <div class="articleLink p-3 w-full flex flex-col">
+            
+            <span class="flex w-full justify-between">
                 <h2 class="font-bold hover:underline"><a href={"/panels/" + slugURL}>{panelTitle}</a></h2>
+                <span class="block text-right">{service.toString()} {service > 1 ? "Services" : "Service"}</span>
+            </span>
+            
+            <span class="flex w-full justify-between">
                 <span class="flex gap-1 items-center text-yellow-400 text-sm mt-2" title={`${rating} of 5`}>
                     {
                         ratingCollection.map(rating =>(
@@ -47,11 +52,9 @@ for (let j = 0; j < 5; j++) {
                         ))
                     } <span class="text-black">{`${rating}/5`}</span>
                 </span>
-            </span>
-            <span>
-                <span class="block text-right">{service.toString()} {service > 1 ? "Services" : "Service"}</span>
                 <span class="block">{`Average Price : $${avrg}`}</span>
             </span>
+            
         </div>
         
         <div class="websiteLink p-3 bg-slate-200 rounded-bl-lg rounded-br-lg">

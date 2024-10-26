@@ -56,9 +56,25 @@ allPanelRes.map((panel: any) =>
 
 //Executing Every Panel's API to get services
 for (let i = 0; i < allPanelAPIs.length; i++) {
-    let panelServicesdata = await fetch(allPanelAPIs[i][0]).then((Response) =>
-        Response.json(),
-    );
+    let panelServicesdata
+    try {
+        panelServicesdata = await fetch(allPanelAPIs[i][0], {method:'POST'}).then((Response) =>
+            Response.json(),
+        );
+    } catch (error) {
+        console.log(allPanelAPIs[i][0])
+    }
+
+    try {
+        if(panelServicesdata.length == 0){
+            panelServicesdata = await fetch(allPanelAPIs[i][0]).then((Response) =>
+                Response.json(),
+            );
+    }
+    } catch (error) {
+        console.log(allPanelAPIs[i][0])
+    }
+
     SMMService_APIData.push([
         panelServicesdata, 
         allPanelAPIs[i][1], 
@@ -111,6 +127,10 @@ for (let j = 0; j < SMMService_APIData.length; j++) {
 const allSiteFetch:any = await fetch(getAPIPath() + "api/siteData.json").then(Response => Response.json());
 
 let servicePageListCount = allSiteFetch[0].platformServiceCount || 20;
+
+// console.log(allPanelAPIs.length);
+// console.log(SMMService_APIData.length);
+// console.log(relevantServices.length);
 ---
 
 <PanelLayout 
@@ -142,7 +162,7 @@ let servicePageListCount = allSiteFetch[0].platformServiceCount || 20;
                         >
                     </span>
                 </span>
-                <span class="text-2xl lg:w-[30%] font-semibold"
+                <span class="text-2xl lg:w-[35%] font-semibold"
                     >{
                         panelCount!
                             ? `Panels Providing Services : ${panelCount}`

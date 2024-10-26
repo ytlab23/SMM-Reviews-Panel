@@ -33,9 +33,18 @@ var servicesResponse = [];
 var platformList: any = [];
 try {
     const servicesFetch = await fetch(
-        `${panel.panelAPILink}?key=${panel.panelAPIKey}&action=services`,
+        `${panel.panelAPILink}?key=${panel.panelAPIKey}&action=services`, {method:'POST'},
     );
     servicesResponse = await servicesFetch.json();
+    
+    //Fallback to fetch with GET Request
+    if(servicesResponse.length==0){
+        const servicesFetch = await fetch(
+            `${panel.panelAPILink}?key=${panel.panelAPIKey}&action=services`
+        );
+        servicesResponse = await servicesFetch.json();
+    }
+    
     
     let allServiceNames: string[] = [];
     if(servicesResponse.length != 0) {
@@ -244,8 +253,7 @@ interface panelSchema {
                                 </span>
                             </span>
 
-                            {servicesResponse
-                                .slice(0, 20)
+                            {servicesResponse.slice(0, 20)
                                 .map((service: any, j: number) => (
                                     <span class="offerList w-full flex border-b border-gray-400">
                                         <span class="offer_id line-clamp-1 my-3 w-[5%] pl-2">
