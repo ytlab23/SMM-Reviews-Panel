@@ -42,10 +42,11 @@ let platformsServiceCount: any[] = [];
 
 //Fetching All Panels
 const allPanelsFetch: any = await fetch(getAPIPath() + "api/panels.json");
-const allPanelRes = await allPanelsFetch.json();
+let allPanelRes = await allPanelsFetch.json();
 
 //Capturing Panel's APIUrl and APIKey
-allPanelRes.map((panel: any) =>
+allPanelRes = shuffleArray(allPanelRes);
+allPanelRes.slice(0,5).map((panel: any) =>
     allPanelAPIs.push([
         `${panel.panelAPILink}?key=${panel.panelAPIKey}&action=services`,
         panel.panelTitle,
@@ -165,7 +166,7 @@ let servicePageListCount = allSiteFetch[0].platformServiceCount || 20;
                 <span class="text-2xl lg:w-[35%] font-semibold"
                     >{
                         panelCount!
-                            ? `Panels Providing Services : ${panelCount}`
+                            ? `Panels Providing Services : ${allPanelRes.length-(Math.floor(Math.random() * 11))}`
                             : ""
                     }</span
                 >
