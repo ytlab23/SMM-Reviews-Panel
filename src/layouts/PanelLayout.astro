@@ -8,7 +8,8 @@ interface Props {
     title:string,
     metaDescription?:string,
     pageType ?: string,
-    pageFeaturedImage ?: string
+    pageFeaturedImage ?: string,
+    isCanonical ?: boolean
 }
 
 //Fetching Site Settings
@@ -19,6 +20,7 @@ const {
     metaDescription = allSiteFetch[0].siteMetaDescription,
     pageType = "website",
     pageFeaturedImage = allSiteFetch[0].siteFavicon.url,
+    isCanonical = false
     } = Astro.props;
 ---
 
@@ -27,10 +29,6 @@ const {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href={allSiteFetch[0].siteFavicon.url} type="image/x-icon">
-    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.5.1/css/all.css">
-    <meta name="generator" content={Astro.generator} />
-    <link rel="sitemap" href="/sitemap-index.xml" />
     <SEO
       title={`${title} - ${allSiteFetch[0].SiteTitle}`}
       description={metaDescription}
@@ -45,7 +43,7 @@ const {
         creator: "@Jack"
       }}
       extend={{
-        // extending the default link tags{allSiteFetch[0].siteFavicon.url}
+        // extending the default link tags{allSiteFetch[0].siteFavicon.url} 
         link: [{ rel: "icon", href: allSiteFetch[0].siteFavicon.url }],
         // extending the default meta tags
         meta: [
@@ -58,7 +56,9 @@ const {
         ],
       }}
     />
-    
+    <link rel="shortcut icon" href={allSiteFetch[0].siteFavicon.url} type="image/x-icon">
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.5.1/css/all.css">
+    <meta name="generator" content={Astro.generator} />
 </head>
 <body>
     <Navbar logoImgSrc={allSiteFetch[0].siteLog.url}></Navbar>

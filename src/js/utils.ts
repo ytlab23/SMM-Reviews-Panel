@@ -32,9 +32,30 @@ export function JSONConvertToHTML(JSONStringParameter : string) {
     const edjsParser = edjsHTML();
     // Parse the JSON string to get an object (if it is not already parsed)
     const parsedJSON = JSON.parse(JSONString);
-    const html = edjsParser.parse(parsedJSON);  // Pass the parsed object
+    const html = edjsParser.parse(parsedJSON);  // Pass the parsed object    
     return html.join("");
 }
+
+export function makeWordsClickable(html:string, words:string[]) {
+    // Iterate through each word in the array
+    words.forEach(word => {
+      // Create a regular expression to find the word, ignoring case
+      const regex = new RegExp(`\\b${word}\\b`, 'gi');
+      
+      // Replace each occurrence of the word with an anchor tag
+      html = html.replace(regex, `<a href="/services/${word}">${word}</a>`);
+    });
+    
+    return html;
+  }
+
+export function shuffleArray(array:any[]) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+    }
+    return array;
+  }
 
 export function timeDifference(dateTime: string | Date): string {
     const inputTime = new Date(dateTime);

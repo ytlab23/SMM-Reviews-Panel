@@ -3,9 +3,12 @@ import HeroSection from "../components/HeroSection.astro";
 import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
 import { getAPIPath } from "../js/utils";
+import { SEO } from "astro-seo";
 interface Props {
     title:string,
-    metaDescription?:string
+    metaDescription?:string,
+    pageType ?: string,
+    isCanonical ?: boolean
 }
 
 //Fetching Site Settings
@@ -13,7 +16,9 @@ const allSiteFetch:any = await fetch(getAPIPath() + "api/siteData.json").then(Re
 
 const {
     title, 
-    metaDescription = allSiteFetch[0].siteMetaDescription
+    metaDescription = allSiteFetch[0].siteMetaDescription,
+    isCanonical = false,
+    pageType = "website",
     } = Astro.props;
 
 ---
@@ -23,12 +28,33 @@ const {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <SEO
+      title={`${title} - ${allSiteFetch[0].SiteTitle}`}
+      description={metaDescription}
+      openGraph={{
+        basic: {
+          title: `${title} - ${allSiteFetch[0].SiteTitle}`,
+          type: pageType,
+          image: allSiteFetch[0].siteFavicon.url,
+        }
+      }}
+      twitter={{
+        creator: "@Jack"
+      }}
+      extend={{
+        // extending the default link tags{allSiteFetch[0].siteFavicon.url}
+        link: [{ rel: "icon", href: allSiteFetch[0].siteFavicon.url }],
+        // extending the default meta tags
+        meta: [
+          { name: "twitter:title", content: `${title} - ${allSiteFetch[0].SiteTitle}` },
+          { name: "twitter:description", content: metaDescription },
+        ],
+      }}
+    />
     <link rel="shortcut icon" href={allSiteFetch[0].siteFavicon.url} type="image/x-icon">
     <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.5.1/css/all.css">
-    <title>{title} - {allSiteFetch[0].SiteTitle}</title>
-    <meta name="description" content={metaDescription}>
     <meta name="generator" content={Astro.generator} />
-    <link rel="sitemap" href="/sitemap-index.xml" />
 </head>
 <body>
     <Navbar logoImgSrc={allSiteFetch[0].siteLog.url}></Navbar>

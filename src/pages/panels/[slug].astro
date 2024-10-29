@@ -1,5 +1,5 @@
 ---
-import { getAPIPath, JSONConvertToHTML } from "../../js/utils";
+import { getAPIPath, JSONConvertToHTML, makeWordsClickable, optimizeImageUrl } from "../../js/utils";
 import PanelLayout from "../../layouts/PanelLayout.astro";
 
 //import servicePlatformsData from "../../data/temp-services";
@@ -31,6 +31,7 @@ for (let j = 0; j < 5; j++) {
 
 var servicesResponse = [];
 var platformList: any = [];
+var platformListTitles: any = [];
 try {
     const servicesFetch = await fetch(
         `${panel.panelAPILink}?key=${panel.panelAPIKey}&action=services`, {method:'POST'},
@@ -66,6 +67,10 @@ try {
     console.log("Could not Find Services and API URL is not correct.");
 }
 
+platformList.map((services:any)=>(
+    platformListTitles.push(services.serviceTitle.toLowerCase())
+));
+
 function isSame(APIService: string, platformSavedService: string) {
     if (APIService.toLowerCase().includes(platformSavedService.toLowerCase()))
         return true;
@@ -96,13 +101,17 @@ interface panelSchema {
         payOption: string;
     }];
 }
+
+
+// console.log(makeWordsClickable(JSONConvertToHTML(panel.panelTextDescrition), platformList));
+
 ---
 
 <PanelLayout 
     title={panel.panelTitle} 
     metaDescription={panel.panelMetaDesc} 
     pageType="article"
-    pageFeaturedImage={panel.paneFeaturedImage.url}>
+    pageFeaturedImage={optimizeImageUrl(panel.paneFeaturedImage.url, 720, "webp")}>
     
     <div
         class="content-wrapper flex flex-wrap lg:justify-start justify-center gap-5 my-6 px-5"
@@ -110,7 +119,7 @@ interface panelSchema {
         <article class="flex flex-col gap-5">
             <h1 class="text-4xl font-bold">{panel.panelTitle}</h1>
             <img
-                src={panel.paneFeaturedImage.url}
+                src={optimizeImageUrl(panel.paneFeaturedImage.url, 720, "webp")}
                 alt={panel.panelTitle + " Panel Image"}
                 class="shadow-lg rounded-lg"
             />
@@ -123,7 +132,8 @@ interface panelSchema {
             </span>
             <div class="article-wrapper flex lg:flex-row flex-col gap-4">
                 <div class="post-content lg:w-4/6 w-full flex flex-col gap-4">
-                    <div class="content" set:html={JSONConvertToHTML(panel.panelTextDescrition)}></div>
+                    <!-- Panels Text Content Goes Here -->
+                    <div class="content" set:html={makeWordsClickable(JSONConvertToHTML(panel.panelTextDescrition), platformListTitles)}></div>
 
                     <div class="aboutPanel flex justify-between items-center">
                         <h2 class="text-3xl font-semibold">
@@ -220,7 +230,7 @@ interface panelSchema {
                                 } alt={rating.ratingSite + " logo"} class="h-10 lg:w-[180px] w-full object-contain" />
                                 <span class="flex gap-2 font-bold text-[#36304a] text-2xl">
                                     {
-                                        `${rating.score} / ${rating.TotalReviews}` 
+                                        `${rating.score} / 5 (${rating.TotalReviews} reviews)` 
                                     }
                                 </span>
                             </a>

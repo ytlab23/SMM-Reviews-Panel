@@ -4,6 +4,8 @@ import vercel from "@astrojs/vercel/serverless";
 
 import sitemap from "@astrojs/sitemap";
 
+import metaTags from 'astro-meta-tags';
+
 // https://astro.build/config
 export default defineConfig({
   // site: 'http://localhost:4321',
@@ -12,26 +14,10 @@ export default defineConfig({
   site: 'https://smmsearch.io/',
   output: 'server',
   adapter: vercel(),
-  integrations: [tailwind(),
-    sitemap({
-      filter: (page) =>
-        page !== `${mainSite}admin/` &&
-        page !== `${mainSite}search/` &&
-        page !== `${mainSite}services/search/`
-    }),
-  ],
+  integrations: [tailwind(), metaTags(), sitemap({
+    filter: (page) =>
+      page !== `https://smmsearch.io/admin/` &&
+      page !== `https://smmsearch.io/search/` &&
+      page !== `https://smmsearch.io/services/search/`
+  })],
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,5 +1,5 @@
 ---
-import { getAPIPath } from "../../js/utils";
+import { getAPIPath, shuffleArray } from "../../js/utils";
 import PanelLayout from "../../layouts/PanelLayout.astro";
 interface serviceSchema {
     serviceColor: string;
@@ -104,7 +104,7 @@ for (let j = 0; j < SMMService_APIData.length; j++) {
         }
     }
 }
-
+relevantServices=shuffleArray(relevantServices);
 //Counting Panel that provides services
 let panelCount = 0;
 for (let j = 0; j < SMMService_APIData.length; j++) {
