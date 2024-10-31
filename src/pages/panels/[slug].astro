@@ -1,16 +1,18 @@
 ---
-import { getAPIPath, JSONConvertToHTML, makeWordsClickable, optimizeImageUrl } from "../../js/utils";
+import { getAPIPath, JSONConvertToHTML, makeWordsClickable, optimizeImageUrl, shuffleArray } from "../../js/utils";
 import PanelLayout from "../../layouts/PanelLayout.astro";
+import SMM_panelCards_related from "../../components/SMM_panelCards_related.astro"
 
 //import servicePlatformsData from "../../data/temp-services";
 const allServicesFetch = await fetch(getAPIPath() + "api/services.json");
 const allServices = await allServicesFetch.json();
 
+let randomPanelsList = await fetch(getAPIPath() + "api/panels.json").then(Response => Response.json());
 export const prerender = true;
 export async function getStaticPaths() {
     const allPanelsFetch: any = await fetch(getAPIPath() + "api/panels.json");
     const allPanelRes: panelSchema[] = await allPanelsFetch.json();
-
+    
     return allPanelRes.map((panel: any) => ({
         params: { slug: panel.panelSlug },
         props: { panel },
@@ -103,6 +105,12 @@ interface panelSchema {
 }
 
 
+for (let i = 0; i < randomPanelsList.length; i++) {
+        if(randomPanelsList[i].panelSlug === slug)
+            randomPanelsList.splice(i, 1);
+    }
+    
+randomPanelsList = shuffleArray(randomPanelsList);
 // console.log(makeWordsClickable(JSONConvertToHTML(panel.panelTextDescrition), platformList));
 
 ---
@@ -113,9 +121,7 @@ interface panelSchema {
     pageType="article"
     pageFeaturedImage={optimizeImageUrl(panel.paneFeaturedImage.url, 720, "webp")}>
     
-    <div
-        class="content-wrapper flex flex-wrap lg:justify-start justify-center gap-5 my-6 px-5"
-    >
+    <div class="content-wrapper flex flex-wrap lg:justify-start justify-center gap-5 my-6 px-5">
         <article class="flex flex-col gap-5">
             <h1 class="text-4xl font-bold">{panel.panelTitle}</h1>
             <img
@@ -298,6 +304,26 @@ interface panelSchema {
                 </div>
             } -->
         </article>
+
+        <h2 class="mt-4 text-2xl font-semibold">You may also like:</h2>
+        <div class="relatedPanels-container my-4 flex lg:flex-row flex-col flex-wrap gap-3 justify-between">
+            {
+                randomPanelsList.slice(0, 3).map((panel:any)=>(
+                    <SMM_panelCards_related
+                        imageSrc={
+                            panel.paneFeaturedImage == null
+                                ? ""
+                                : optimizeImageUrl(
+                                      panel.paneFeaturedImage.url,
+                                      250,
+                                  )
+                        }
+                        panelTitle={panel.panelTitle}
+                        slugURL={panel.panelSlug}
+                    />
+                ))
+            }
+        </div>
     </div>
 </PanelLayout>
 

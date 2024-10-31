@@ -1,0 +1,35 @@
+---
+
+interface Props {
+    imageSrc : string,
+    panelTitle : string,
+    slugURL : string,
+}
+
+const {imageSrc, panelTitle, slugURL} = Astro.props;
+
+---
+
+<article class="lg:w-[32%] md:w-[48%] w-full rounded-lg bg-white shadow-md hover:shadow-2xl hover:-translate-y-2 hover:scale-105 transition-all ease-in-out duration-150">
+    
+    <a href={"/panels/" + slugURL}>
+        <img src=
+        {
+            imageSrc != ""
+            ? imageSrc 
+            :"/assets/images/no-image-available.jpg"
+        } 
+        alt={panelTitle + " thumbnail"} class="h-52 w-full rounded-tl-lg rounded-tr-lg hover:brightness-75">
+    </a>
+    
+    <div class="data w-full">
+        <div class="articleLink p-3 w-full flex flex-col">
+            
+            <span class="flex w-full justify-center">
+                <h2 class="font-bold hover:underline"><a href={"/panels/" + slugURL}>{panelTitle}</a></h2>
+            </span>
+            
+        </div>
+        
+    </div>
+</article>
