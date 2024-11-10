@@ -15,6 +15,12 @@ export async function getStaticPaths (){
     const allPagesFetch:any = await fetch(getAPIPath() + "api/pages.json")
     const allPageRes : pageSchema[] = await allPagesFetch.json();
     
+    for (let i = 0; i < allPageRes.length; i++) {
+        if(allPageRes[i].pageTitle.toLowerCase().includes("contact")){
+            allPageRes.splice(i, 1);
+        }
+    }
+    
     return allPageRes.map((page:any) => (
         {
             params : { slug: page.pageSlug },

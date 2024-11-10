@@ -47,7 +47,7 @@ export function makeWordsClickable(html:string, words:string[]) {
     });
     
     return html;
-  }
+}
 
 export function shuffleArray(array:any[]) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -97,6 +97,7 @@ export function optimizeImageUrl(url:string, height = 100, format = 'webp') {
 
 export function getAPIPath() {
     let siteIs = "https://smm-admin-panel.vercel.app/";
+    // let siteIs = "http://localhost:4321/";
     return siteIs
 }
 // Example usage:

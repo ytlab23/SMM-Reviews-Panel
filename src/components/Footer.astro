@@ -8,10 +8,16 @@ const {siteTitle} = Astro.props
 
 <footer class="flex justify-center items-center bg-slate-700 text-white">
     <div class="main-container w-[1150px]">
-        <div class="wrapper w-full p-3">
+        <div class="wrapper w-full p-3 py-6">
             
-            <div class="bottom flex justify-between items-center">
-                <span>&copy; {siteTitle} | All Rights reserved</span>
+            <div class="bottom flex justify-center items-center gap-4 flex-col">
+                <span class="flex gap-3 flex-wrap justify-center">
+                    <a class="hover:underline hover:text-gray-300" href="/page/about">About Us</a>
+                    <a class="hover:underline hover:text-gray-300" href="/page/privacy-policy">Privacy Policy</a>
+                    <a class="hover:underline hover:text-gray-300" href="/page/disclaimer">Disclaimer</a>
+                    <a class="hover:underline hover:text-gray-300" href="/page/contact-us">Contact Us</a>
+                </span>
+                <span class="text-center">&copy; {new Date().getFullYear()} {siteTitle} | All Rights reserved</span>
             </div>
         </div>
     </div>
