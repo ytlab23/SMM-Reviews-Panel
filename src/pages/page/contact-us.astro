@@ -31,7 +31,7 @@ if (Astro.request.method === "POST") {
 
       const APIResponse = await response.json();
       
-      console.log("Sign In Response - ", APIResponse);
+      console.log("Message POST Request response - ", APIResponse);
       
       if (APIResponse.message == "Data Saved Successfully"){
         form_message = "Thank You for contacting us. We will reach out to soon!!"
@@ -77,6 +77,9 @@ if (Astro.request.method === "POST") {
                     <input required class="border-green-500 border shadow-lg shadow-green-100 px-3 py-2 rounded-md" type="email" name="contact_email" id="contact_email" placeholder="Email Address" />
                     <textarea required class="border-green-500 border shadow-lg shadow-green-100 px-3 py-2 rounded-md min-h-32" name="contact_msg" id="contact_msg" placeholder="Your Message"></textarea>
         
+                    {/* <!-- Captcha --> */}
+                    <div class="my-3 g-recaptcha flex justify-center" data-sitekey={import.meta.env.CapchaSiteKey}></div>
+
                     <button id="userAddBtn"
                     type="submit"
                     class="size-fit w-auto my-2 px-5 py-3 text-white rounded-lg bg-[#44f570] hover:bg-[#37bc58] capitalize">
@@ -90,6 +93,7 @@ if (Astro.request.method === "POST") {
     </div>
 
 </PanelLayout>
+<script is:inline src="https://www.google.com/recaptcha/api.js" async defer></script>
 
 <style is:inline>
     .content h1{
