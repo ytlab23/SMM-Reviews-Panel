@@ -5,13 +5,16 @@ interface Props {
     imageLogoPath : string
 }
 
-const {title, servicesCount, imageLogoPath} = Astro.props;
+const {title, servicesCount=0, imageLogoPath} = Astro.props;
 ---
 
 <article class="cursor-pointer hover:bg-white flex flex-col lg:flex-row lg:justify-start justify-center lg:items-start items-center lg:text-left text-center gap-2 lg:w-[32%] w-[47%] p-3 border rounded-md shadow-md hover:shadow-2xl">
     <a href={"/services/"+ title.toLowerCase().replaceAll(" ", "-")}><img alt={title} class="rounded-lg size-20" src={imageLogoPath}></a>
     <span>
         <h2 class="font-semibold hover:underline"><a href={"/services/"+ title.toLowerCase().replaceAll(" ", "-")}>{title}</a></h2>
-        <span class="block">{servicesCount} Services</span>
+        {
+            servicesCount > 0 &&
+            <span class="block">{servicesCount}+ Services</span>
+        }
     </span>
 </article>

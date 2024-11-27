@@ -123,11 +123,11 @@ function getPanelsCards(rating, service, websiteURL, imageSrc, panelTitle, slugU
 
 function getServicesCards(title, imageLogoPath, servicesCount) {
     return `
-    <article class="cursor-pointer hover:bg-white flex flex-col lg:flex-row lg:justify-start justify-center lg:items-start items-center lg:text-left text-center gap-2 lg:w-[32%] w-[47%] p-3 border rounded-md shadow-md hover:shadow-2xl">
+    <article class="cursor-pointer bg-[#f3f5f6] hover:bg-white flex flex-col lg:flex-row lg:justify-start justify-center lg:items-start items-center lg:text-left text-center gap-2 lg:w-[32%] w-[47%] p-3 border rounded-md shadow-md hover:shadow-2xl">
         <a href="${"/services/"+ title.toLowerCase().replaceAll(" ", "-")}"><img alt="${title}" class="rounded-lg size-20" src="${imageLogoPath}"></a>
         <span>
             <h2 class="font-semibold hover:underline"><a href="${"/services/"+ title.toLowerCase().replaceAll(" ", "-")}">${title}</a></h2>
-            <span class="block">${servicesCount} Services</span>
+            <span class="block">${servicesCount}+ Services</span>
         </span>
     </article>
     `

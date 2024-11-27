@@ -31,9 +31,9 @@ if (Astro.request.method === "POST") {
 
       const APIResponse = await response.json();
       
-      console.log("Message POST Request response - ", APIResponse);
+    //   console.log("Message POST Request response - ", APIResponse);
       
-      if (APIResponse.message == "Data Saved Successfully"){
+      if (APIResponse.message == "Message Saved into Database and Email is Sent."){
         form_message = "Thank You for contacting us. We will reach out to soon!!"
         isFormSubmitted = true;
       }
@@ -77,7 +77,7 @@ if (Astro.request.method === "POST") {
                     <input required class="border-green-500 border shadow-lg shadow-green-100 px-3 py-2 rounded-md" type="email" name="contact_email" id="contact_email" placeholder="Email Address" />
                     <textarea required class="border-green-500 border shadow-lg shadow-green-100 px-3 py-2 rounded-md min-h-32" name="contact_msg" id="contact_msg" placeholder="Your Message"></textarea>
         
-                    {/* <!-- Captcha --> */}
+                    <!-- Captcha -->
                     <div class="my-3 g-recaptcha flex justify-center" data-sitekey={import.meta.env.CapchaSiteKey}></div>
 
                     <button id="userAddBtn"

@@ -8,6 +8,8 @@ const allPanels = await fetch(getAPIPath() + "api/panels.json").then(Response =>
 let SMMService_APIData: any[] = [];
 let allPanelAPIs: string[][] = [];
 
+// console.log("allPanels- ", allPanels);
+
 //Capturing Panel's APIUrl and APIKey
 allPanels.map((panel: any) =>
     allPanelAPIs.push([
@@ -18,18 +20,29 @@ allPanels.map((panel: any) =>
 );
 
 //Executing Every Panel's API to get services
-for (let i = 0; i < allPanelAPIs.length; i++) {
-    let panelServicesdata = await fetch(allPanelAPIs[i][0], {method:'POST'}).then((Response) =>
-        Response.json(),
-    );
-    //Fallback to fetch with GET Request
-    if(panelServicesdata.length==0){
+for (let i = 0; i < 4; i++) {
+    let panelServicesdata = [];
+    try {
         panelServicesdata = await fetch(allPanelAPIs[i][0]).then((Response) =>
             Response.json(),
         );
+    } catch (error) {
+        console.log("GET Request failed for-", allPanelAPIs[i][0]);
+    }
+    
+    //Fallback to fetch with POST Request
+    try {
+        if(panelServicesdata.length==0){
+            panelServicesdata = await fetch(allPanelAPIs[i][0], {method:'POST'}).then((Response) =>
+                Response.json(),
+            );
+        }
+    } catch (error) {
+        console.log("POST Request failed for-", allPanelAPIs[i][0]);
     }
 
-    SMMService_APIData.push([panelServicesdata, allPanelAPIs[i][1], allPanelAPIs[i][2]]);
+    if(panelServicesdata.length > 0)
+        SMMService_APIData.push([panelServicesdata, allPanelAPIs[i][1], allPanelAPIs[i][2]]);
 }
 //Counting Services and Collecting all Relevant Services
 let relevantServices: any[] = [];
@@ -43,6 +56,8 @@ for (let j = 0; j < SMMService_APIData.length; j++) {
         relevantServices.push(temp);
     }
 }
+
+// console.log(relevantServices.length);
 
 //Fetching Site Settings
 let servicePageListCount = allSiteFetch[0].platformServiceCount || 20;
